@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/fragmentFeed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/icon_home"
+        android:title="@string/bnv_feed" />
+    <item
+        android:id="@id/fragmentFriends"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/bnv_friends"
+        android:icon="@drawable/icon_friends"/>
+    <item
+        android:id="@+id/fragmentActivity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/icon_run"
+        android:title="@string/bnv_register" />
+    <item
+        android:id="@+id/fragmentSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/icon_settings"
+        android:title="@string/bnv_settings" />
+    <item
+        android:id="@+id/fragmentProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/icon_profile"
+        android:title="@string/bnv_profile" />
+</menu>

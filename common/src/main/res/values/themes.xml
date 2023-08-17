@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.APKCarrera" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/blue_primary</item>
+        <item name="colorPrimaryVariant">@color/lightPrimary</item>
+        <item name="colorOnPrimary">@color/orange_quaternary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/purple_secondary</item>
+        <item name="colorSecondaryVariant">@color/lightPrimary</item>
+        <item name="colorOnSecondary">@color/orange_quaternary</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="colorAccent">@color/orange_quaternary</item>
+        <item name="android:navigationBarColor">@color/blue_primary</item>
+        <!-- Customize your theme here. -->
+
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <!-- Base application theme. -->
+    <style name="Base.Theme.APKCarrera" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/blue_primary</item>
+        <item name="colorPrimaryVariant">@color/lightPrimary</item>
+        <item name="colorOnPrimary">@color/orange_quaternary</item>
+        <item name="windowSplashScreenBackground">@color/blue_primary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/purple_secondary</item>
+        <item name="colorSecondaryVariant">@color/lightPrimary</item>
+        <item name="colorOnSecondary">@color/orange_quaternary</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="colorAccent">@color/orange_quaternary</item>
+        <!-- Customize your theme here. -->
+
+        <item name="android:textColor">@color/white</item>
+        <item name="android:navigationBarColor">@color/blue_primary</item>
+    </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen.IconBackground">
+        <item name="windowSplashScreenBackground">@color/blue_primary</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.APKCarrera</item>
+        <item name="android:navigationBarColor">@color/blue_primary</item>
+
+    </style>
+</resources>

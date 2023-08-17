@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "44750196637",
+    "firebase_url": "https://apkcarrera-cc15d-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "apkcarrera-cc15d",
+    "storage_bucket": "apkcarrera-cc15d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44750196637:android:3c98b5d6ced7ea391fa974",
+        "android_client_info": {
+          "package_name": "com.gf.apkcarrera"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "44750196637-ci3r824bq8vjffmbhb6a12jrvgfnkove.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMyS3rljJuMo__1pNifnVcBAan4Xn3voE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "44750196637-ci3r824bq8vjffmbhb6a12jrvgfnkove.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

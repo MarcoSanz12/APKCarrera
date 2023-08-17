@@ -1,0 +1,59 @@
+<resources>
+
+    <!-- TITULOS -->
+    <string name="title_login">Iniciar sesión</string>
+    <string name="title_register">Crear cuenta</string>
+    <string name="title_recover_account">Recuperar cuenta</string>
+    <string name="title_feed">Actividad</string>
+
+    <!-- BottomNavigationView -->
+    <string name="bnv_feed">Inicio</string>
+    <string name="bnv_friends">Amigos</string>
+    <string name="bnv_register">Registrar</string>
+    <string name="bnv_settings">Ajustes</string>
+    <string name="bnv_profile">Mi perfil</string>
+
+    <!-- Fragment00 - Register / Login -->
+
+    <string name="app_name">APKCarrera</string>
+    <string name="welcome_message_1">¡Bienvenid@ a APKCarrera!</string>
+    <string name="welcome_message_2">Para poder usar la aplicación debes tener una cuenta registrada</string>
+    <string name="username">Nombre de usuario</string>
+    <string name="email">Correo electrónico</string>
+    <string name="password">Contraseña</string>
+    <string name="repeat_password">Repita su contraseña</string>
+    <string name="i_read_terms">He leido los términos y condiciones de APKCarrera y estoy de acuerdo con ellos.</string>
+    <string name="register">Registrar</string>
+    <string name="login">Login</string>
+    <string name="accept">Aceptar</string>
+    <string name="already_have_account">¿Ya tienes cuenta?</string>
+    <string name="dont_have_account">¿No tienes cuenta?</string>
+    <string name="forgot_password">¿Has olvidado la contraseña?\n¡Pulse aquí!</string>
+    <string name="please_introduce_data">Por favor introduzca los datos de su cuenta APKCarrera.</string>
+    <string name="we_are_almost_done">¡Ya casi estamos!</string>
+    <string name="we_are_almost_done2">¿Por qué no le das a tu cuenta un nombre y le pones una foto?\n¡No te preocupes si te equivocas, podrás cambiarlo más adelante!</string>
+    <string name="recover_password_msg">Introduzca su correo electrónico, si tiene una cuenta asociada recibirá un correo con la información para recuperarla en los próximos minutos.</string>
+    <string name="my_name">Mi nombre</string>
+    <string name="version">Versión %s</string>
+    <string name="user_exists">Ya existe un usuario registrado con ese correo / nombre</string>
+    <string name="verify_email_not_valid">El correo electrónico no es válido</string>
+    <string name="verify_username_not_long">El nombre de usuario tiene que tener mínimo 6 caracteres</string>
+    <string name="verify_password_not_long">La contraseña tiene que tener mínimo 6 caracteres</string>
+    <string name="verify_name_not_long">El nombre no puede tener menos de 6 caracteres</string>
+    <string name="verify_password_not_match">Las contraseñas no encajan</string>
+    <string name="verify_field_required">Campo obligatorio</string>
+    <string name="verify_field_already_used">Ya esta siendo usado</string>
+    <string name="verify_terms_condicions">Tienes que aceptar los términos y condiciones</string>
+    <string name="keep_logged_in">Mantener sesión iniciada</string>
+    <string name="generic_error">Se ha producido un error</string>
+    <string name="select_camera_method">Seleccione método</string>
+    <string name="no_camera">No se ha podido detectar la cámara del dispositivo</string>
+    <string name="loading_signing_in">Iniciando sesión</string>
+    <string name="loading_signing_up">Creando cuenta</string>
+
+    <!-- Fragment03 - Registrar actividad -->
+    <string name="error_no_location">No se pudo acceder a la localización GPS del dispositivo</string>
+    <string name="google_maps_key">AIzaSyAfzS0tFJwWGDVg2GZ0IP7eLLasTI-inPg</string>
+
+
+</resources>

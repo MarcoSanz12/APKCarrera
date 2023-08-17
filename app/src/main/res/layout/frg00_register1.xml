@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingHorizontal="20dp"
+    android:scrollbars="none"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/blue_primary">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginVertical="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+                <!-- LOGO -->
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_logo"
+                    android:layout_width="0dp"
+                    android:layout_height="120dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:src="@drawable/logo_invi"/>
+
+                <!-- Welcome message -->
+                <LinearLayout
+                    android:id="@+id/ly_welcome_msg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_logo"
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/welcome_message_1"
+                            android:textAlignment="center"
+                            android:textSize="20sp"
+                            />
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:textSize="16sp"
+                            android:text="@string/welcome_message_2"/>
+
+                </LinearLayout>
+                <!-- Editexts data -->
+                <LinearLayout
+                    android:id="@+id/ly_data_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@id/ly_welcome_msg"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical"
+                            >
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginHorizontal="5dp"
+                                    android:text="@string/username"/>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/ly_username"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    app:boxBackgroundMode="filled">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/et_username"
+                                            android:nextFocusDown="@id/et_email"
+                                            android:text="prueba_username"
+                                            style="@style/register_editext" />
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical"
+                            >
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginHorizontal="5dp"
+                                    android:text="@string/email"/>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/ly_email"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    app:boxBackgroundMode="filled">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/et_email"
+                                            android:nextFocusDown="@id/et_password"
+                                            android:text="pruebamail@gmail.com"
+                                            style="@style/register_editext"/>
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical"
+                            >
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginHorizontal="5dp"
+                                    android:text="@string/password"/>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/ly_password"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    app:boxBackgroundMode="filled">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/et_password"
+                                            android:nextFocusDown="@id/et_repeat_password"
+                                            android:text="prueba123"
+                                            style="@style/register_editext"/>
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="vertical">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="5dp"
+                                    android:layout_marginHorizontal="5dp"
+                                    android:text="@string/repeat_password"/>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/ly_repeat_password"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    app:boxBackgroundMode="filled">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/et_repeat_password"
+                                            android:imeOptions="actionDone"
+                                            android:text="prueba123"
+                                            style="@style/register_editext"/>
+                                </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+                </LinearLayout>
+
+                <CheckBox
+                    android:id="@+id/cb_terms_conditions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:checked="true"
+                    android:buttonTint="@color/checkbox_colors"
+                    android:text="@string/i_read_terms"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:layout_constraintTop_toBottomOf="@id/ly_data_et"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_marginBottom="20dp"
+                    app:layout_constraintVertical_bias="0"
+                    app:layout_constraintTop_toBottomOf="@id/cb_terms_conditions"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+                        <com.gf.common.custom.CustomImageButton
+                            android:id="@+id/bt_register"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            app:text="@string/register"
+                            app:imageSrc="@drawable/icon_done"/>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/already_have_account"/>
+                        <com.gf.common.custom.CustomImageButton
+                            android:id="@+id/bt_login"
+                            android:layout_width="wrap_content"
+                            app:text="@string/login"
+                            app:imageSrc="@drawable/icon_login"
+                            android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

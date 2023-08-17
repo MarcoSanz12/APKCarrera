@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue_primary">#2438D3</color>
+    <color name="purple_secondary">#620BD9</color>
+    <color name="blue_tertiary">#2C0BE3</color>
+    <color name="orange_quaternary">#FF9900</color>
+    <color name="orange_quaternary_transp">#4DFF9900</color>
+
+    <color name="lightPrimary">#5265FF</color>
+    <color name="grey">#292929</color>
+    <color name="green">#29B41C</color>
+    <color name="red">#8A0000</color>
+    <color name="yellow">#F7EC07</color>
+    <color name="white">#FFFFFF</color>
+    <color name="background">#E9E9E9</color>
+    <color name="black">#000000</color>
+    <color name="lightGrey">#6A6A6A</color>
+    <color name="redLike">#FF006B</color>
+    <color name="transpGrey">#434343</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="ruta1">#306CAF</color>
+    <color name="ruta2">#BF0811</color>
+    <color name="ruta3">#8483B8</color>
+    <color name="ruta4">#D67924</color>
+    <color name="ruta5">#00765F</color>
+    <color name="ruta6">#70C72B</color>
+    <color name="ruta7">#FFA131</color>
+    <color name="ruta8">#8F4C3B</color>
+    <color name="ruta9">#CC033A</color>
+    <color name="ruta10">#66CAC6</color>
+    <color name="ruta11">#342E67</color>
+    <color name="ruta12">#FF00E5</color>
+</resources>

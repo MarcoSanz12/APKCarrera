@@ -9,6 +9,8 @@ plugins {
 
 }
 
+
+
 android {
     namespace = "com.gf.apkcarrera"
     compileSdk = 34
@@ -75,8 +77,7 @@ dependencies {
     implementation ("com.google.dagger:hilt-android:2.44")
 
     // Expandable Layout
-    implementation ("net.cachapa.expandablelayout:expandablelayout:2.9.2")
-
+    implementation("net.cachapa.expandablelayout:expandablelayout:2.9.2")
 
     ksp("androidx.room:room-compiler:$room_version")
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dim_2sp">2sp</dimen>
+    <dimen name="dim_50dp">50dp</dimen>
+    <dimen name="dim_55dp">55dp</dimen>
+    <!-- Horizontal margin -->
+    <dimen name="horizontal_margin_standard">30dp</dimen>
+    <dimen name="horizontal_margin_small">16dp</dimen>
+    <dimen name="horizontal_margin_card">8dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="text_size_ultralarge_20">20sp</dimen>
+    <dimen name="text_size_large_16">16sp</dimen>
+    <dimen name="text_size_standard_14">14sp</dimen>
+    <dimen name="text_size_small_12">12sp</dimen>
+    <dimen name="text_size_dwarf_10">10sp</dimen>
+
+    <dimen name="corner_radius_standard">20dp</dimen>
+
+    <!-- Elevation -->
+    <dimen name="elevation_card_title">10dp</dimen>
+    <dimen name="elevation_card_title_content">12dp</dimen>
+
+    <dimen name="friends_card_size">68dp</dimen>
+    <dimen name="prueba">@dimen/friends_card_size</dimen>
+
+</resources>

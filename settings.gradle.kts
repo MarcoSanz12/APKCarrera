@@ -3,6 +3,8 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven { url = uri("https://www.jitpack.io" ) }
+        jcenter()
 
     }
 }
@@ -12,8 +14,10 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven { url = uri("https://www.jitpack.io" ) }
+        jcenter()
     }
 }
+
 
 rootProject.name = "APKCarrera"
 include(":app")

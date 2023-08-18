@@ -51,6 +51,14 @@
     <string name="loading_signing_in">Iniciando sesión</string>
     <string name="loading_signing_up">Creando cuenta</string>
 
+
+    <!-- Fragment02 - Amigos -->
+    <string name="last_activity">Última actividad: Hace %s</string>
+    <string name="stat_distance_activity"><font color="#6A6A6A" size="10" style="regular">Distancia</font>\n%s km</string>
+    <string name="stat_rythm_activity"><font color="#6A6A6A" size="10" style="regular">Ritmo</font>\n%s /km</string>
+    <string name="stat_time_activity"><font color="#6A6A6A" size="10" style="regular">Tiempo</font>\n%s</string>
+
+
     <!-- Fragment03 - Registrar actividad -->
     <string name="error_no_location">No se pudo acceder a la localización GPS del dispositivo</string>
     <string name="google_maps_key">AIzaSyAfzS0tFJwWGDVg2GZ0IP7eLLasTI-inPg</string>

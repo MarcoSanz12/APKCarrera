@@ -12,7 +12,7 @@
     <string name="login">Login</string>
     <string name="accept">Accept</string>
     <string name="already_have_account">Already have account?</string>
-    <string name="please_introduce_data">Please, insert your credentials of your APKCarrera account.</string>
+    <string name="please_introduce_data">Please, insert your APKCarrera credentials to log into your account.</string>
     <string name="dont_have_account">You don\'t have account?</string>
     <string name="forgot_password">Forgot your password?\nClick here!</string>
     <string name="recover_password_msg">Please enter your email address. If you have an associated account, you will receive an email with the information to recover it in the next few minutes.</string>

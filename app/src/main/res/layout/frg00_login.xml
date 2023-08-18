@@ -33,9 +33,10 @@
             <androidx.appcompat.widget.AppCompatTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@string/please_introduce_data"
                 android:textAlignment="center"
                 android:textSize="16sp"
-                android:text="@string/please_introduce_data"/>
+                android:theme="@style/Theme.APKCarrera" />
 
         </LinearLayout>
         <!-- Editexts data -->
@@ -71,6 +72,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_email"
                         android:nextFocusDown="@id/et_password"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:maxLength="50"
                         style="@style/register_editext"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,11 +96,15 @@
                     android:id="@+id/ly_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:passwordToggleEnabled="true"
                     app:boxBackgroundMode="filled">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_password"
                         style="@style/register_editext"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:maxLength="30"
                         android:imeOptions="actionDone"/>
                 </com.google.android.material.textfield.TextInputLayout>
 

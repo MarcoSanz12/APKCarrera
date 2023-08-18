@@ -40,7 +40,9 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
+
 
 
     override fun onCreateView(
@@ -48,7 +50,8 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        return createBindingInstance(inflater, container).also { _bi = it }.root
+        val view = createBindingInstance(inflater, container).also { _bi = it }.root
+        return view
     }
 
     override fun onDestroyView() {

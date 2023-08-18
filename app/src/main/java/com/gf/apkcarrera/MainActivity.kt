@@ -1,5 +1,6 @@
 package com.gf.apkcarrera
 
+import android.app.Application
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
@@ -21,13 +22,12 @@ class MainActivity : BaseActivity() {
     private val viewModel: RegisterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         val screenSplash = installSplashScreen()
         screenSplash.setKeepOnScreenCondition{false}
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         setSupportActionBar(findViewById(R.id.my_toolbar))
 
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
@@ -40,8 +40,6 @@ class MainActivity : BaseActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         bottomNavigationView.setupWithNavController(navController)
-
-
 
     }
 

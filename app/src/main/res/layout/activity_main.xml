@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:theme="@style/Theme.APKCarrera"
     tools:context=".MainActivity">
+
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -26,6 +28,7 @@
         android:id="@+id/fragmentContainerView"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
+        android:theme="@style/Theme.APKCarrera"
         android:layout_height="0dp"
         app:defaultNavHost="true"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,20 +40,21 @@
         tools:layout_editor_absoluteY="1dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:visibility="gone"
-        tools:visibility="visible"
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:backgroundTint="@color/blue_primary"
+        app:itemActiveIndicatorStyle="@color/transparent"
+        app:itemIconSize="35dp"
+        app:itemIconTint="@drawable/bottom_nav_item_selector"
         app:itemRippleColor="@color/orange_quaternary_transp"
         app:itemTextColor="@drawable/bottom_nav_item_selector"
-        app:itemIconSize="35dp"
         app:labelVisibilityMode="labeled"
-        app:itemActiveIndicatorStyle="@color/transparent"
-        app:backgroundTint="@color/blue_primary"
-        app:itemIconTint="@drawable/bottom_nav_item_selector"
-        app:menu="@menu/bottom_nav_menu"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

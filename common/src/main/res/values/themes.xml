@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Base application theme. -->
     <style name="Theme.APKCarrera" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -16,11 +18,12 @@
         <item name="colorAccent">@color/orange_quaternary</item>
         <item name="android:navigationBarColor">@color/blue_primary</item>
         <!-- Customize your theme here. -->
-
         <item name="android:textColor">@color/white</item>
+        <item name="fontFamily">@font/be_vietnam_pro</item>
     </style>
     <!-- Base application theme. -->
-    <style name="Base.Theme.APKCarrera" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.APKCarrera" parent="Theme.Material3.DayNight.NoActionBar"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
         <!-- Customize your light theme here. -->
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/blue_primary</item>
@@ -39,6 +42,7 @@
 
         <item name="android:textColor">@color/white</item>
         <item name="android:navigationBarColor">@color/blue_primary</item>
+        <item name="fontFamily">@font/be_vietnam_pro</item>
     </style>
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen.IconBackground">
@@ -46,6 +50,7 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
         <item name="postSplashScreenTheme">@style/Theme.APKCarrera</item>
         <item name="android:navigationBarColor">@color/blue_primary</item>
+        <item name="fontFamily">@font/be_vietnam_pro</item>
 
     </style>
 </resources>

@@ -1,7 +1,7 @@
 package com.gf.apkcarrera.di
 
-import com.gf.apkcarrera.features.f0_register.RegisterRepository
-import com.gf.apkcarrera.features.f1_feed.MainRepository
+import com.gf.apkcarrera.repository.RegisterRepository
+import com.gf.apkcarrera.repository.MainRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

@@ -1,6 +1,6 @@
 package com.gf.apkcarrera.features.f1_feed.usecase
 
-import com.gf.apkcarrera.features.f1_feed.MainRepository
+import com.gf.apkcarrera.repository.MainRepository
 import com.gf.common.entity.user.UserModel
 import com.gf.common.exception.Failure
 import com.gf.common.functional.Either

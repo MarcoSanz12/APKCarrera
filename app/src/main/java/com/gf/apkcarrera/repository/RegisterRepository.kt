@@ -1,12 +1,17 @@
-package com.gf.apkcarrera.features.f0_register
+package com.gf.apkcarrera.repository
 
 import android.content.Context
 import com.gf.common.db.APKCarreraDatabase
 import com.gf.common.entity.user.LoginRequest
 import com.gf.common.entity.user.UserModel
 import com.gf.common.exception.Failure
+import com.gf.common.extensions.remove
 import com.gf.common.functional.Either
 import com.gf.common.platform.NetworkHandler
+import com.gf.common.utils.Constants.Login.ALWAYS_LOGGED
+import com.gf.common.utils.Constants.Login.LOG_EMAIL
+import com.gf.common.utils.Constants.Login.LOG_PASSWORD
+import com.gf.common.utils.Constants.Login.LOG_UID
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.AggregateSource
@@ -22,6 +27,8 @@ interface RegisterRepository {
 
     suspend fun login(user: LoginRequest): Either<Failure, UserModel>
 
+    suspend fun logout() : Either<Failure, Any>
+
     suspend fun checkUserExists(user:LoginRequest): Boolean
 
     @Singleton
@@ -34,6 +41,10 @@ interface RegisterRepository {
         val firestore: FirebaseFirestore,
         val analytics: FirebaseAnalytics
     ) : RegisterRepository {
+
+        val preferences = context.getSharedPreferences(
+            context.packageName + "_preferences",
+            Context.MODE_PRIVATE)
 
         override suspend fun register(user: LoginRequest): Either<Failure, UserModel> {
 
@@ -85,6 +96,40 @@ interface RegisterRepository {
                 else
                     Either.Left(Failure.LoginError)
 
+            }catch (ex: Throwable){
+                ex.printStackTrace()
+                Either.Left(Failure.ServerError.apply {
+                    message = ex.message.toString()
+                })
+            }
+        }
+
+        override suspend fun logout(): Either<Failure, Any> {
+
+            return try {
+                database.userDao().clearUser()
+                //FIXME: Borrar carreras
+
+                val email = preferences.getString(LOG_EMAIL, null)
+                val pass = preferences.getString(LOG_PASSWORD, null)
+
+                preferences.apply {
+                    remove(ALWAYS_LOGGED)
+                    remove(LOG_EMAIL)
+                    remove(LOG_UID)
+                    remove(LOG_PASSWORD)
+                }
+
+                if (email.isNullOrEmpty() || pass.isNullOrEmpty())
+                    Either.Left(Failure.LoginError)
+
+                if (!networkHandler.isConnected) {
+                    Either.Left(Failure.ServerError)
+                }
+
+                auth.signOut()
+
+                Either.Right(true)
             }catch (ex: Throwable){
                 ex.printStackTrace()
                 Either.Left(Failure.ServerError.apply {

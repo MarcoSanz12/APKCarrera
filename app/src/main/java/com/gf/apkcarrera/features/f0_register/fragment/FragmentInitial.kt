@@ -4,14 +4,19 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg00InitialBinding
+import com.gf.common.extensions.invisible
+import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class FragmentInitial : BaseFragment<Frg00InitialBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (requireActivity() as MainActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView).invisible()
 
     }
 

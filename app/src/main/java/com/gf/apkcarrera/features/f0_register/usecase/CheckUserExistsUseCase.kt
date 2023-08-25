@@ -1,6 +1,6 @@
 package com.gf.apkcarrera.features.f0_register.usecase
 
-import com.gf.apkcarrera.features.f0_register.RegisterRepository
+import com.gf.apkcarrera.repository.RegisterRepository
 import com.gf.common.entity.user.LoginRequest
 import com.gf.common.exception.Failure
 import com.gf.common.functional.Either

@@ -3,6 +3,7 @@ package com.gf.apkcarrera.features.f0_register.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg00SplashBinding
 import com.gf.apkcarrera.features.f0_register.viewmodel.RegisterViewModel
@@ -10,11 +11,14 @@ import com.gf.apkcarrera.features.f1_feed.viewmodel.MainViewModel
 import com.gf.common.entity.user.LoginRequest
 import com.gf.common.entity.user.UserModel
 import com.gf.common.exception.Failure
+import com.gf.common.extensions.invisible
+import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseFragment
 import com.gf.common.utils.Constants.Login.ALWAYS_LOGGED
 import com.gf.common.utils.Constants.Login.LOG_EMAIL
 import com.gf.common.utils.Constants.Login.LOG_PASSWORD
 import com.gf.common.utils.Constants.Login.LOG_UID
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class FragmentSplash : BaseFragment<Frg00SplashBinding>() {
 

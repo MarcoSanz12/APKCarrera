@@ -62,6 +62,22 @@
     <!-- Fragment03 - Registrar actividad -->
     <string name="error_no_location">No se pudo acceder a la localización GPS del dispositivo</string>
     <string name="google_maps_key">AIzaSyAfzS0tFJwWGDVg2GZ0IP7eLLasTI-inPg</string>
+    <string name="panel_time">TIEMPO</string>
+    <string name="panel_distance">Distancia <font size="10">(km)</font></string>
+    <string name="panel_speed">Ritmo <font size="10">(min/km)</font></string>
+    <string name="btmap_iniciar">Iniciar</string>
+    <string name="btmap_detener">Detener</string>
+    <string name="btmap_reanudar">Reanudar</string>
+    <string name="btmap_finalizar">Finalizar</string>
+    <string name="obtaining_gps">OBTENIENDO LOCALIZACIÓN GPS</string>
+    <string name="obtaining_gps_done">¡LOCALIZACIÓN GPS OBTENIDA!</string>
+
+    <!-- Fragment04 - Ajustes -->
+    <string name="settings_help">Ayuda</string>
+    <string name="settings_logout">Cerrar sesión</string>
+    <string name="logout_succesful">Sesión cerrada</string>
+    <string name="loggin_out">Cerrando sesión\nEspere porfavor</string>
+
 
 
 </resources>

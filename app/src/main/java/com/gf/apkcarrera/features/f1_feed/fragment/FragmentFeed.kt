@@ -26,6 +26,7 @@ class FragmentFeed : BaseFragment<Frg01FeedBinding>() {
         super.onCreate(savedInstanceState)
         (requireActivity() as MainActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView).visible()
         viewModel.user.observe(this, Observer(::handleUserLoaded))
+        hideLoadingDialog()
     }
 
 

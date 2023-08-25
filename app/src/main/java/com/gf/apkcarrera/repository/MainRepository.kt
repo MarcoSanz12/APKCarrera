@@ -1,4 +1,4 @@
-package com.gf.apkcarrera.features.f1_feed
+package com.gf.apkcarrera.repository
 
 import android.content.Context
 import com.gf.common.db.APKCarreraDatabase

@@ -6,6 +6,7 @@
     android:id="@+id/card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardElevation="10dp"
     app:cardBackgroundColor="@color/white"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -154,6 +155,7 @@
             app:layout_constraintEnd_toEndOf="parent">
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_fav1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:textSize="18sp"
@@ -165,7 +167,7 @@
                 tools:text="55"/>
 
             <androidx.appcompat.widget.AppCompatToggleButton
-                android:id="@+id/bt_fav_item_colegio"
+                android:id="@+id/bt_fav1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -187,9 +189,85 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/bt_deploy"
             app:layout_constraintTop_toBottomOf="@id/gl_resume" >
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ScrollView
+                    android:layout_marginVertical="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/horizontal_margin_card"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_image"
+                        />
+                </ScrollView>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:orientation="horizontal">
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_message"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/black"
+                        android:textSize="10sp"
+                        android:maxLines="3"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/ly_fav2"
+                        tools:text="Me duelen las piernas pero aun asi debo continuar escribiendo hasta poder llegar a la tercera linea ay ay ay se acaba ya el espacio de texto esto no tiene futuro"/>
+
+                    <!-- Likes 2 -->
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/ly_fav2"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:weightSum="3"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        >
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_fav2"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:textSize="18sp"
+                            android:layout_weight="2"
+                            android:textColor="@color/black"
+                            android:gravity="end|center"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            tools:text="55"/>
+
+                        <androidx.appcompat.widget.AppCompatToggleButton
+                            android:id="@+id/bt_fav2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:scaleX="0.75"
+                            android:scaleY="0.75"
+                            android:background="@drawable/fav_selector"
+                            android:textOn="@null"
+                            android:textOff="@null"
+                            android:checked="false"/>
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            </LinearLayout>
+
         </net.cachapa.expandablelayout.ExpandableLayout>
 
         <androidx.appcompat.widget.AppCompatImageButton

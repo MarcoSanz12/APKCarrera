@@ -101,7 +101,13 @@
         android:id="@+id/fragmentSettings"
         android:name="com.gf.apkcarrera.features.f4_settings.fragments.FragmentSettings"
         android:label="FragmentSettings"
-        tools:layout="@layout/frg04_settings"/>
+        tools:layout="@layout/frg04_settings">
+        <action
+            android:id="@+id/action_fragmentSettings_to_fragmentInitial"
+            app:destination="@id/fragmentInitial"
+            app:popUpTo="@id/my_nav"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
     <fragment
         android:id="@+id/fragmentProfile"

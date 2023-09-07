@@ -11,6 +11,7 @@ import com.gf.common.entity.user.UserModel
 import com.gf.common.extensions.isEmpty
 import com.gf.common.extensions.isValidEmail
 import com.gf.common.extensions.textToString
+import com.gf.common.platform.BaseActivity
 import com.gf.common.platform.BaseFragment
 import com.gf.common.utils.Constants
 

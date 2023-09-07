@@ -185,7 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:checked="true"
-                    android:buttonTint="@color/checkbox_colors"
+                    android:buttonTint="@color/selector_checkbox"
                     android:text="@string/i_read_terms"
                     android:textColor="@color/white"
                     android:textSize="12sp"

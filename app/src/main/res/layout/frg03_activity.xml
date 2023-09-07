@@ -214,6 +214,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_margin="10dp"
         android:textColor="@color/purple_secondary"/>
+    
+    <!-- My Location Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_mylocation"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:checkable="true"
+        app:icon="@drawable/selector_mylocation_drawable"
+        app:iconSize="30dp"
+        app:iconTint="@color/selector_mylocation"
+        app:rippleColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/ly_locating"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/RoundButton"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

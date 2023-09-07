@@ -1,6 +1,5 @@
 package com.gf.apkcarrera
 
-import android.app.Application
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
@@ -40,6 +39,8 @@ class MainActivity : BaseActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         bottomNavigationView.setupWithNavController(navController)
+
+        bottomNavigationView.setOnItemReselectedListener {}
 
     }
 

@@ -18,21 +18,23 @@ import com.gf.common.exception.Failure
 import com.gf.common.extensions.putAny
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import java.lang.reflect.ParameterizedType
 
 abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     private var _bi: VB? = null
     protected val binding: VB get() = _bi!!
-    protected val MAIN = CoroutineScope(Dispatchers.Main)
-    private var loadingDialog : LoadingDialog? = null
+    protected lateinit var MAIN : CoroutineScope
     protected lateinit var preferences : SharedPreferences
+
 
     private lateinit var activity: BaseActivity
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         activity = requireActivity() as BaseActivity
+        MAIN = CoroutineScope(Dispatchers.Main)
         preferences = requireContext().getSharedPreferences(
             requireContext().packageName + "_preferences",
             Context.MODE_PRIVATE
@@ -42,8 +44,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         super.onCreate(savedInstanceState)
 
     }
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,21 +57,11 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _bi = null
+        MAIN.cancel()
     }
 
-    protected fun showLoadingDialog(msg:String){
-        if (loadingDialog == null)
-            loadingDialog = LoadingDialog(requireContext(),msg)
-        else
-            loadingDialog!!.setText(msg)
-
-        loadingDialog!!.show()
-    }
-
-    protected fun hideLoadingDialog(){
-        loadingDialog?.hide()
-    }
-
+    protected fun showLoadingDialog(msg:String) = (requireActivity() as BaseActivity).showLoadingDialog(msg)
+    fun hideLoadingDialog() = (requireActivity() as BaseActivity).hideLoadingDialog()
 
     protected open fun createBindingInstance(inflater: LayoutInflater, container: ViewGroup?): VB {
         val vbType = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
@@ -101,7 +91,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     }
 
     open fun handleFailure(failure: Failure?) {
-        hideLoadingDialog()
+        (requireActivity() as BaseActivity).hideLoadingDialog()
         Toast.makeText(requireContext(), getString(R.string.generic_error), Toast.LENGTH_SHORT).show()
         Log.e("ERROR",failure?.message ?: "Error en FragmentRegister2")
     }

@@ -7,15 +7,25 @@ import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
+import android.os.SystemClock
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.LinearInterpolator
+import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.cotesa.common.extensions.distanceTo
+import com.cotesa.common.extensions.notNull
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg03ActivityBinding
 import com.gf.common.extensions.invisible
 import com.gf.common.extensions.visible
+import com.gf.common.functional.AccuracyInterpolator
+import com.gf.common.functional.LatLngInterpolator
 import com.gf.common.platform.BaseFragment
 import com.gf.common.utils.Constants.Permissions.LOCATION_PERMISSION_CODE
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -26,28 +36,43 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.LocationSource
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.coroutines.launch
 import java.util.Timer
 import kotlin.concurrent.timerTask
+
 
 class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallback {
 
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var locationCallback: LocationCallback
+    private lateinit var positionUpdater: PositionUpdater
     private val points : MutableList<LatLng> = mutableListOf()
     private var STATUS = STATUS_LOCATING
-    private lateinit var lastLocation : LatLng
-    private var isLocated = false
-    private var time : Int = 0
-    private var distance : Int = 0
+    private var CAM_MOVING = false
+    private var CAM_TRACK = true
     private lateinit var timer : Timer
+    private val handler by lazy{ Handler()}
+    private var runnable : Runnable? = null
+    private var TAG = "lifecycle"
+
+    // Estadísticas
+
+    // Tiempo - Segundos
+    private val time = mutableListOf<Int>()
+
+    // Distancia - Metros
+    private var distance = 0
+
+    // Velocidad - Metros / Segundo
+    private var speed = 0
+
+
 
     companion object{
         private const val STATUS_LOCATING = 0
@@ -60,13 +85,39 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        Log.d(TAG, "[${this.javaClass.simpleName}]onAttach")
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
         setOnBackPressed(R.id.fragmentFeed)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "[${this.javaClass.simpleName}][${requireActivity().supportFragmentManager.fragments.size}]onCreate")
         initializeView()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        Log.d(TAG, "[${this.javaClass.simpleName}]onCreateView")
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "[${this.javaClass.simpleName}]onDestroy")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG, "[${this.javaClass.simpleName}]onDestroyView")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "[${this.javaClass.simpleName}]onResume")
     }
 
     private fun initializeView(){
@@ -129,9 +180,39 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
         map.mapType = GoogleMap.MAP_TYPE_SATELLITE
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(41.6315, -4.7220),9f))
 
+        positionUpdater = PositionUpdater()
+        map.setLocationSource(positionUpdater)
+        map.isMyLocationEnabled = true
+
+        val locationButton = (binding.lyMapContainer.findViewById<View>(Integer.parseInt("1")).parent as View)
+            .findViewById<ImageView>(Integer.parseInt("2"))
+
+        locationButton.invisible()
+
+        map.setOnCameraMoveStartedListener {
+            CAM_MOVING = true
+            if (it == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE)
+                binding.btMylocation.isChecked = false
+        }
+
+        binding.btMylocation.addOnCheckedChangeListener { button, isChecked ->
+            if (isChecked){
+                locationButton.callOnClick()
+                CAM_TRACK = true
+            }
+            else{
+                CAM_TRACK = false
+            }
+        }
+
+        binding.btMylocation.isChecked = true
 
 
-        val locationRequest = LocationRequest.Builder( Priority.PRIORITY_HIGH_ACCURACY,3000).build()
+        map.setOnCameraIdleListener {
+            CAM_MOVING = false
+        }
+
+        val locationRequest = LocationRequest.Builder( Priority.PRIORITY_HIGH_ACCURACY,1000).build()
 
         // Timer para poner 3 puntitos *importante* al buscar gps
        timer = Timer().apply {
@@ -147,105 +228,220 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
                 ,0,1000)
         }
 
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, positionUpdater, null)
+    }
 
-                // Si la localización es null, no coger punto
-                val location = locationResult.lastLocation ?: return
 
-                when (STATUS){
-                    STATUS_LOCATING ->
-                        action0LocateGps(location)
+    private inner class PositionUpdater : LocationSource,LocationCallback(){
+        var locationChangeListener: LocationSource.OnLocationChangedListener? = null
+        var oldLocation : Location? = null
+        var lastLocation : Location? = null
 
-                    STATUS_RUNNING ->
-                        action1AddPoint(location)
-                    STATUS_PAUSE ->{
+        init {
+            binding.btMapButton.apply {
+                visible()
+                setOnClickListener {
+                    binding.lyInfoPanel.expand()
+                    text = getString(com.gf.common.R.string.btmap_detener)
+                    setTextColor(resources.getColor(com.gf.common.R.color.white))
+                    backgroundTintList = ColorStateList.valueOf(resources.getColor(com.gf.common.R.color.purple_secondary))
+                    STATUS = STATUS_RUNNING
+                    binding.btMylocation.isChecked = true
+                }
+            }
+        }
 
+        override fun onLocationResult(locationResult: LocationResult) {
+            super.onLocationResult(locationResult)
+
+            // Si la localización es null, no coger punto
+            lastLocation = locationResult.lastLocation ?: return
+
+            if (oldLocation == null){
+                oldLocation = lastLocation
+                locationChangeListener?.onLocationChanged(lastLocation!!)
+            }
+            else {
+                animateMovement()
+            }
+
+            if (!isAdded)
+                return
+
+            when (STATUS){
+                STATUS_LOCATING ->
+                    action0LocateGps(lastLocation!!)
+
+                STATUS_RUNNING ->
+                    action1AddPoint(lastLocation!!)
+                STATUS_PAUSE ->{
+
+                }
+                STATUS_DONE ->{
+
+                }
+            }
+        }
+
+        private fun animateMovement() {
+            runnable.notNull {
+                handler.removeCallbacks(it)
+            }
+
+            val startPosition = LatLng(oldLocation!!.latitude, oldLocation!!.longitude)
+            val startAccuracy = oldLocation!!.accuracy
+            val startBearing = oldLocation!!.bearing
+            val start = SystemClock.uptimeMillis()
+            val interpolator = LinearInterpolator()
+            val accInterpolator = AccelerateDecelerateInterpolator()
+            val durationInMs = 1000F
+            val latLngInterpolator = LatLngInterpolator.Linear()
+            val floatInterpolator = AccuracyInterpolator.Linear()
+
+            runnable = object : Runnable {
+
+                var elapsed: Long = 0
+                var t: Float = 0.0f
+                var v: Float = 0.0f
+                var vAcc: Float = 0.0f
+
+                override fun run() {
+                    elapsed = SystemClock.uptimeMillis() - start;
+                    t = (elapsed.toFloat() / durationInMs)
+                    v = interpolator.getInterpolation(t)
+                    vAcc = accInterpolator.getInterpolation(t)
+
+                    val position = latLngInterpolator.interpolate(
+                        v,
+                        startPosition,
+                        LatLng(lastLocation!!.latitude, lastLocation!!.longitude)
+                    )
+                    val interAccuracy =
+                        floatInterpolator.interpolate(vAcc, startAccuracy, lastLocation!!.accuracy)
+                    val interBearing =
+                        floatInterpolator.interpolate(vAcc, startBearing, lastLocation!!.bearing)
+
+                    val interLocation = Location("")
+                    interLocation.apply {
+                        latitude = position.latitude
+                        longitude = position.longitude
+                        accuracy = interAccuracy
+                        bearing = interBearing
                     }
-                    STATUS_DONE ->{
 
+                    if (!CAM_MOVING && CAM_TRACK){
+
+                        if (map.cameraPosition.zoom < CAM_ZOOM){
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(position,CAM_ZOOM))
+                        }
+                        else
+                            map.animateCamera(CameraUpdateFactory.newLatLng(position))
+
+                        CAM_MOVING = true
+
+                        Log.d("ANIMATUR","Animaturu!")
+                    }
+
+                    oldLocation = interLocation
+
+                    locationChangeListener?.onLocationChanged(interLocation)
+
+                    // Repeat till progress is complete.
+                    if (t < 1) {
+                        // Post again 16ms later.
+                        handler.postDelayed(this, 8);
                     }
                 }
-
-
             }
+
+            handler.post(runnable!!)
         }
 
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null)
-
-    }
-    @SuppressLint("MissingPermission")
-    private fun action0LocateGps(location: Location){
-        if (location.accuracy > 30)
-            return
-
-        // LOCALIZACIÓN ENCONTRADA
-        map.isMyLocationEnabled = true
-
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(
-            LatLng(location.latitude,location.longitude),
-            CAM_ZOOM
-        ))
-
-        STATUS = STATUS_READY
-        timer.cancel()
-        binding.tvLocating.text = getString(com.gf.common.R.string.obtaining_gps_done)
-        binding.lyLocating.setBackgroundResource(com.gf.common.R.color.green)
-        binding.pbLocating.invisible()
-
-        timer = Timer().apply{
-            schedule(timerTask {
-                MAIN.launch { binding.lyLocating.collapse() }
-
-            },2000)
+        override fun activate(p0: LocationSource.OnLocationChangedListener) {
+            locationChangeListener = p0
         }
 
+        override fun deactivate() {
+            locationChangeListener = null
+        }
 
-        binding.btMapButton.apply {
-            visible()
-            setOnClickListener {
-                binding.lyInfoPanel.expand()
-                text = getString(com.gf.common.R.string.btmap_detener)
-                setTextColor(resources.getColor(com.gf.common.R.color.white))
-                backgroundTintList = ColorStateList.valueOf(resources.getColor(com.gf.common.R.color.purple_secondary))
-                STATUS = STATUS_RUNNING
+        @SuppressLint("MissingPermission")
+        private fun action0LocateGps(location: Location){
+            if (location.accuracy > 30)
+                return
+
+            // LOCALIZACIÓN ENCONTRADA
+            map.isMyLocationEnabled = true
+
+
+
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                LatLng(location.latitude,location.longitude),
+                CAM_ZOOM
+            ))
+
+            STATUS = STATUS_READY
+            timer.cancel()
+            binding.tvLocating.text = getString(com.gf.common.R.string.obtaining_gps_done)
+            binding.lyLocating.setBackgroundResource(com.gf.common.R.color.green)
+            binding.pbLocating.invisible()
+
+            timer = Timer().apply{
+                schedule(timerTask {
+                    MAIN.launch { binding.lyLocating.collapse() }
+
+                },2000)
             }
+
+
+
         }
 
+        @SuppressLint("MissingPermission")
+        private fun action1AddPoint(location: Location) {
+            val locLatLng = LatLng(location.latitude, location.longitude)
 
-    }
+            // Si detecta a más de 30 metros de precisión, no coger
+            if (location.accuracy > 30)
+                return
 
-    @SuppressLint("MissingPermission")
-    private fun action1AddPoint(location: Location) {
-        Log.d("GPS_Update", "Accuracy: ${location.accuracy} meters")
-        val locLatLng = LatLng(location.latitude, location.longitude)
+            if (points.size > 0) {
+                val segmentDistance = points.last().distanceTo(locLatLng)
+                if (segmentDistance > 10 && segmentDistance < 1000) {
+                    points.add(locLatLng)
+                    updatePolyline(map)
+                    Log.d("GPS_Update", "Points: ${points.size}")
+                }
 
-        if (map.cameraPosition.zoom < CAM_ZOOM)
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(locLatLng,CAM_ZOOM))
-        else
-            map.animateCamera(CameraUpdateFactory.newLatLng(locLatLng))
-
-
-        // Si detecta a más de 30 metros de precisión, no coger
-        if (location.accuracy > 30)
-            return
-
-        if (points.size > 0) {
-            val distance = points.last().distanceTo(locLatLng)
-            if (distance > 10 && distance < 1000) {
+            } else {
                 points.add(locLatLng)
                 updatePolyline(map)
                 Log.d("GPS_Update", "Points: ${points.size}")
             }
-
-        } else {
-            points.add(locLatLng)
-            updatePolyline(map)
-            Log.d("GPS_Update", "Points: ${points.size}")
         }
+
     }
 
+    /** USAR PILA Distancia - Tiempo **/
+   /* private fun addData(d:Int, t:Int){
+
+        distance += d
+
+        val lastSegment = if (distance >= 1000){
+            distance
+        }
+        else
+            distance%1000
+
+        if (lastSegment <)
+
+
+        if (lastSegment + d > 1000){
+
+        }
+
+
+    }*/
     private fun updatePolyline(map:GoogleMap){
         map.clear()
 
@@ -258,9 +454,8 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
         for (point in points)
             polylineOptions.add(point)
 
-       map.addPolyline(polylineOptions)
+        map.addPolyline(polylineOptions)
     }
-
     fun simplifyDouglasPeucker(points: List<LatLng>, epsilon: Double): List<LatLng> {
         if (points.size < 3) {
             return points
@@ -299,9 +494,13 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
 
     override fun onPause() {
         super.onPause()
-        if (::locationCallback.isInitialized)
-            fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        if (::positionUpdater.isInitialized){
+            fusedLocationProviderClient.removeLocationUpdates(positionUpdater)
+        }
+
     }
+
+
 
 
 }

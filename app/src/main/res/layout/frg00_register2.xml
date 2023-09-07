@@ -92,7 +92,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:buttonTint="@color/checkbox_colors"
+                    android:buttonTint="@color/selector_checkbox"
                     android:text="@string/keep_logged_in"
                     android:textColor="@color/white"
                     android:textSize="12sp"

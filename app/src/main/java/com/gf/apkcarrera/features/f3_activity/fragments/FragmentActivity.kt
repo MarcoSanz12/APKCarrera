@@ -22,12 +22,14 @@ import com.cotesa.common.extensions.distanceTo
 import com.cotesa.common.extensions.notNull
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg03ActivityBinding
+import com.gf.common.entity.activity.ActivityModel
 import com.gf.common.extensions.invisible
 import com.gf.common.extensions.visible
 import com.gf.common.functional.AccuracyInterpolator
 import com.gf.common.functional.LatLngInterpolator
 import com.gf.common.platform.BaseFragment
 import com.gf.common.utils.Constants.Permissions.LOCATION_PERMISSION_CODE
+import com.gf.common.utils.StatCounter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -44,6 +46,8 @@ import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.coroutines.launch
 import java.util.Timer
 import kotlin.concurrent.timerTask
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 
 class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallback {
@@ -54,6 +58,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
     private lateinit var positionUpdater: PositionUpdater
     private val points : MutableList<LatLng> = mutableListOf()
     private var STATUS = STATUS_LOCATING
+    private var USER_PAUSED = true
     private var CAM_MOVING = false
     private var CAM_TRACK = true
     private lateinit var timer : Timer
@@ -61,18 +66,13 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
     private var runnable : Runnable? = null
     private var TAG = "lifecycle"
 
-    // Estadísticas
+    lateinit var activity : ActivityModel
 
-    // Tiempo - Segundos
-    private val time = mutableListOf<Int>()
+    // Cola usada para registrar las distancias y tiempos del último kilómetro
+    private val statCounter = StatCounter()
 
-    // Distancia - Metros
-    private var distance = 0
-
-    // Velocidad - Metros / Segundo
-    private var speed = 0
-
-
+    private var clockTime = 0
+    private var lastRegisterTime = 0
 
     companion object{
         private const val STATUS_LOCATING = 0
@@ -81,6 +81,8 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
         private const val STATUS_PAUSE = 3
         private const val STATUS_DONE = 4
         private const val CAM_ZOOM = 18f
+        private const val MAX_PAUSED_POINTS = 5
+        private const val PAUSE_MIN_DISTANCE = 30
     }
 
     override fun onAttach(context: Context) {
@@ -93,6 +95,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "[${this.javaClass.simpleName}][${requireActivity().supportFragmentManager.fragments.size}]onCreate")
+        activity = ActivityModel()
         initializeView()
     }
 
@@ -146,7 +149,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 createMap()
             } else {
-              handleNoGps()
+                handleNoGps()
             }
         }
         else {
@@ -162,7 +165,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
             LOCATION_PERMISSION_CODE
         )
     }
-    
+
     private fun handleNoGps(){
         Toast.makeText(requireContext(), getString(com.gf.common.R.string.error_no_location), Toast.LENGTH_SHORT).show()
         onBackPressed()
@@ -215,7 +218,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
         val locationRequest = LocationRequest.Builder( Priority.PRIORITY_HIGH_ACCURACY,1000).build()
 
         // Timer para poner 3 puntitos *importante* al buscar gps
-       timer = Timer().apply {
+        timer = Timer().apply {
             scheduleAtFixedRate(timerTask {
                 MAIN.launch {
                     if (binding.tvLocating.text.contains("..."))
@@ -231,22 +234,22 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, positionUpdater, null)
     }
 
-
     private inner class PositionUpdater : LocationSource,LocationCallback(){
         var locationChangeListener: LocationSource.OnLocationChangedListener? = null
         var oldLocation : Location? = null
         var lastLocation : Location? = null
+        var pausedPoints = 0
 
         init {
             binding.btMapButton.apply {
                 visible()
                 setOnClickListener {
-                    binding.lyInfoPanel.expand()
-                    text = getString(com.gf.common.R.string.btmap_detener)
-                    setTextColor(resources.getColor(com.gf.common.R.color.white))
-                    backgroundTintList = ColorStateList.valueOf(resources.getColor(com.gf.common.R.color.purple_secondary))
-                    STATUS = STATUS_RUNNING
-                    binding.btMylocation.isChecked = true
+                    if (STATUS == STATUS_READY){
+                       startActivity()
+                    }else if (STATUS == STATUS_RUNNING){
+                        pauseActivity(true)
+                    }
+
                 }
             }
         }
@@ -275,7 +278,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
                 STATUS_RUNNING ->
                     action1AddPoint(lastLocation!!)
                 STATUS_PAUSE ->{
-
+                    action2Paused(lastLocation!!)
                 }
                 STATUS_DONE ->{
 
@@ -283,6 +286,10 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
             }
         }
 
+        /**
+         * Se encarga de interpolar el circulo del usuario, para moverlo de forma fluida además de
+         * mover la cámara segun este se vaya moviendo
+         */
         private fun animateMovement() {
             runnable.notNull {
                 handler.removeCallbacks(it)
@@ -405,56 +412,100 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
             if (location.accuracy > 30)
                 return
 
-            if (points.size > 0) {
-                val segmentDistance = points.last().distanceTo(locLatLng)
-                if (segmentDistance > 10 && segmentDistance < 1000) {
-                    points.add(locLatLng)
-                    updatePolyline(map)
-                    Log.d("GPS_Update", "Points: ${points.size}")
-                }
+            var segmentDistance = 10.0
 
-            } else {
+            if (points.isNotEmpty())
+                segmentDistance = points.last().distanceTo(locLatLng)
+
+            if (segmentDistance >= 10) {
                 points.add(locLatLng)
                 updatePolyline(map)
+                statCounter.add(segmentDistance.toInt(),clockTime-lastRegisterTime)
+                lastRegisterTime = clockTime
+                binding.apply {
+                    tvPanelDistance.text = statCounter.distanceKm()
+                    statCounter.speedMinKm().notNull {
+                        tvPanelSpeed.text = it
+                    }
+                }
                 Log.d("GPS_Update", "Points: ${points.size}")
+            }
+            else{
+                pausedPoints ++
+                if (pausedPoints > MAX_PAUSED_POINTS){
+                    pauseActivity(false)
+                }
             }
         }
 
+        private fun action2Paused(location: Location){
+            if (!USER_PAUSED){
+                val curLatLng = LatLng(location.latitude,location.longitude)
+                if (curLatLng.distanceTo(activity.points.last().last()) > PAUSE_MIN_DISTANCE){
+                    resumeActivity()
+                }
+            }
+        }
+
+        private fun startActivity(){
+            binding.lyInfoPanel.expand()
+
+            binding.btMapButton.apply {
+                text = getString(com.gf.common.R.string.btmap_detener)
+                setTextColor(resources.getColor(com.gf.common.R.color.white))
+                backgroundTintList = ColorStateList.valueOf(resources.getColor(com.gf.common.R.color.purple_secondary))
+            }
+
+            STATUS = STATUS_RUNNING
+            binding.btMylocation.isChecked = true
+            startTimer()
+        }
+
+        private fun pauseActivity(userPause : Boolean){
+
+            USER_PAUSED = userPause
+            pausedPoints = 0
+            binding.btFinish.visible()
+            activity.points.add(points)
+            points.clear()
+            binding.btMapButton.apply {
+                text = getString(com.gf.common.R.string.btmap_reanudar)
+                setTextColor(resources.getColor(com.gf.common.R.color.purple_secondary))
+                backgroundTintList = ColorStateList.valueOf(resources.getColor(com.gf.common.R.color.white))
+            }
+
+            STATUS = STATUS_PAUSE
+            stopTimer()
+        }
+
+        private fun resumeActivity(){
+            binding.btMapButton.apply {
+                text = getString(com.gf.common.R.string.btmap_detener)
+                setTextColor(resources.getColor(com.gf.common.R.color.white))
+                backgroundTintList = ColorStateList.valueOf(resources.getColor(com.gf.common.R.color.purple_secondary))
+            }
+            STATUS = STATUS_RUNNING
+            startTimer()
+            binding.btFinish.invisible()
+        }
     }
 
-    /** USAR PILA Distancia - Tiempo **/
-   /* private fun addData(d:Int, t:Int){
-
-        distance += d
-
-        val lastSegment = if (distance >= 1000){
-            distance
-        }
-        else
-            distance%1000
-
-        if (lastSegment <)
-
-
-        if (lastSegment + d > 1000){
-
-        }
-
-
-    }*/
     private fun updatePolyline(map:GoogleMap){
         map.clear()
 
-        val polylineOptions = PolylineOptions().apply {
-            color(requireContext().getColor(com.gf.common.R.color.orange_quaternary)) // Color de la línea
-            visible(true)
-            zIndex(7f)
-            width(8f) // Grosor de la línea en píxeles
+        activity.points.forEach {
+            val polylineOptions = PolylineOptions().apply {
+                color(requireContext().getColor(com.gf.common.R.color.orange_quaternary)) // Color de la línea
+                visible(true)
+                zIndex(7f)
+                width(8f) // Grosor de la línea en píxeles
+            }
+            it.forEach {
+                polylineOptions.add(it)
+            }
+            map.addPolyline(polylineOptions)
         }
-        for (point in points)
-            polylineOptions.add(point)
 
-        map.addPolyline(polylineOptions)
     }
     fun simplifyDouglasPeucker(points: List<LatLng>, epsilon: Double): List<LatLng> {
         if (points.size < 3) {
@@ -485,22 +536,30 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
     }
 
     fun perpendicularDistance(p: LatLng, p1: LatLng, p2: LatLng): Double {
-        val area = Math.abs(0.5 * (p1.longitude * p2.latitude + p2.longitude * p.latitude + p.latitude * p1.longitude - p2.longitude * p1.latitude - p.latitude * p2.longitude - p1.longitude * p.latitude))
-        val bottom = Math.sqrt(Math.pow(p1.longitude - p2.longitude, 2.0) + Math.pow(p1.latitude - p2.latitude, 2.0))
+        val area = abs(0.5 * (p1.longitude * p2.latitude + p2.longitude * p.latitude + p.latitude * p1.longitude - p2.longitude * p1.latitude - p.latitude * p2.longitude - p1.longitude * p.latitude))
+        val bottom = sqrt(Math.pow(p1.longitude - p2.longitude, 2.0) + Math.pow(p1.latitude - p2.latitude, 2.0))
         return area / bottom
     }
-
-
 
     override fun onPause() {
         super.onPause()
         if (::positionUpdater.isInitialized){
             fusedLocationProviderClient.removeLocationUpdates(positionUpdater)
         }
-
     }
 
-
-
+    private fun startTimer(){
+        timer.scheduleAtFixedRate(timerTask {
+            if (STATUS == STATUS_RUNNING){
+                clockTime ++
+                MAIN.launch {
+                    binding.tvPanelTime.text = StatCounter.formatTime(clockTime)
+                }
+            }
+        },0,1000)
+    }
+    private fun stopTimer(){
+        timer.cancel()
+    }
 
 }

@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ly_map_root"
     android:clickable="true"
+    android:clipChildren="false"
     xmlns:tools="http://schemas.android.com/tools">
     <FrameLayout
         android:id="@+id/ly_map_container"
@@ -51,6 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:el_expanded="false"
+        tools:el_expanded="true"
         app:layout_constraintBottom_toBottomOf="parent">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -124,7 +126,7 @@
                         android:layout_alignParentBottom="true"
                         android:gravity="center"
                         android:paddingVertical="5dp"
-                        android:text="0:00"
+                        android:text="0.00"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_ultralarge_20"
                         android:textStyle="bold" />
@@ -157,7 +159,7 @@
                         android:layout_alignParentBottom="true"
                         android:gravity="center"
                         android:paddingVertical="5dp"
-                        android:text="0:00"
+                        android:text="0.00"
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_ultralarge_20"
                         android:textStyle="bold" />
@@ -230,6 +232,28 @@
         style="@style/RoundButton"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"/>
+
+    <!-- FINISH BUTTON -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_finish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/horizontal_margin_standard"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:stateListAnimator="@animator/animator_button"
+        app:rippleColor="@color/white"
+        android:text="@string/btmap_finalizar"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:backgroundTint="@color/red"
+        app:cornerRadius="5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="30dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

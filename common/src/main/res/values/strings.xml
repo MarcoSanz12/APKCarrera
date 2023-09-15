@@ -65,6 +65,7 @@
     <string name="panel_time">TIEMPO</string>
     <string name="panel_distance">Distancia <font size="10">(km)</font></string>
     <string name="panel_speed">Ritmo <font size="10">(min/km)</font></string>
+    <string name="panel_stat_format">%s:%s</string>
     <string name="btmap_iniciar">Iniciar</string>
     <string name="btmap_detener">Detener</string>
     <string name="btmap_reanudar">Reanudar</string>

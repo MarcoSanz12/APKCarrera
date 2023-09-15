@@ -8,8 +8,4 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class APKCarreraApp : Application(){
-    override fun onCreate() {
-        super.onCreate()
-
-    }
 }

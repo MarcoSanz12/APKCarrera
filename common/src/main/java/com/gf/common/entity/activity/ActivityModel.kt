@@ -21,7 +21,7 @@ class ActivityModel() : Model() {
      var title : String = ""
 
     @ColumnInfo("points")
-     var points : List<List<LatLng>> = listOf()
+     var points : MutableList<List<LatLng>> = mutableListOf()
 
     @ColumnInfo("time")
      var time : List<Int> = listOf()

@@ -16,7 +16,6 @@ class FragmentInitial : BaseFragment<Frg00InitialBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity() as MainActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView).invisible()
 
     }
 
@@ -25,10 +24,10 @@ class FragmentInitial : BaseFragment<Frg00InitialBinding>() {
 
         binding.apply {
             btLogin.setOnClickListener {
-                navigate(R.id.action_fragmentInitial_to_fragmentLogin)
+                navigate(R.id.action_fragmentInitial_to_navigation00Login)
             }
             btRegister.setOnClickListener {
-               navigate(R.id.action_fragmentInitial_to_fragmentRegister1)
+               navigate(R.id.action_fragmentInitial_to_navigation00Register)
             }
 
             tvVersion.text = getString(com.gf.common.R.string.version,getAppVersion(requireContext()))

@@ -33,6 +33,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - ${this.lifecycle.currentState.name}")
         activity = requireActivity() as BaseActivity
         MAIN = CoroutineScope(Dispatchers.Main)
         preferences = requireContext().getSharedPreferences(
@@ -42,22 +43,47 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - CREATE")
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - RESUME")
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - CREATE VIEW")
         val view = createBindingInstance(inflater, container).also { _bi = it }.root
         return view
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - VIEW CREATED")
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _bi = null
         MAIN.cancel()
+        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - DESTROY VIEW")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - DESTROY")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - DETACH")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - STOP")
     }
 
     protected fun showLoadingDialog(msg:String) = (requireActivity() as BaseActivity).showLoadingDialog(msg)
@@ -79,15 +105,8 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         Navigation.findNavController(binding.root).navigate(id)
     }
 
-    protected fun setOnBackPressed(idDestiny : Int){
-        activity.onBackPressedDispatcher.addCallback(this) {
-            activity.navController.popBackStack(idDestiny,false)
-            this.isEnabled = false
-        }
-    }
-
     protected fun onBackPressed(){
-        activity.onBackPressedDispatcher.onBackPressed()
+        Navigation.findNavController(binding.root).navigateUp()
     }
 
     open fun handleFailure(failure: Failure?) {

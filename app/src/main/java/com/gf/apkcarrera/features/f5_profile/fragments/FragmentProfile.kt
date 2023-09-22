@@ -8,6 +8,5 @@ import com.gf.common.platform.BaseFragment
 class FragmentProfile : BaseFragment<Frg05ProfileBinding>() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        setOnBackPressed(R.id.fragmentFeed)
     }
 }

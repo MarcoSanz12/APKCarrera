@@ -11,7 +11,6 @@ import com.gf.common.entity.user.UserModel
 import com.gf.common.extensions.isEmpty
 import com.gf.common.extensions.isValidEmail
 import com.gf.common.extensions.textToString
-import com.gf.common.platform.BaseActivity
 import com.gf.common.platform.BaseFragment
 import com.gf.common.utils.Constants
 
@@ -52,7 +51,7 @@ class FragmentLogin : BaseFragment<Frg00LoginBinding>() {
     private fun handleUserLogin(userModel: UserModel) {
         saveUserData(userModel)
         hideLoadingDialog()
-        navigate(com.gf.apkcarrera.R.id.action_fragmentLogin_to_fragmentFeed)
+        navigate(com.gf.apkcarrera.R.id.action_global_navigationMain)
     }
 
     private fun saveUserData(userModel: UserModel){

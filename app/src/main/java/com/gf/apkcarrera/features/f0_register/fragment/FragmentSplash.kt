@@ -3,6 +3,7 @@ package com.gf.apkcarrera.features.f0_register.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg00SplashBinding
@@ -57,12 +58,12 @@ class FragmentSplash : BaseFragment<Frg00SplashBinding>() {
     }
 
     private fun handleUserLogin(userModel: UserModel) {
-        navigate(R.id.action_fragmentSplash_to_fragmentFeed)
+        navigate(R.id.action_global_navigationMain)
         putPreference(LOG_UID,userModel.uid)
     }
 
     override fun handleFailure(failure: Failure?) {
-        navigate(R.id.action_fragmentSplash_to_fragmentInitial)
+        navigate(R.id.action_global_fragmentInitial)
     }
 
 }

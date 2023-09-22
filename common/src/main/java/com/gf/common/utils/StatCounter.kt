@@ -34,7 +34,7 @@ class StatCounter() {
     private val totalTime = mutableListOf<Int>()
 
     // Distancia - Metros
-    private var totalDistance = 0
+    var totalDistance = 0
 
     val lastDistance : Int
         get() = queue.sumOf { it.first }

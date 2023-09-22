@@ -5,116 +5,117 @@
     android:id="@+id/my_nav"
     app:startDestination="@id/fragmentSplash">
 
-    <fragment
-        android:id="@+id/fragmentSplash"
-        android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentSplash"
-        tools:layout="@layout/frg00_splash"
-        android:label=" ">
-        <action
-            android:id="@+id/action_fragmentSplash_to_fragmentInitial"
-            app:destination="@id/fragmentInitial"
-            app:popUpTo="@id/my_nav"
-            app:popUpToInclusive="true"/>
-        <action
-            android:id="@+id/action_fragmentSplash_to_fragmentFeed"
-            app:destination="@id/fragmentFeed"
-            app:popUpTo="@id/my_nav"
-            app:popUpToInclusive="true"/>
-    </fragment>
-
+    <action android:id="@+id/action_global_fragmentInitial"
+        app:destination="@id/fragmentInitial"
+        app:popUpTo="@id/my_nav"
+        app:popUpToInclusive="true"/>
+    <action android:id="@+id/action_global_navigationMain"
+        app:destination="@id/fragmentFeed"
+        app:popUpTo="@id/my_nav"
+        app:popUpToInclusive="true"/>
+    <!-- 00_Inicial -->
     <fragment
         android:id="@+id/fragmentInitial"
         android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentInitial"
         android:label=""
-        tools:layout="@layout/frg00_initial">
+        tools:layout="@layout/frg00_initial" >
         <action
-            android:id="@+id/action_fragmentInitial_to_fragmentRegister1"
-            app:destination="@id/fragmentRegister1"
-            app:popUpTo="@id/fragmentInitial" />
+            android:id="@+id/action_fragmentInitial_to_navigation00Login"
+            app:destination="@id/navigation_login" />
         <action
-            android:id="@+id/action_fragmentInitial_to_fragmentLogin"
-            app:destination="@id/fragmentLogin"
-            app:popUpTo="@id/fragmentInitial" />
-    </fragment>
-    <fragment
-        android:id="@+id/fragmentRegister1"
-        android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentRegister1"
-        android:label="@string/title_register"
-        tools:layout="@layout/frg00_register1">
-        <action
-            android:id="@+id/action_fragmentRegister1_to_fragmentRegister2"
-            app:destination="@id/fragmentRegister2"
-            app:popUpTo="@id/fragmentRegister1"/>
-    </fragment>
-    <fragment
-        android:id="@+id/fragmentRegister2"
-        android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentRegister2"
-        android:label="@string/title_register"
-        tools:layout="@layout/frg00_register2">
-        <action
-            android:id="@+id/action_fragmentRegister2_to_fragmentFeed"
-            app:destination="@id/fragmentFeed"
-            app:popUpTo="@id/my_nav"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_fragmentInitial_to_navigation00Register"
+            app:destination="@id/navigation_register" />
     </fragment>
 
+    <!-- 00_Splash -->
     <fragment
-        android:id="@+id/fragmentLogin"
-        android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentLogin"
-        android:label="@string/title_login"
-        tools:layout="@layout/frg00_login">
-        <action
-            android:id="@+id/action_fragmentLogin_to_fragmentRecoverPass"
-            app:destination="@id/fragmentRecoverPass"
-            app:popUpTo="@id/fragmentLogin" />
-        <action
-            android:id="@+id/action_fragmentLogin_to_fragmentFeed"
-            app:destination="@id/fragmentFeed"
-            app:popUpTo="@id/my_nav"
-            app:popUpToInclusive="true"/>
-    </fragment>
-
-    <fragment
-        android:id="@+id/fragmentRecoverPass"
-        android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentRecoverPass"
-        android:label="@string/title_recover_account"
-        tools:layout="@layout/frg00_recover_pass"/>
-
+        android:id="@+id/fragmentSplash"
+        android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentSplash"
+        android:label=""
+        tools:layout="@layout/frg00_splash" />
+    <!-- 01_Feed -->
     <fragment
         android:id="@+id/fragmentFeed"
         android:name="com.gf.apkcarrera.features.f1_feed.fragment.FragmentFeed"
         android:label="@string/title_feed"
-        tools:layout="@layout/frg01_feed">
-
-    </fragment>
-    <fragment
-        android:id="@+id/fragmentFriends"
-        android:name="com.gf.apkcarrera.features.f2_friends.fragments.FragmentFriends"
-        android:label="FragmentFriends"
-        tools:layout="@layout/frg02_friends"/>
+        tools:layout="@layout/frg01_feed" />
+    <!-- 02_Amigos -->
     <fragment
         android:id="@+id/fragmentActivity"
         android:name="com.gf.apkcarrera.features.f3_activity.fragments.FragmentActivity"
         android:label="FragmentActivity"
-        tools:layout="@layout/frg03_activity"/>
+        tools:layout="@layout/frg03_activity" />
+    <!-- 03_Activity -->
+    <fragment
+        android:id="@+id/fragmentFriends"
+        android:name="com.gf.apkcarrera.features.f2_friends.fragments.FragmentFriends"
+        android:label="FragmentFriends"
+        tools:layout="@layout/frg02_friends" />
+    <!-- 04_Ajustes-->
     <fragment
         android:id="@+id/fragmentSettings"
         android:name="com.gf.apkcarrera.features.f4_settings.fragments.FragmentSettings"
         android:label="FragmentSettings"
-        tools:layout="@layout/frg04_settings">
-        <action
-            android:id="@+id/action_fragmentSettings_to_fragmentInitial"
-            app:destination="@id/fragmentInitial"
-            app:popUpTo="@id/my_nav"
-            app:popUpToInclusive="true"/>
-    </fragment>
-
+        tools:layout="@layout/frg04_settings" />
+    <!-- 05_Perfil -->
     <fragment
         android:id="@+id/fragmentProfile"
         android:name="com.gf.apkcarrera.features.f5_profile.fragments.FragmentProfile"
         android:label="FragmentProfile"
-        tools:layout="@layout/frg05_profile"/>
+        tools:layout="@layout/frg05_profile" />
 
 
 
+
+
+
+
+
+
+
+    <!-- Navigation Registro -->
+    <navigation
+        android:id="@+id/navigation_register"
+        app:startDestination="@id/fragmentRegister1">
+
+        <fragment
+            android:id="@+id/fragmentRegister1"
+            android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentRegister1"
+            android:label="@string/title_register"
+            tools:layout="@layout/frg00_register1" >
+            <action
+                android:id="@+id/action_fragmentRegister1_to_fragmentRegister2"
+                app:destination="@id/fragmentRegister2" />
+        </fragment>
+        <fragment
+            android:id="@+id/fragmentRegister2"
+            android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentRegister2"
+            android:label="@string/title_register"
+            tools:layout="@layout/frg00_register2" />
+
+    </navigation>
+    <!-- Navigation Login -->
+    <navigation android:id="@+id/navigation_login"
+        app:startDestination="@id/fragmentLogin">
+        <!-- Login -->
+        <fragment
+            android:id="@+id/fragmentLogin"
+            android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentLogin"
+            android:label="@string/title_login"
+            tools:layout="@layout/frg00_login">
+            <action
+                android:id="@+id/action_fragmentLogin_to_fragmentRecoverPass"
+                app:destination="@id/fragmentRecoverPass" />
+        </fragment>
+
+        <!-- Recuperar cuenta-->
+        <fragment
+            android:id="@+id/fragmentRecoverPass"
+            android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentRecoverPass"
+            android:label="@string/title_recover_account"
+            tools:layout="@layout/frg00_recover_pass" />
+        <fragment
+            android:id="@+id/placeholder"
+            tools:layout="@layout/frg01_feed" />
+    </navigation>
 </navigation>

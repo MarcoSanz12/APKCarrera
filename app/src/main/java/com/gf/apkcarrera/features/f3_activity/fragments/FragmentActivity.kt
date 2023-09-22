@@ -83,13 +83,15 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
         private const val CAM_ZOOM = 18f
         private const val MAX_PAUSED_POINTS = 5
         private const val PAUSE_MIN_DISTANCE = 30
+
+        private const val SPEED_STAT_MIN_TIME = 60
+        private const val SPEED_STAT_MIN_DISTANCE = 300
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         Log.d(TAG, "[${this.javaClass.simpleName}]onAttach")
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
-        setOnBackPressed(R.id.fragmentFeed)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -177,62 +179,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
                 ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
 
 
-    @SuppressLint("MissingPermission")
-    override fun onMapReady(googleMap: GoogleMap) {
-        map = googleMap
-        map.mapType = GoogleMap.MAP_TYPE_SATELLITE
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(41.6315, -4.7220),9f))
 
-        positionUpdater = PositionUpdater()
-        map.setLocationSource(positionUpdater)
-        map.isMyLocationEnabled = true
-
-        val locationButton = (binding.lyMapContainer.findViewById<View>(Integer.parseInt("1")).parent as View)
-            .findViewById<ImageView>(Integer.parseInt("2"))
-
-        locationButton.invisible()
-
-        map.setOnCameraMoveStartedListener {
-            CAM_MOVING = true
-            if (it == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE)
-                binding.btMylocation.isChecked = false
-        }
-
-        binding.btMylocation.addOnCheckedChangeListener { button, isChecked ->
-            if (isChecked){
-                locationButton.callOnClick()
-                CAM_TRACK = true
-            }
-            else{
-                CAM_TRACK = false
-            }
-        }
-
-        binding.btMylocation.isChecked = true
-
-
-        map.setOnCameraIdleListener {
-            CAM_MOVING = false
-        }
-
-        val locationRequest = LocationRequest.Builder( Priority.PRIORITY_HIGH_ACCURACY,1000).build()
-
-        // Timer para poner 3 puntitos *importante* al buscar gps
-        timer = Timer().apply {
-            scheduleAtFixedRate(timerTask {
-                MAIN.launch {
-                    if (binding.tvLocating.text.contains("..."))
-                        binding.tvLocating.text = getString(com.gf.common.R.string.obtaining_gps)
-                    else
-                        binding.tvLocating.text = binding.tvLocating.text.toString() + "."
-                }
-
-            }
-                ,0,1000)
-        }
-
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, positionUpdater, null)
-    }
 
     private inner class PositionUpdater : LocationSource,LocationCallback(){
         var locationChangeListener: LocationSource.OnLocationChangedListener? = null
@@ -244,12 +191,11 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
             binding.btMapButton.apply {
                 visible()
                 setOnClickListener {
-                    if (STATUS == STATUS_READY){
-                       startActivity()
-                    }else if (STATUS == STATUS_RUNNING){
-                        pauseActivity(true)
+                    when(STATUS){
+                        STATUS_READY -> startActivity()
+                        STATUS_RUNNING -> pauseActivity(true)
+                        STATUS_PAUSE -> resumeActivity()
                     }
-
                 }
             }
         }
@@ -399,10 +345,8 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
 
                 },2000)
             }
-
-
-
         }
+
 
         @SuppressLint("MissingPermission")
         private fun action1AddPoint(location: Location) {
@@ -417,20 +361,26 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
             if (points.isNotEmpty())
                 segmentDistance = points.last().distanceTo(locLatLng)
 
+            Log.d("DISTANCE",segmentDistance.toString())
+
             if (segmentDistance >= 10) {
+                pausedPoints = 0
                 points.add(locLatLng)
                 updatePolyline(map)
                 statCounter.add(segmentDistance.toInt(),clockTime-lastRegisterTime)
                 lastRegisterTime = clockTime
                 binding.apply {
                     tvPanelDistance.text = statCounter.distanceKm()
-                    statCounter.speedMinKm().notNull {
-                        tvPanelSpeed.text = it
-                    }
+                    // Mostramos distancia unicamente cuando haya unas estadisticas en condiciones
+                    if (statCounter.totalDistance >= SPEED_STAT_MIN_DISTANCE && statCounter.getTime() >= SPEED_STAT_MIN_TIME)
+                        statCounter.speedMinKm().notNull {
+                            tvPanelSpeed.text = it
+                        }
                 }
                 Log.d("GPS_Update", "Points: ${points.size}")
             }
-            else{
+            // Si vas a menos de 0.5 m/s durante 5 segundos seguidos se considera pausa
+            else if (segmentDistance < 0.5){
                 pausedPoints ++
                 if (pausedPoints > MAX_PAUSED_POINTS){
                     pauseActivity(false)
@@ -441,7 +391,14 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
         private fun action2Paused(location: Location){
             if (!USER_PAUSED){
                 val curLatLng = LatLng(location.latitude,location.longitude)
-                if (curLatLng.distanceTo(activity.points.last().last()) > PAUSE_MIN_DISTANCE){
+                val distance = try{
+                    curLatLng.distanceTo(activity.points.last().last())
+                }catch (ex:Exception){
+                    0.0
+                }
+
+                // Si se recorren 15 metros desde el punto de pausa se reanuda la actividad
+                if (distance > PAUSE_MIN_DISTANCE){
                     resumeActivity()
                 }
             }
@@ -462,11 +419,10 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
         }
 
         private fun pauseActivity(userPause : Boolean){
-
             USER_PAUSED = userPause
             pausedPoints = 0
             binding.btFinish.visible()
-            activity.points.add(points)
+            activity.points.add(points.toList())
             points.clear()
             binding.btMapButton.apply {
                 text = getString(com.gf.common.R.string.btmap_reanudar)
@@ -493,7 +449,9 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
     private fun updatePolyline(map:GoogleMap){
         map.clear()
 
-        activity.points.forEach {
+        val paintPoints = activity.points.toMutableList()
+        paintPoints.add(points)
+        paintPoints.forEach {
             val polylineOptions = PolylineOptions().apply {
                 color(requireContext().getColor(com.gf.common.R.color.orange_quaternary)) // Color de la línea
                 visible(true)
@@ -535,7 +493,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
         }
     }
 
-    fun perpendicularDistance(p: LatLng, p1: LatLng, p2: LatLng): Double {
+    private fun perpendicularDistance(p: LatLng, p1: LatLng, p2: LatLng): Double {
         val area = abs(0.5 * (p1.longitude * p2.latitude + p2.longitude * p.latitude + p.latitude * p1.longitude - p2.longitude * p1.latitude - p.latitude * p2.longitude - p1.longitude * p.latitude))
         val bottom = sqrt(Math.pow(p1.longitude - p2.longitude, 2.0) + Math.pow(p1.latitude - p2.latitude, 2.0))
         return area / bottom
@@ -549,6 +507,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
     }
 
     private fun startTimer(){
+        timer = Timer()
         timer.scheduleAtFixedRate(timerTask {
             if (STATUS == STATUS_RUNNING){
                 clockTime ++
@@ -560,6 +519,63 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
     }
     private fun stopTimer(){
         timer.cancel()
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onMapReady(googleMap: GoogleMap) {
+        map = googleMap
+        map.mapType = GoogleMap.MAP_TYPE_SATELLITE
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(41.6315, -4.7220),9f))
+
+        positionUpdater = PositionUpdater()
+        map.setLocationSource(positionUpdater)
+        map.isMyLocationEnabled = true
+
+        val locationButton = (binding.lyMapContainer.findViewById<View>(Integer.parseInt("1")).parent as View)
+            .findViewById<ImageView>(Integer.parseInt("2"))
+
+        locationButton.invisible()
+
+        map.setOnCameraMoveStartedListener {
+            CAM_MOVING = true
+            if (it == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE)
+                binding.btMylocation.isChecked = false
+        }
+
+        binding.btMylocation.addOnCheckedChangeListener { button, isChecked ->
+            if (isChecked){
+                locationButton.callOnClick()
+                CAM_TRACK = true
+            }
+            else{
+                CAM_TRACK = false
+            }
+        }
+
+        binding.btMylocation.isChecked = true
+
+
+        map.setOnCameraIdleListener {
+            CAM_MOVING = false
+        }
+
+        val locationRequest = LocationRequest.Builder( Priority.PRIORITY_HIGH_ACCURACY,1000).build()
+
+        // Timer para poner 3 puntitos *importante* al buscar gps
+        timer = Timer().apply {
+            scheduleAtFixedRate(timerTask {
+                MAIN.launch {
+                    if (binding.tvLocating.text.contains("..."))
+                        binding.tvLocating.text = getString(com.gf.common.R.string.obtaining_gps)
+                    else
+                        binding.tvLocating.text = binding.tvLocating.text.toString() + "."
+                }
+
+            }
+                ,0,1000)
+        }
+
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, positionUpdater, null)
     }
 
 }

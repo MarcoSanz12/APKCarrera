@@ -52,16 +52,22 @@ dependencies {
     api(platform("com.google.firebase:firebase-bom:32.2.0"))
     api("com.google.firebase:firebase-analytics-ktx")
     api("com.google.firebase:firebase-firestore-ktx")
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
+    api("androidx.core:core-ktx:1.10.1")
+    api("androidx.appcompat:appcompat:1.6.1")
+    api("com.google.android.material:material:1.9.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    api("androidx.navigation:navigation-fragment-ktx:2.6.0")
-    api("androidx.navigation:navigation-ui-ktx:2.6.0")
+    // Navigation
+    api("androidx.navigation:navigation-fragment-ktx:2.7.3")
+    api("androidx.navigation:navigation-ui-ktx:2.7.3")
+    api ("androidx.navigation:navigation-dynamic-features-fragment:2.7.3")
 
+    //DATABINDING
+    api ("androidx.databinding:databinding-common:8.1.1")
+
+    // Corrutinas
     api ("androidx.appcompat:appcompat:1.6.1")
     api ("org.jetbrains.kotlin:kotlin-stdlib:1.8.22")
     api ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
@@ -99,10 +105,9 @@ dependencies {
     api("com.google.android.gms:play-services-location:21.0.1")
     implementation("com.google.maps.android:android-maps-utils:2.3.0")
 
+    // Firebase
     api(platform("com.google.firebase:firebase-bom:32.2.0"))
-
-    // Add the dependency for the Firebase Authentication library
-    // When using the BoM, you don't specify versions in Firebase library dependencies
+    api("com.google.firebase:firebase-firestore-ktx:24.7.0")
     api("com.google.firebase:firebase-auth-ktx")
 
 

@@ -79,7 +79,7 @@ class FragmentRegister2 : BaseCameraFragment<Frg00Register2Binding>() {
     private fun handleUserRegistered(userModel: UserModel) {
         hideLoadingDialog()
         saveUserData(userModel.uid)
-        navigate(com.gf.apkcarrera.R.id.action_fragmentRegister2_to_fragmentFeed)
+        navigate(com.gf.apkcarrera.R.id.action_global_navigationMain)
     }
 
     override fun onImageLoadedListener(img: Bitmap?) {

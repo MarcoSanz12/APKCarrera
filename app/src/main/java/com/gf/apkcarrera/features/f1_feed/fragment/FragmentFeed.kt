@@ -24,7 +24,6 @@ class FragmentFeed : BaseFragment<Frg01FeedBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity() as MainActivity).findViewById<BottomNavigationView>(R.id.bottomNavigationView).visible()
         viewModel.user.observe(this, Observer(::handleUserLoaded))
         hideLoadingDialog()
     }

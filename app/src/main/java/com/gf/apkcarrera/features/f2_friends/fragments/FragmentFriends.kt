@@ -9,7 +9,6 @@ class FragmentFriends : BaseFragment<Frg02FriendsBinding>(){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        setOnBackPressed(R.id.fragmentFeed)
     }
 
 }

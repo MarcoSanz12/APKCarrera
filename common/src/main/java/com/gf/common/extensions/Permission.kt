@@ -1,23 +1,34 @@
 package com.gf.common.extensions
 
 import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
 
-fun Fragment.isGranted(permission: AppPermission) = run {
+fun Fragment.isPermissionGranted(permission: AppPermission) = run {
     context?.let {
         (PermissionChecker.checkSelfPermission(it, permission.permissionName
         ) == PermissionChecker.PERMISSION_GRANTED)
     } ?: false
 }
 
-fun Fragment.shouldShowRationale(permission: AppPermission) = run {
-    shouldShowRequestPermissionRationale(permission.permissionName)
+fun Fragment.isPermissionGranted(permissionId : String) : Boolean =
+    ContextCompat.checkSelfPermission(requireContext(),permissionId) == PackageManager.PERMISSION_GRANTED
+
+fun Fragment.isPermissionGranted(permissionIdList : Set<String>) : Boolean {
+    var allGranted = true
+
+    for (permId in permissionIdList){
+        if (!isPermissionGranted(permId)){
+            allGranted = false
+            break
+        }
+    }
+
+    return allGranted
 }
 
-fun Fragment.requestPermission(permissions: Array<out String>, requestCode: Int ) {
-    requestPermissions(permissions, requestCode)
-}
 
 //private fun Fragment.goToAppDetailsSettings() {
 //    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {

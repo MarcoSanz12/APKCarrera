@@ -110,5 +110,8 @@ dependencies {
     api("com.google.firebase:firebase-firestore-ktx:24.7.0")
     api("com.google.firebase:firebase-auth-ktx")
 
+    // WorkManager
+    api("androidx.work:work-runtime-ktx:2.8.0")
+    api ("androidx.work:work-multiprocess:2.8.0")
 
 }

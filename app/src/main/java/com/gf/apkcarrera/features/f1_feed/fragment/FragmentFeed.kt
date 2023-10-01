@@ -7,14 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.cotesa.common.extensions.toBitmap
-import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg01FeedBinding
-import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.features.f1_feed.viewmodel.MainViewModel
 import com.gf.common.entity.user.UserModel
-import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,6 +32,11 @@ class FragmentFeed : BaseFragment<Frg01FeedBinding>() {
     ): View? {
         viewModel.getUser()
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 
     private fun handleUserLoaded(userModel: UserModel?) {

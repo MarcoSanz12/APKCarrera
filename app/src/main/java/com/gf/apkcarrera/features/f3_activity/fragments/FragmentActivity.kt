@@ -3,9 +3,9 @@ package com.gf.apkcarrera.features.f3_activity.fragments
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
@@ -17,18 +17,19 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.activity.result.contract.ActivityResultContracts
 import com.cotesa.common.extensions.distanceTo
 import com.cotesa.common.extensions.notNull
+import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg03ActivityBinding
 import com.gf.common.entity.activity.ActivityModel
 import com.gf.common.extensions.invisible
+import com.gf.common.extensions.isPermissionGranted
 import com.gf.common.extensions.visible
 import com.gf.common.functional.AccuracyInterpolator
 import com.gf.common.functional.LatLngInterpolator
 import com.gf.common.platform.BaseFragment
-import com.gf.common.utils.Constants.Permissions.LOCATION_PERMISSION_CODE
 import com.gf.common.utils.StatCounter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -66,7 +67,9 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
     private var runnable : Runnable? = null
     private var TAG = "lifecycle"
 
-    lateinit var activity : ActivityModel
+    private lateinit var permissionToAsk : MutableSet<String>
+
+    lateinit var activityModel : ActivityModel
 
     // Cola usada para registrar las distancias y tiempos del último kilómetro
     private val statCounter = StatCounter()
@@ -90,15 +93,14 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        Log.d(TAG, "[${this.javaClass.simpleName}]onAttach")
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "[${this.javaClass.simpleName}][${requireActivity().supportFragmentManager.fragments.size}]onCreate")
-        activity = ActivityModel()
+        activityModel = ActivityModel()
         initializeView()
+        Log.d("VIDA","${javaClass.simpleName} OnCreate")
     }
 
     override fun onCreateView(
@@ -106,30 +108,45 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d(TAG, "[${this.javaClass.simpleName}]onCreateView")
+        Log.d("VIDA","${javaClass.simpleName} OnCreateView")
+        if (!(requireActivity() as MainActivity).mBound)
+            (requireActivity() as MainActivity).startService()
+
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d("VIDA","${javaClass.simpleName} OnDetach")
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG, "[${this.javaClass.simpleName}]onDestroy")
+        Log.d("VIDA","${javaClass.simpleName} OnDestroy")
+
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.d(TAG, "[${this.javaClass.simpleName}]onDestroyView")
+    private fun initializeView(){
+        if (checkPermissions())
+            createMap()
+        else
+            requestPermissions()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("VIDA","${javaClass.simpleName} OnStop")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "[${this.javaClass.simpleName}]onResume")
+        Log.d("VIDA","${javaClass.simpleName} OnResume")
     }
 
-    private fun initializeView(){
-        if (areLocationPermissionsGranted())
-            createMap()
-        else
-            requestLocationPermissions()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d("VIDA","${javaClass.simpleName} OnDestroyView")
     }
 
     private fun createMap(){
@@ -140,46 +157,43 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
             .commit()
 
         mapFragment.getMapAsync(this)
+        (requireActivity() as MainActivity).startService()
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == LOCATION_PERMISSION_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+    private val requestMultiplePermissions =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            if (permissions.all { it.value })
                 createMap()
-            } else {
+            else
                 handleNoGps()
-            }
+
         }
-        else {
-            handleNoGps()
-        }
-    }
-    private fun requestLocationPermissions() {
-        requestPermissions( //Method of Fragment
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ),
-            LOCATION_PERMISSION_CODE
+    private fun requestPermissions() =
+        requestMultiplePermissions.launch(
+            permissionToAsk.toTypedArray()
         )
-    }
 
     private fun handleNoGps(){
         Toast.makeText(requireContext(), getString(com.gf.common.R.string.error_no_location), Toast.LENGTH_SHORT).show()
         onBackPressed()
     }
 
-    private fun areLocationPermissionsGranted() : Boolean  =
-        (ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                &&
-                ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+    @SuppressLint("InlinedApi")
+    private fun checkPermissions() : Boolean{
+
+        permissionToAsk = mutableSetOf(Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION)
+
+        if (Build.VERSION.SDK_INT >= 33)
+            permissionToAsk.add(Manifest.permission.POST_NOTIFICATIONS)
 
 
-
+        return isPermissionGranted(setOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.POST_NOTIFICATIONS
+        ))
+    }
 
     private inner class PositionUpdater : LocationSource,LocationCallback(){
         var locationChangeListener: LocationSource.OnLocationChangedListener? = null
@@ -347,7 +361,6 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
             }
         }
 
-
         @SuppressLint("MissingPermission")
         private fun action1AddPoint(location: Location) {
             val locLatLng = LatLng(location.latitude, location.longitude)
@@ -392,7 +405,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
             if (!USER_PAUSED){
                 val curLatLng = LatLng(location.latitude,location.longitude)
                 val distance = try{
-                    curLatLng.distanceTo(activity.points.last().last())
+                    curLatLng.distanceTo(activityModel.points.last().last())
                 }catch (ex:Exception){
                     0.0
                 }
@@ -406,6 +419,8 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
 
         private fun startActivity(){
             binding.lyInfoPanel.expand()
+
+            (activity as? MainActivity)?.mService?.start()
 
             binding.btMapButton.apply {
                 text = getString(com.gf.common.R.string.btmap_detener)
@@ -422,7 +437,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
             USER_PAUSED = userPause
             pausedPoints = 0
             binding.btFinish.visible()
-            activity.points.add(points.toList())
+            activityModel.points.add(points.toList())
             points.clear()
             binding.btMapButton.apply {
                 text = getString(com.gf.common.R.string.btmap_reanudar)
@@ -449,7 +464,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
     private fun updatePolyline(map:GoogleMap){
         map.clear()
 
-        val paintPoints = activity.points.toMutableList()
+        val paintPoints = activityModel.points.toMutableList()
         paintPoints.add(points)
         paintPoints.forEach {
             val polylineOptions = PolylineOptions().apply {
@@ -509,13 +524,22 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
     private fun startTimer(){
         timer = Timer()
         timer.scheduleAtFixedRate(timerTask {
-            if (STATUS == STATUS_RUNNING){
-                clockTime ++
-                MAIN.launch {
-                    binding.tvPanelTime.text = StatCounter.formatTime(clockTime)
-                }
-            }
+          try {
+              if (STATUS == STATUS_RUNNING) {
+                  clockTime++
+                  val xd = (activity as? MainActivity)?.mService!!.contador++
+                  MAIN.launch {
+                      //binding.tvPanelTime.text = StatCounter.formatTime(clockTime)
+                      binding.tvPanelTime.text = xd.toString()
+                  }
+              }
+          }catch (ex:Exception){
+              ex.printStackTrace()
+              timer.cancel()
+          }
+
         },0,1000)
+
     }
     private fun stopTimer(){
         timer.cancel()

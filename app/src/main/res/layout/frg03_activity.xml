@@ -5,9 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ly_map_root"
     android:clickable="true"
-    android:clipChildren="false"
     xmlns:tools="http://schemas.android.com/tools">
-    <FrameLayout
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/ly_map_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -52,7 +51,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:el_expanded="false"
-        tools:el_expanded="true"
+
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -214,6 +214,8 @@
         app:backgroundTint="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:layout_margin="10dp"
         android:textColor="@color/purple_secondary"/>
     
@@ -230,6 +232,8 @@
         app:layout_constraintTop_toBottomOf="@id/ly_locating"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/RoundButton"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"/>
 

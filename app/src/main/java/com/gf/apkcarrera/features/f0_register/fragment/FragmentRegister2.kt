@@ -37,10 +37,9 @@ class FragmentRegister2 : BaseCameraFragment<Frg00Register2Binding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         assignProfilePicture()
-        initializeView()
     }
 
-    private fun initializeView(){
+    override fun initializeView(){
         binding.apply {
 
             etName.setText(user.username)

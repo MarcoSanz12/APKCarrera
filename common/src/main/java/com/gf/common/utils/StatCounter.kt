@@ -126,22 +126,6 @@ class StatCounter() {
 
 
 
-    fun speedMinKm() : String? {
-        val km = lastDistance / 1000.0 // Km
-        val min = lastTime / 60.0 // S
-
-        // Se actualiza la velocidad cada aprox 15s
-        return if (getTime() - lastTimeGivenSpeed >= UPDATE_SPEED_COOLDOWN){
-            lastTimeGivenSpeed = getTime()
-            String.format("%.2f",min / km)
-        }
-        else
-            null
-
-
-
-    }
-
 
 
 }

@@ -14,14 +14,10 @@ import com.gf.common.platform.BaseFragment
 class FragmentSettings : BaseFragment<Frg04SettingsBinding>() {
 
     val viewModel: MainViewModel by activityViewModels()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun initializeView() {
         binding.lyLogout.setOnClickListener {
             showLoadingDialog(getString(com.gf.common.R.string.loggin_out))
             viewModel.logout {
-                Log.d("Logout", "Llegamos")
                 android.widget.Toast.makeText(requireContext(), getString(com.gf.common.R.string.logout_succesful), LENGTH_SHORT).show()
                 hideLoadingDialog()
                 navigate(R.id.action_global_fragmentInitial)

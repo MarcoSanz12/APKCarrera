@@ -43,6 +43,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initObservers()
         Log.d("STATUS_LIFE","${this.javaClass.simpleName} - CREATE")
     }
 
@@ -60,8 +61,12 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initializeView()
         Log.d("STATUS_LIFE","${this.javaClass.simpleName} - VIEW CREATED")
     }
+
+    open fun initObservers(){}
+    open fun initializeView(){}
 
 
     override fun onDestroyView() {

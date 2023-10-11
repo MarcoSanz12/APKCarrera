@@ -9,10 +9,8 @@ interface LatLngInterpolator {
     fun interpolate(fraction: Float, a: LatLng, b: LatLng): LatLng
     class Linear : LatLngInterpolator {
         override fun interpolate(fraction: Float, a: LatLng, b: LatLng): LatLng {
-            Log.d("INTERPOSITION","Fraction: $fraction, Initial: $a, Final: $b ")
             val lat = (b.latitude - a.latitude) * fraction + a.latitude
             val lng = (b.longitude - a.longitude) * fraction + a.longitude
-            Log.d("INTERPOSITION","X: ${lat}, Y: ${lng}" )
 
             return LatLng(lat, lng)
         }

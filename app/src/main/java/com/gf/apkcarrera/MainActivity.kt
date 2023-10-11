@@ -13,7 +13,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.gf.apkcarrera.features.f3_activity.service.RunningService
+import com.gf.apkcarrera.features.f3_activity.service.ServiceActivity
 import com.gf.common.extensions.getDestinationId
 import com.gf.common.extensions.invisible
 import com.gf.common.extensions.navigateToMenuItem
@@ -28,10 +28,8 @@ class MainActivity : BaseActivity() {
 
     override val navController by lazy { (supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment).navController }
     private val topLevelIds = setOf(R.id.fragmentSplash,R.id.fragmentInitial, R.id.fragmentFeed)
-    var mService: RunningService? = null
+    var mService: ServiceActivity? = null
     var mBound: Boolean = false
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val screenSplash = installSplashScreen()
@@ -73,7 +71,7 @@ class MainActivity : BaseActivity() {
 
     private val mConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            mService = (service as RunningService.RunningBinder).getService()
+            mService = (service as ServiceActivity.RunningBinder).getService()
         }
 
         override fun onServiceDisconnected(className: ComponentName) {
@@ -85,10 +83,11 @@ class MainActivity : BaseActivity() {
         bindService(
             Intent(
                 this@MainActivity,
-                RunningService::class.java
+                ServiceActivity::class.java
             ), mConnection, BIND_AUTO_CREATE
         )
         mBound = true
+        mService?.start()
     }
 
     fun stopService() {
@@ -97,6 +96,7 @@ class MainActivity : BaseActivity() {
             unbindService(mConnection)
             mBound = false
         }
+        mService?.stop()
     }
 
     override fun onResume() {
@@ -104,8 +104,8 @@ class MainActivity : BaseActivity() {
         Log.d("STATUS_LIFE","${this.javaClass.simpleName} - RESUME")
     }
     override fun onDestroy() {
-        super.onDestroy()
         stopService()
+        super.onDestroy()
         Log.d("STATUS_LIFE","${this.javaClass.simpleName} - DESTROY")
     }
 

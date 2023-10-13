@@ -2,10 +2,10 @@ package com.gf.common.entity
 
 import com.google.android.gms.maps.model.LatLng
 
-data class ActivityUIState(
+data class RunningUIState(
     val time : Int,
     val distance : Int,
-    val speedLastKm : Double,
+    val speedLastKm : Int,
     val points : List<List<LatLng>>,
     val status : ActivityStatus
 )

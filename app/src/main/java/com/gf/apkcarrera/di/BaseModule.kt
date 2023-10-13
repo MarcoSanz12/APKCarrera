@@ -1,7 +1,7 @@
 package com.gf.apkcarrera.di
 
 import android.content.Context
-import com.gf.apkcarrera.features.f3_activity.viewmodel.ActivityViewModel
+import com.gf.apkcarrera.features.f3_running.viewmodel.ActivityViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices

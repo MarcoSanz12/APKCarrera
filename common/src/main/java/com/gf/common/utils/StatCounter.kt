@@ -7,8 +7,6 @@ package com.gf.common.utils
  */
 class StatCounter() {
 
-    var lastTimeGivenSpeed = 0
-
     companion object{
         const val LAST_KILOMETER = 1000
         const val UPDATE_SPEED_COOLDOWN = 15
@@ -36,6 +34,8 @@ class StatCounter() {
     // Distancia - Metros
     var totalDistance = 0
 
+    val lastSpeed : Int
+        get() = lastDistance / lastTime
     val lastDistance : Int
         get() = queue.sumOf { it.first }
 

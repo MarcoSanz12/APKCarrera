@@ -47,7 +47,7 @@ kapt {
 }
 
 dependencies {
-    val room_version = "2.5.0"
+    val room_version = "2.5.2"
 
     api(platform("com.google.firebase:firebase-bom:32.2.0"))
     api("com.google.firebase:firebase-analytics-ktx")
@@ -86,14 +86,15 @@ dependencies {
     api("com.google.code.gson:gson:2.9.0")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
 
     // Viewmodel
-    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    api("androidx.lifecycle:lifecycle-livedata:2.6.1")
+    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    api("androidx.lifecycle:lifecycle-livedata:2.6.2")
+    api("androidx.lifecycle:lifecycle-service:2.6.2")
     api("androidx.fragment:fragment-ktx:1.6.1")
-    api("androidx.activity:activity-ktx:1.7.2")
+    api("androidx.activity:activity-ktx:1.8.0")
 
     // SplashScreen
     api("androidx.core:core-splashscreen:1.0.1")

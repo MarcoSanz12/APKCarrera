@@ -17,7 +17,7 @@
         android:enabled="true"
         android:icon="@drawable/icon_friends"/>
     <item
-        android:id="@+id/fragmentActivity"
+        android:id="@+id/fragmentRunning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/icon_run"

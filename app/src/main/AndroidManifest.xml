@@ -50,7 +50,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".features.f3_activity.service.ServiceActivity" android:foregroundServiceType="location"/>
+        <service
+            android:name=".features.f3_running.service.ServiceRunning"
+            android:foregroundServiceType="location"/>
     </application>
 
 </manifest>

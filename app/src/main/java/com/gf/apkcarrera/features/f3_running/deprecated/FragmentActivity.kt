@@ -1,54 +1,10 @@
-package com.gf.apkcarrera.features.f3_activity.fragments
 
-import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.res.ColorStateList
-import android.location.Location
-import android.os.Build
-import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.gf.apkcarrera.MainActivity
-import com.gf.apkcarrera.R
-import com.gf.apkcarrera.databinding.Frg03ActivityBinding
-import com.gf.apkcarrera.features.f3_activity.viewmodel.ActivityViewModel
-import com.gf.common.entity.ActivityStatus
-import com.gf.common.entity.ActivityUIState
-import com.gf.common.entity.activity.ActivityModel
-import com.gf.common.extensions.invisible
-import com.gf.common.extensions.isPermissionGranted
-import com.gf.common.extensions.visible
-import com.gf.common.platform.BaseFragment
-import com.gf.common.utils.AccurateLocationCallback
-import com.gf.common.utils.StatCounter
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.PolylineOptions
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import java.util.Timer
-import javax.inject.Inject
-import kotlin.concurrent.timerTask
-import kotlin.math.abs
-import kotlin.math.sqrt
+package com.gf.apkcarrera.features.f3_running.deprecated
 
+/*
 @AndroidEntryPoint
-class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallback {
+@Deprecated("Obsolete due to a new class", ReplaceWith("FragmentRunning","lol"),DeprecationLevel.HIDDEN)
+class FragmentActivity : BaseFragment<Frg03RunningBinding>(), OnMapReadyCallback {
 
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var map: GoogleMap
@@ -61,8 +17,6 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
     private lateinit var accurateLocationCallback : AccurateLocationCallback
 
     private lateinit var permissionToAsk : MutableSet<String>
-
-    lateinit var activityModel : ActivityModel
 
     @Inject
     lateinit var activityViewModel : ActivityViewModel
@@ -82,12 +36,8 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
 
 
     override fun initObservers() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                activityViewModel.uiStateFlow.collect{
-                    updateUI(it)
-                }
-            }
+        with(activityViewModel){
+            collectFlow(uiStateFlow,Lifecycle.State.STARTED,::updateUI)
         }
     }
 
@@ -100,6 +50,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
     }
 
     private fun updateUI(it: ActivityUIState) {
+        Log.d("ACTUALIZACION","Fragment : ${it}")
 
         if (STATUS != it.status){
             when (it.status){
@@ -260,7 +211,7 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
             (requireActivity() as MainActivity).startService()
     }
 
-    private fun TextView.setSpeed(speed: Double){
+    private fun TextView.setSpeed(speed: Int){
         val speedMinsKm = ((1.0 / speed) / 60.0)
 
         // Calcula los minutos y segundos
@@ -374,4 +325,4 @@ class FragmentActivity : BaseFragment<Frg03ActivityBinding>(), OnMapReadyCallbac
             Manifest.permission.POST_NOTIFICATIONS
         ))
     }
-}
+}*/

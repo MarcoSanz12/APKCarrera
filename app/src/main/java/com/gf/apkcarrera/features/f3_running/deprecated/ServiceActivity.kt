@@ -1,32 +1,8 @@
-package com.gf.apkcarrera.features.f3_activity.service
+package com.gf.apkcarrera.features.f3_running.deprecated
 
-import android.annotation.SuppressLint
-import android.app.Notification
-import android.app.Service
-import android.content.Intent
-import android.location.Location
-import android.os.Binder
-import android.os.IBinder
-import android.util.Log
-import androidx.core.app.NotificationCompat
-import com.cotesa.common.extensions.distanceTo
-import com.gf.apkcarrera.features.f3_activity.viewmodel.ActivityViewModel
-import com.gf.common.entity.ActivityStatus
-import com.gf.common.utils.StatCounter
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.model.LatLng
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.util.Timer
-import javax.inject.Inject
-import kotlin.concurrent.timerTask
-
+/*
 @AndroidEntryPoint
+@Deprecated("Obsolete due to a new class", ReplaceWith("ServiceRunning","lol"),DeprecationLevel.HIDDEN)
 class ServiceActivity : Service() {
     companion object{
         private const val MAX_PAUSED_POINTS = 5
@@ -47,14 +23,16 @@ class ServiceActivity : Service() {
     @Inject
     lateinit var locationRequest: LocationRequest
 
+    private val positionUpdater : PositionUpdater by lazy { PositionUpdater() }
+
     var contador = 0
-    override fun onBind(p0: Intent?): IBinder? {
+    override fun onBind(p0: Intent?): IBinder {
         return binder
     }
 
     inner class RunningBinder : Binder() {
         // Return this instance of LocalService so clients can call public methods
-        fun getService(): ServiceActivity = this@ServiceActivity
+        //fun getService(): ServiceActivity = this@ServiceActivity
     }
 
     fun start(){
@@ -65,9 +43,16 @@ class ServiceActivity : Service() {
             .build()
 
         startForeground(1, mNotification)
+
         CoroutineScope(Dispatchers.Default).launch {
             activityViewModel.serviceStateFlow.collect{
+                Log.d("ACTUALIZACION","Servicio : ${it}")
                 STATUS = it
+                if (STATUS == ActivityStatus.RUNNING)
+                    positionUpdater.startTimer()
+                if (STATUS == ActivityStatus.PAUSE || STATUS == ActivityStatus.DONE)
+                    positionUpdater.stopTimer()
+
             }
         }
 
@@ -75,6 +60,17 @@ class ServiceActivity : Service() {
     }
 
     private fun initializeRegister() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.d("ACTUALIZACION","Empiezo a recolectar")
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest,positionUpdater,null)
+        }
 
     }
 
@@ -97,6 +93,8 @@ class ServiceActivity : Service() {
             // Si la localización es null, no coger punto
             lastLocation = locationResult.lastLocation ?: return
 
+            Log.d("ACTUALIZACION","Punto : X ${lastLocation?.latitude ?: 0} Y ${lastLocation?.longitude ?: 0}")
+
 
             when (STATUS){
                 ActivityStatus.LOCATING ->
@@ -111,88 +109,16 @@ class ServiceActivity : Service() {
 
                 }
             }
+
+            activityViewModel.updateUi(ActivityUIState(
+                time = clockTime,
+                distance = statCounter.totalDistance,
+                speedLastKm = statCounter.lastSpeed,
+                points = points,
+                status = STATUS
+
+            ))
         }
-
-        /**
-         * Se encarga de interpolar el circulo del usuario, para moverlo de forma fluida además de
-         * mover la cámara segun este se vaya moviendo
-         */
-        /*private fun animateMovement() {
-            runnable.notNull {
-                handler.removeCallbacks(it)
-            }
-
-            val startPosition = LatLng(oldLocation!!.latitude, oldLocation!!.longitude)
-            val startAccuracy = oldLocation!!.accuracy
-            val startBearing = oldLocation!!.bearing
-            val start = SystemClock.uptimeMillis()
-            val interpolator = LinearInterpolator()
-            val accInterpolator = AccelerateDecelerateInterpolator()
-            val durationInMs = 1000F
-            val latLngInterpolator = LatLngInterpolator.Linear()
-            val floatInterpolator = AccuracyInterpolator.Linear()
-
-            runnable = object : Runnable {
-
-                var elapsed: Long = 0
-                var t: Float = 0.0f
-                var v: Float = 0.0f
-                var vAcc: Float = 0.0f
-
-                override fun run() {
-                    elapsed = SystemClock.uptimeMillis() - start;
-                    t = (elapsed.toFloat() / durationInMs)
-                    v = interpolator.getInterpolation(t)
-                    vAcc = accInterpolator.getInterpolation(t)
-
-                    val position = latLngInterpolator.interpolate(
-                        v,
-                        startPosition,
-                        LatLng(lastLocation!!.latitude, lastLocation!!.longitude)
-                    )
-                    val interAccuracy =
-                        floatInterpolator.interpolate(vAcc, startAccuracy, lastLocation!!.accuracy)
-                    val interBearing =
-                        floatInterpolator.interpolate(vAcc, startBearing, lastLocation!!.bearing)
-
-                    val interLocation = Location("")
-                    interLocation.apply {
-                        latitude = position.latitude
-                        longitude = position.longitude
-                        accuracy = interAccuracy
-                        bearing = interBearing
-                    }
-
-                    if (!CAM_MOVING && CAM_TRACK){
-
-                        if (map.cameraPosition.zoom < FragmentActivity.CAM_ZOOM){
-                            map.animateCamera(
-                                CameraUpdateFactory.newLatLngZoom(position,
-                                    FragmentActivity.CAM_ZOOM
-                                ))
-                        }
-                        else
-                            map.animateCamera(CameraUpdateFactory.newLatLng(position))
-
-                        CAM_MOVING = true
-
-                        Log.d("ANIMATUR","Animaturu!")
-                    }
-
-                    oldLocation = interLocation
-
-                    locationChangeListener?.onLocationChanged(interLocation)
-
-                    // Repeat till progress is complete.
-                    if (t < 1) {
-                        // Post again 16ms later.
-                        handler.postDelayed(this, 8);
-                    }
-                }
-            }
-
-            handler.post(runnable!!)
-        }*/
 
 
         @SuppressLint("MissingPermission")
@@ -214,7 +140,6 @@ class ServiceActivity : Service() {
             if (points.last().isNotEmpty())
                 segmentDistance = points.last().last().distanceTo(locLatLng)
 
-            Log.d("DISTANCE",segmentDistance.toString())
 
             if (segmentDistance >= 10) {
                 pausedPoints = 0
@@ -222,7 +147,7 @@ class ServiceActivity : Service() {
                 statCounter.add(segmentDistance.toInt(),clockTime-lastRegisterTime)
                 lastRegisterTime = clockTime
 
-                Log.d("GPS_Update", "Points: ${points.size}")
+
             }
             // Si vas a menos de 0.5 m/s durante 5 segundos seguidos se considera pausa
             else if (segmentDistance < 0.5){
@@ -233,7 +158,7 @@ class ServiceActivity : Service() {
             }
         }
 
-        private fun startTimer(){
+        fun startTimer(){
             timer = Timer()
             timer.scheduleAtFixedRate(timerTask {
                 try {
@@ -248,7 +173,7 @@ class ServiceActivity : Service() {
             },0,1000)
 
         }
-        private fun stopTimer(){
+        fun stopTimer(){
             timer.cancel()
         }
 
@@ -273,3 +198,4 @@ class ServiceActivity : Service() {
     }
 
 }
+*/

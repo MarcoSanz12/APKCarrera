@@ -8,18 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.viewbinding.ViewBinding
 import com.gf.common.R
-import com.gf.common.dialog.LoadingDialog
 import com.gf.common.exception.Failure
 import com.gf.common.extensions.putAny
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import java.lang.reflect.ParameterizedType
+import java.util.Timer
+import kotlin.concurrent.timerTask
 
 abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
@@ -112,6 +113,16 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     protected fun onBackPressed(){
         Navigation.findNavController(binding.root).navigateUp()
+    }
+
+    protected fun startTimerOnMain(delay : Long = 0, period : Long = 1000,run: () -> Unit) : Timer {
+        return Timer().apply {
+            scheduleAtFixedRate(timerTask {
+                MAIN.launch {
+                    run()
+                }
+            },delay,period)
+        }
     }
 
     open fun handleFailure(failure: Failure?) {

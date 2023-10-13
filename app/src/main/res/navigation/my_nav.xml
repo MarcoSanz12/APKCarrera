@@ -41,10 +41,15 @@
         tools:layout="@layout/frg01_feed" />
     <!-- 02_Amigos -->
     <fragment
-        android:id="@+id/fragmentActivity"
-        android:name="com.gf.apkcarrera.features.f3_activity.fragments.FragmentActivity"
-        android:label="FragmentActivity"
-        tools:layout="@layout/frg03_activity" />
+        android:id="@+id/fragmentRunning"
+        android:name="com.gf.apkcarrera.features.f3_running.fragments.FragmentRunning"
+        android:label="FragmentRunning"
+        tools:layout="@layout/frg03_running" />
+    <action
+        android:id="@+id/action_global_fragmentRunning"
+        app:destination="@id/fragmentRunning"
+        app:launchSingleTop="true"/>
+
     <!-- 03_Activity -->
     <fragment
         android:id="@+id/fragmentFriends"
@@ -118,4 +123,5 @@
             android:id="@+id/placeholder"
             tools:layout="@layout/frg01_feed" />
     </navigation>
+
 </navigation>

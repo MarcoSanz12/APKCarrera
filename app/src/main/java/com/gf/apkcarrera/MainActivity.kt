@@ -1,10 +1,7 @@
 package com.gf.apkcarrera
 
-import android.content.ComponentName
 import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
 import android.util.Log
 import androidx.appcompat.widget.Toolbar
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -13,12 +10,14 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import com.gf.apkcarrera.features.f3_activity.service.ServiceActivity
+import com.gf.apkcarrera.features.f3_running.service.ServiceRunning
 import com.gf.common.extensions.getDestinationId
 import com.gf.common.extensions.invisible
 import com.gf.common.extensions.navigateToMenuItem
 import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseActivity
+import com.gf.common.utils.Constants.ACTION_SHOW_RUNNING_FRAGMENT
+import com.gf.common.utils.Constants.ACTION_STOP_RUNNING
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,8 +27,6 @@ class MainActivity : BaseActivity() {
 
     override val navController by lazy { (supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment).navController }
     private val topLevelIds = setOf(R.id.fragmentSplash,R.id.fragmentInitial, R.id.fragmentFeed)
-    var mService: ServiceActivity? = null
-    var mBound: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val screenSplash = installSplashScreen()
@@ -37,6 +34,8 @@ class MainActivity : BaseActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        navigateToRunningFragmentIfNeeded(intent)
 
         val toolbar : Toolbar = findViewById(R.id.my_toolbar)
         setSupportActionBar(toolbar)
@@ -69,43 +68,24 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private val mConnection: ServiceConnection = object : ServiceConnection {
-        override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            mService = (service as ServiceActivity.RunningBinder).getService()
-        }
-
-        override fun onServiceDisconnected(className: ComponentName) {
-            mService = null
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navigateToRunningFragmentIfNeeded(intent)
+    }
+    private fun navigateToRunningFragmentIfNeeded(intent:Intent?){
+        if (intent?.action == ACTION_SHOW_RUNNING_FRAGMENT){
+            navController.navigate(R.id.action_global_fragmentRunning)
         }
     }
 
-    fun startService() {
-        bindService(
-            Intent(
-                this@MainActivity,
-                ServiceActivity::class.java
-            ), mConnection, BIND_AUTO_CREATE
-        )
-        mBound = true
-        mService?.start()
-    }
-
-    fun stopService() {
-        if (mBound) {
-            // Detach our existing connection.
-            unbindService(mConnection)
-            mBound = false
-        }
-        mService?.stop()
-    }
 
     override fun onResume() {
         super.onResume()
         Log.d("STATUS_LIFE","${this.javaClass.simpleName} - RESUME")
     }
     override fun onDestroy() {
-        stopService()
         super.onDestroy()
+        sendCommandToService(ACTION_STOP_RUNNING)
         Log.d("STATUS_LIFE","${this.javaClass.simpleName} - DESTROY")
     }
 
@@ -114,4 +94,10 @@ class MainActivity : BaseActivity() {
         super.onStop()
         Log.d("STATUS_LIFE", "${this.javaClass.simpleName} - STOP")
     }
+
+    fun sendCommandToService (action : String) =
+        Intent(this, ServiceRunning::class.java).also {
+            it.action = action
+            this.startService(it)
+        }
 }

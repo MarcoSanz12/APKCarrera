@@ -1,5 +1,7 @@
 package com.gf.common.extensions
 
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.Factory
@@ -29,4 +31,17 @@ inline fun <reified T : ViewModel> androidx.fragment.app.FragmentActivity.viewMo
     return vm
 }
 
+/**
+ * Muestra un toast
+ * @param string a mostrar en el toast
+ * @param toastLength *opcional* Duración del toast, por defecto LENGTH_SHORT
+ */
+fun Fragment.toast(string:String,toastLength: Int = Toast.LENGTH_SHORT) = Toast.makeText(this.requireContext(),string,toastLength).show()
+
+/**
+ * Muestra un toast
+ * @param stringId a mostrar en el toast
+ * @param toastLength *opcional* Duración del toast, por defecto LENGTH_SHORT
+ */
+fun Fragment.toast(stringId:Int,toastLength: Int = Toast.LENGTH_SHORT) = Toast.makeText(this.requireContext(),getString(stringId),toastLength).show()
 

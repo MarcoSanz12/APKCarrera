@@ -1,5 +1,6 @@
 package com.gf.apkcarrera.features.f3_running.service
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
@@ -7,11 +8,15 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
+import android.location.Location
+import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.cotesa.common.extensions.distanceTo
 import com.gf.apkcarrera.MainActivity
+import com.gf.common.entity.ActivityStatus
 import com.gf.common.entity.RunningUIState
 import com.gf.common.utils.Constants.ACTION_PAUSE_RUNNING
 import com.gf.common.utils.Constants.ACTION_SHOW_RUNNING_FRAGMENT
@@ -20,26 +25,61 @@ import com.gf.common.utils.Constants.ACTION_STOP_RUNNING
 import com.gf.common.utils.Constants.NOTIFICATION_CHANNEL_ID
 import com.gf.common.utils.Constants.NOTIFICATION_CHANNEL_NAME
 import com.gf.common.utils.Constants.NOTIFICATION_ID
+import com.gf.common.utils.StatCounter
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.maps.model.LatLng
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.Timer
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ServiceRunning : LifecycleService() {
 
+    // VAR Servicio
     private val TAG = "ServiceRunning"
-
     var isUnresumed = true
 
+    // VAR Localización
+    @Inject
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    @Inject
+    lateinit var locationRequest: LocationRequest
+
+    var oldLocation : Location? = null
+    var lastLocation : Location? = null
+
+    var clockTime = 0
+    var lastRegisterTime = 0
+
+    var STATUS = ActivityStatus.RUNNING
+    lateinit var timer: Timer
+    var points : MutableList<MutableList<LatLng>> = mutableListOf(mutableListOf())
+    var pausedPoints = 0
+    val statCounter = StatCounter()
     companion object{
 
         private val _uiState = MutableStateFlow<RunningUIState?>(null)
         val uiState get() = _uiState.asStateFlow()
+
+        private const val MAX_PAUSED_POINTS = 5
+        private const val PAUSE_MIN_DISTANCE = 30
+
+        private const val SPEED_STAT_MIN_TIME = 60
+        private const val SPEED_STAT_MIN_DISTANCE = 300
     }
 
+    // 1. Comandos para controlar el servicio
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.let {
             when(it.action){
                 ACTION_START_OR_RESUME_RUNNING->{
+                    STATUS = ActivityStatus.RUNNING
                     if (isUnresumed){
                         Log.d(TAG, "onStartCommand: START_RUNNING")
                         startForegroundService()
@@ -53,9 +93,12 @@ class ServiceRunning : LifecycleService() {
 
                 }
                 ACTION_PAUSE_RUNNING->{
+                    STATUS = ActivityStatus.PAUSE
+                    points.add(mutableListOf())
                     Log.d(TAG, "onStartCommand: PAUSE_RUNNING")
                 }
                 ACTION_STOP_RUNNING ->{
+                    STATUS = ActivityStatus.DONE
                     stopSelf()
                     Log.d(TAG, "onStartCommand: STOP_RUNNING")
                 }
@@ -65,6 +108,8 @@ class ServiceRunning : LifecycleService() {
         return super.onStartCommand(intent, flags, startId)
     }
 
+    // 1. Inicio del servicio
+    @SuppressLint("MissingPermission")
     private fun startForegroundService(){
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         createNotificationChannel(notificationManager)
@@ -78,8 +123,93 @@ class ServiceRunning : LifecycleService() {
             .setContentIntent(getMainActivityPendingIntent())
 
         startForeground(NOTIFICATION_ID,notificationBuilder.build())
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.getMainLooper())
     }
 
+    // 2. Recogida de datos
+    val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(p0: LocationResult) {
+            super.onLocationResult(p0)
+
+            // Aumentar tiempo si estamos corriendo
+            if (STATUS == ActivityStatus.RUNNING)
+                clockTime++
+
+            // Si la localización es null, no coger punto
+            lastLocation = p0.lastLocation ?: return
+
+            when (STATUS){
+                ActivityStatus.RUNNING ->
+                    action1AddPoint(lastLocation!!)
+                ActivityStatus.PAUSE ->
+                    action2Paused(lastLocation!!)
+                else ->{}
+            }
+
+            updateUi(
+                RunningUIState(
+                    time = clockTime,
+                    distance = statCounter.totalDistance,
+                    speedLastKm = statCounter.lastSpeed,
+                    points = points,
+                    status = STATUS
+                )
+            )
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun action1AddPoint(location: Location) {
+        val locLatLng = LatLng(location.latitude, location.longitude)
+
+        // Si detecta a más de 30 metros de precisión, no coger
+        if (location.accuracy > 30)
+            return
+
+        var segmentDistance = 10.0
+
+        if (points.last().isNotEmpty())
+            segmentDistance = points.last().last().distanceTo(locLatLng)
+
+
+        if (segmentDistance >= 10) {
+            pausedPoints = 0
+            points.last().add(locLatLng)
+            statCounter.add(segmentDistance.toInt(),clockTime-lastRegisterTime)
+            lastRegisterTime = clockTime
+            Log.d(TAG, "action1AddPoint: Registro punto $locLatLng")
+
+        }
+        // Si vas a menos de 0.5 m/s durante 5 segundos seguidos se considera pausa
+        else if (segmentDistance < 0.5){
+            Log.d(TAG, "action1AddPoint: Velocidad baja $segmentDistance m/s [$pausedPoints/$MAX_PAUSED_POINTS]")
+            pausedPoints ++
+            if (pausedPoints > MAX_PAUSED_POINTS){
+                points.add(mutableListOf())
+                STATUS = ActivityStatus.PAUSE
+            }
+        }
+    }
+
+    private fun action2Paused(location: Location){
+        Log.d(TAG, "action2Paused: Pausado")
+        val curLatLng = LatLng(location.latitude,location.longitude)
+        val distance = try{
+            curLatLng.distanceTo(points.last().last())
+        }catch (ex:Exception){
+            0.0
+        }
+
+        // Si se recorren 15 metros desde el punto de pausa se reanuda la actividad
+        if (distance > PAUSE_MIN_DISTANCE){
+            Log.d(TAG, "action2Paused: Se recupera la carrera")
+            STATUS = ActivityStatus.RUNNING
+        }
+
+    }
+
+
+    // Emitir datos
     private fun updateUi(uiState : RunningUIState) {
         lifecycleScope.launch {
             _uiState.emit(uiState)

@@ -83,6 +83,10 @@ class MainActivity : BaseActivity() {
         super.onResume()
         Log.d("STATUS_LIFE","${this.javaClass.simpleName} - RESUME")
     }
+
+    override fun onPause() {
+        super.onPause()
+    }
     override fun onDestroy() {
         super.onDestroy()
         sendCommandToService(ACTION_STOP_RUNNING)

@@ -43,7 +43,6 @@ fun <T : Any> T?.notNull(isSomething: (it: T) -> Unit, isNull:() -> Unit) {
 fun LatLng.distanceTo(other: LatLng) : Double = SphericalUtil.computeDistanceBetween(this,other)
 
 
-
 /**
 Obtiene una representación formateada del tamaño del archivo en bytes.
 @param bytes El tamaño del archivo en bytes.

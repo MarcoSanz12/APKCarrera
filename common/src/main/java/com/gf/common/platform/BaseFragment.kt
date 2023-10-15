@@ -115,13 +115,23 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         Navigation.findNavController(binding.root).navigateUp()
     }
 
-    protected fun startTimerOnMain(delay : Long = 0, period : Long = 1000,run: () -> Unit) : Timer {
+    protected fun startScheduleTimerOnMain(delay : Long = 0, period : Long = 1000, run: () -> Unit) : Timer {
         return Timer().apply {
             scheduleAtFixedRate(timerTask {
                 MAIN.launch {
                     run()
                 }
             },delay,period)
+        }
+    }
+
+    protected fun startTimerOnMain(delay : Long = 0, run: () -> Unit) : Timer {
+        return Timer().apply {
+            schedule(timerTask {
+                MAIN.launch {
+                    run()
+                }
+            },delay)
         }
     }
 

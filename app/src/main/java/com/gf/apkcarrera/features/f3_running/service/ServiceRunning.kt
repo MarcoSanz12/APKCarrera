@@ -5,11 +5,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
 import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.app.PendingIntent.FLAG_MUTABLE
 import android.content.Context
 import android.content.Intent
 import android.location.Location
-import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
@@ -30,13 +29,15 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.Timer
-import javax.inject.Inject
+import kotlin.concurrent.timerTask
 
 @AndroidEntryPoint
 class ServiceRunning : LifecycleService() {
@@ -46,22 +47,27 @@ class ServiceRunning : LifecycleService() {
     var isUnresumed = true
 
     // VAR Localización
-    @Inject
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    @Inject
-    lateinit var locationRequest: LocationRequest
+    private val fusedLocationProviderClient: FusedLocationProviderClient
+        get() = LocationServices.getFusedLocationProviderClient(this)
+
+    private val locationRequest: LocationRequest
+        get() = LocationRequest.Builder( Priority.PRIORITY_HIGH_ACCURACY,1000).build()
 
     var oldLocation : Location? = null
     var lastLocation : Location? = null
 
+    // VAR Timer Carrera
+    lateinit var timer: Timer
     var clockTime = 0
+    var innerClockTime = 0
+
     var lastRegisterTime = 0
 
     var STATUS = ActivityStatus.RUNNING
-    lateinit var timer: Timer
     var points : MutableList<MutableList<LatLng>> = mutableListOf(mutableListOf())
     var pausedPoints = 0
     val statCounter = StatCounter()
+
     companion object{
 
         private val _uiState = MutableStateFlow<RunningUIState?>(null)
@@ -83,23 +89,22 @@ class ServiceRunning : LifecycleService() {
                     if (isUnresumed){
                         Log.d(TAG, "onStartCommand: START_RUNNING")
                         startForegroundService()
+                        startTimer()
                         isUnresumed = false
 
                     }
                     else{
                         Log.d(TAG, "onStartCommand: RESUME_RUNNING")
                     }
-
-
                 }
                 ACTION_PAUSE_RUNNING->{
-                    STATUS = ActivityStatus.PAUSE
-                    points.add(mutableListOf())
+                    pauseRunning()
                     Log.d(TAG, "onStartCommand: PAUSE_RUNNING")
                 }
                 ACTION_STOP_RUNNING ->{
                     STATUS = ActivityStatus.DONE
-                    stopSelf()
+                    stopTimer()
+                    stopService()
                     Log.d(TAG, "onStartCommand: STOP_RUNNING")
                 }
                 else -> {}
@@ -123,17 +128,13 @@ class ServiceRunning : LifecycleService() {
             .setContentIntent(getMainActivityPendingIntent())
 
         startForeground(NOTIFICATION_ID,notificationBuilder.build())
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, Looper.getMainLooper())
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, null)
     }
 
     // 2. Recogida de datos
     val locationCallback = object : LocationCallback() {
         override fun onLocationResult(p0: LocationResult) {
             super.onLocationResult(p0)
-
-            // Aumentar tiempo si estamos corriendo
-            if (STATUS == ActivityStatus.RUNNING)
-                clockTime++
 
             // Si la localización es null, no coger punto
             lastLocation = p0.lastLocation ?: return
@@ -146,15 +147,6 @@ class ServiceRunning : LifecycleService() {
                 else ->{}
             }
 
-            updateUi(
-                RunningUIState(
-                    time = clockTime,
-                    distance = statCounter.totalDistance,
-                    speedLastKm = statCounter.lastSpeed,
-                    points = points,
-                    status = STATUS
-                )
-            )
         }
     }
 
@@ -169,7 +161,7 @@ class ServiceRunning : LifecycleService() {
         var segmentDistance = 10.0
 
         if (points.last().isNotEmpty())
-            segmentDistance = points.last().last().distanceTo(locLatLng)
+            segmentDistance = points.flatten().last().distanceTo(locLatLng)
 
 
         if (segmentDistance >= 10) {
@@ -177,35 +169,76 @@ class ServiceRunning : LifecycleService() {
             points.last().add(locLatLng)
             statCounter.add(segmentDistance.toInt(),clockTime-lastRegisterTime)
             lastRegisterTime = clockTime
-            Log.d(TAG, "action1AddPoint: Registro punto $locLatLng")
 
         }
-        // Si vas a menos de 0.5 m/s durante 5 segundos seguidos se considera pausa
-        else if (segmentDistance < 0.5){
-            Log.d(TAG, "action1AddPoint: Velocidad baja $segmentDistance m/s [$pausedPoints/$MAX_PAUSED_POINTS]")
-            pausedPoints ++
-            if (pausedPoints > MAX_PAUSED_POINTS){
-                points.add(mutableListOf())
-                STATUS = ActivityStatus.PAUSE
-            }
+        // Si pasan más de 20 segundos desde el último registro de un punto
+        else if (clockTime - lastRegisterTime > 20){
+            pauseRunning()
+            updateUi(
+                RunningUIState(
+                    time = clockTime,
+                    distance = statCounter.totalDistance,
+                    speedLastKm = statCounter.lastSpeed,
+                    points = points,
+                    status = STATUS
+                )
+            )
+
         }
     }
 
     private fun action2Paused(location: Location){
-        Log.d(TAG, "action2Paused: Pausado")
+
         val curLatLng = LatLng(location.latitude,location.longitude)
         val distance = try{
-            curLatLng.distanceTo(points.last().last())
+            curLatLng.distanceTo(points.flatten().last())
         }catch (ex:Exception){
             0.0
         }
+        Log.d(TAG, "action2Paused: Pausado ($distance -> Unpause in $PAUSE_MIN_DISTANCE)")
+
 
         // Si se recorren 15 metros desde el punto de pausa se reanuda la actividad
         if (distance > PAUSE_MIN_DISTANCE){
             Log.d(TAG, "action2Paused: Se recupera la carrera")
             STATUS = ActivityStatus.RUNNING
         }
+    }
 
+    private fun pauseRunning(){
+        pausedPoints = 0
+        points.add(mutableListOf())
+        STATUS = ActivityStatus.PAUSE
+    }
+
+    private fun startTimer(){
+        timer = Timer().apply {
+            schedule(timerTask {
+                innerClockTime++
+                if (STATUS == ActivityStatus.RUNNING){
+                    clockTime++
+                    updateUi(
+                        RunningUIState(
+                            time = clockTime,
+                            distance = statCounter.totalDistance,
+                            speedLastKm = statCounter.lastSpeed,
+                            points = points,
+                            status = STATUS
+                        )
+                    )
+                }
+
+            },0,1000)
+        }
+    }
+
+    private fun stopTimer(){
+        timer.cancel()
+    }
+
+    private fun stopService(){
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        stopSelf()
     }
 
 
@@ -222,7 +255,7 @@ class ServiceRunning : LifecycleService() {
         Intent(this,MainActivity::class.java).also{
             it.action = ACTION_SHOW_RUNNING_FRAGMENT
         },
-        FLAG_UPDATE_CURRENT
+        FLAG_MUTABLE
     )
 
     private fun createNotificationChannel(notificationManager: NotificationManager){

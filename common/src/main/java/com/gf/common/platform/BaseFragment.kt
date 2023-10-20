@@ -141,4 +141,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         Log.e("ERROR",failure?.message ?: "Error en FragmentRegister2")
     }
 
+
+
 }

@@ -15,7 +15,7 @@ class ActivityViewModel : BaseViewModel() {
     private val _uiStateFlow = MutableStateFlow(RunningUIState(
         time = 0,
         distance = 0,
-        speedLastKm = 0,
+        speedLastKm = 0f,
         points = emptyList(),
         status = ActivityStatus.LOCATING
     ))

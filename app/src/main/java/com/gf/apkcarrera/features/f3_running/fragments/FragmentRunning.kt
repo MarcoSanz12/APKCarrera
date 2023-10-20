@@ -5,19 +5,19 @@ import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.location.Location
 import android.os.Build
+import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import com.gf.apkcarrera.MainActivity
-import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg03RunningBinding
 import com.gf.apkcarrera.features.f3_running.service.ServiceRunning
 import com.gf.common.entity.ActivityStatus
 import com.gf.common.entity.RunningUIState
 import com.gf.common.extensions.collectFlowOnce
+import com.gf.common.extensions.format
 import com.gf.common.extensions.invisible
 import com.gf.common.extensions.isPermissionGranted
 import com.gf.common.extensions.toLatLng
@@ -30,15 +30,16 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Timer
-import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
@@ -46,52 +47,72 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     private val TAG = "FragmentRunning"
 
     // VAR Map
-    private lateinit var mapFragment: SupportMapFragment
     private lateinit var map: GoogleMap
-    private var userLocation : Location? = null
+    private var userLocation: Location? = null
     private var CAM_MOVING = false
     private var CAM_TRACK = true
     private lateinit var permissionToAsk: MutableSet<String>
 
     // VAR Actividad
-    private var timer : Timer? = null
-    private var recoveredState : Boolean = true
-    private var STATUS : ActivityStatus = ActivityStatus.LOCATING
+    private var timer: Timer? = null
+    private var recoveredState: Boolean = true
+    private var STATUS: ActivityStatus = ActivityStatus.LOCATING
     private var uiPoints = listOf<LatLng>()
+    private var lastLocation : LatLng? = null
 
-    @Inject
-    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private val fusedLocationProviderClient: FusedLocationProviderClient
+        get() = LocationServices.getFusedLocationProviderClient(requireContext())
 
-    @Inject
-    lateinit var locationRequest: LocationRequest
+    private val locationRequest: LocationRequest
+        get() = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000).build()
 
-    companion object{
+    private val trackingRequest: LocationRequest
+        get() = LocationRequest.Builder(Priority.PRIORITY_LOW_POWER,1000).apply {
+            setMinUpdateDistanceMeters(5f)
+        }.build()
+
+    private val canUpdateCamera
+        get() = (CAM_TRACK && !CAM_MOVING)
+
+
+    companion object {
         private const val LOCATION_MIN_ACCURACY = 30
+        private const val MIN_CAM_ZOOM = 16f
         private const val CAM_ZOOM = 18f
     }
 
+    // 1. Checkeo de permisos, si hay buscar usuario
 
-
-    // 1. Checkeo de permisos
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.mapView.onCreate(savedInstanceState)
+        super.onViewCreated(view, savedInstanceState)
+    }
+    @SuppressLint("MissingPermission")
     override fun initializeView() {
-        if (checkPermissions()){
-            createMap()
-            adjustButtons()
-        }
-        else
-            requestPermissions()
+        if (checkPermissions()) {
+            // Obtener ubicación
+            fusedLocationProviderClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
 
+            // Localizando...
+            searchingUser()
+            adjustButtons()
+        } else
+            requestPermissions()
     }
 
+
     // 1. Configurar los botones
-    private fun adjustButtons(){
+    private fun adjustButtons() {
         with(binding) {
             btMapButton.setOnClickListener {
-                if (STATUS == ActivityStatus.READY || STATUS == ActivityStatus.PAUSE){
+                if (STATUS == ActivityStatus.READY || STATUS == ActivityStatus.PAUSE) {
                     sendCommandToService(Constants.ACTION_START_OR_RESUME_RUNNING)
                     updateUIRunning()
-                }
-                else if (STATUS == ActivityStatus.RUNNING){
+                } else if (STATUS == ActivityStatus.RUNNING) {
                     sendCommandToService(Constants.ACTION_PAUSE_RUNNING)
                     updateUIPause()
                 }
@@ -99,77 +120,34 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
         }
     }
 
-    // 2. Creación del mapa
-    @SuppressLint("MissingPermission")
-    private fun createMap() {
-        fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.getMainLooper()
-        )
-
-        if (!this::mapFragment.isInitialized) {
-            mapFragment = SupportMapFragment.newInstance()
-            childFragmentManager
-                .beginTransaction()
-                .add(R.id.ly_map_container, mapFragment)
-                .commit()
-
-            mapFragment.getMapAsync(this)
-
-
+    // 2.* Localizando usuario
+    val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(p0: LocationResult) {
+            super.onLocationResult(p0)
+            Log.d(TAG, "UI Location: ${p0.lastLocation?.accuracy}")
+            if (p0.lastLocation?.accuracy!! <= 50){
+                lastLocation = p0.lastLocation?.toLatLng()
+                binding.mapView.getMapAsync(this@FragmentRunning)
+                fusedLocationProviderClient.removeLocationUpdates(this)
+            }
         }
-
-
     }
-    // 2.* Mapa cargado
-    @SuppressLint("MissingPermission")
-    override fun onMapReady(p0: GoogleMap) {
-        Log.d(TAG, "onMapReady: MAPA CARGADO")
-        map = p0
-        map.mapType = GoogleMap.MAP_TYPE_SATELLITE
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(41.6315, -4.7220),9f))
-        map.isMyLocationEnabled = true
 
-        // Default GOOGLE Location Button -> Invisible
-        val locationButton = hideGoogleLocationButton()
-
-        // Localizando...
-        searchingUser()
-
-
-        map.setOnCameraMoveStartedListener {
-            CAM_MOVING = true
-            if (it == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE){
-                binding.btMylocation.isChecked = false
-                CAM_TRACK = false
-            }
-
-        }
-
-        binding.btMylocation.addOnCheckedChangeListener { button, isChecked ->
-            if (isChecked){
-                locationButton?.callOnClick()
-                CAM_TRACK = true
-            }
-            else{
-                CAM_TRACK = false
+    // 2.* Movimiento cámara
+    val trackingCallback = object : LocationCallback() {
+        override fun onLocationResult(p0: LocationResult) {
+            Log.d(TAG, "onLocationResult: TRACKING...")
+            super.onLocationResult(p0)
+            if (canUpdateCamera){
+                lastLocation = p0.lastLocation?.toLatLng()
+                Log.d(TAG, "AUTO move_camera")
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation!!,map.cameraPosition.zoom),300,null)
             }
         }
-
-        binding.btMylocation.isChecked = true
-
-
-        map.setOnCameraIdleListener {
-            CAM_MOVING = false
-        }
-
-
-
     }
 
     // 2.* Animación buscando usuario
-    private fun searchingUser(){
+    private fun searchingUser() {
         Log.d(TAG, "searchingUser: LOCALIZANDO...")
         timer?.cancel()
         // Timer para poner 3 puntitos *importante* al buscar gps
@@ -179,25 +157,22 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
             else
                 binding.tvLocating.text = binding.tvLocating.text.toString() + "."
         }
-
-
     }
-    // 2.* Animación usuario localizado
+
+    // 2.* Mapa y usuario, localizado, se configura el mapa y se llama a servicio
     @SuppressLint("MissingPermission")
-    private fun foundUser(){
+    override fun onMapReady(p0: GoogleMap) {
+        Log.d(TAG, "onMapReady: MAPA CARGADO")
+        map = p0
+        map.mapType = GoogleMap.MAP_TYPE_SATELLITE
+        map.uiSettings.isMyLocationButtonEnabled = false
+
         // LOCALIZACIÓN ENCONTRADA
         map.isMyLocationEnabled = true
 
-        Log.d(TAG,"searchingUser: LOCALIZADO!")
 
-        val location = LatLng(userLocation!!.latitude,userLocation!!.longitude)
-        map.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                location,
-                CAM_ZOOM
-            ))
 
-        with(binding){
+        with(binding) {
             tvLocating.text = getString(com.gf.common.R.string.obtaining_gps_done)
             lyLocating.setBackgroundResource(com.gf.common.R.color.green)
             btMapButton.visible()
@@ -205,50 +180,76 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
             pbLocating.invisible()
         }
         timer?.cancel()
-        timer = startTimerOnMain(2000) {  binding.lyLocating.collapse() }
+        timer = startTimerOnMain(2000) { binding.lyLocating.collapse() }
 
         STATUS = ActivityStatus.READY
 
-    }
+        // Default GOOGLE Location Button -> Invisible
+        // val locationButton = hideGoogleLocationButton()
 
-    // 2.* Esconder botón de google
-    private fun hideGoogleLocationButton(): ImageView? {
-        val locationButton =
-            (binding.lyMapContainer.findViewById<View>(Integer.parseInt("1")).parent as View)
-                .findViewById<ImageView>(Integer.parseInt("2"))
-        locationButton.invisible()
-        return locationButton
-    }
-
-    // 2.* Localizando usuario
-    val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(p0: LocationResult) {
-            super.onLocationResult(p0)
-            if (CAM_TRACK && userLocation != null)
-                map.animateCamera(
-                    CameraUpdateFactory.newLatLngZoom(p0.lastLocation!!.toLatLng(),map.cameraPosition.zoom)
-                )
-            if (p0.lastLocation?.accuracy!! <= 30 && userLocation == null){
-                userLocation = p0.lastLocation
-                userLocated()
+        map.setOnCameraMoveStartedListener {
+            CAM_MOVING = true
+            if (it == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+                binding.btMylocation.isChecked = false
+                CAM_TRACK = false
             }
-
         }
-    }
 
-    // 3. Usuario localizado y mapa cargado, se observa la recolección del servicio
-    private fun userLocated(){
-        if (userLocation == null || !this::map.isInitialized)
-            return
+        map.setOnCameraIdleListener {
+            CAM_MOVING = false
+        }
+        binding.btMylocation.isChecked = true
 
-        foundUser()
+        binding.btMylocation.addOnCheckedChangeListener { button, isChecked ->
+            if (isChecked) {
+                lastLocation?.let {
+                    Log.d(TAG, "MANUAL move_camera")
+                    map.animateCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            it,
+                            if (map.cameraPosition.zoom <= MIN_CAM_ZOOM)
+                                CAM_ZOOM
+                            else
+                                map.cameraPosition.zoom
+
+                        )
+                    )
+                }
+                CAM_TRACK = true
+            }
+            else{
+                CAM_TRACK = false
+            }
+        }
+
+        lastLocation?.let {
+            Log.d(TAG, "INITIAL move_camera")
+            map.moveCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                    it,
+                    CAM_ZOOM
+                )
+            )
+        }
+
+
+        // Actualizar cámara
+        fusedLocationProviderClient.requestLocationUpdates(
+            trackingRequest,
+            trackingCallback,
+            Looper.getMainLooper()
+        )
+
         collectFlowOnce(ServiceRunning.uiState, ::updateUI, ::createUI)
     }
+
+
 
     // 4. Si es la primera vez que se inicia la carrera
     private fun createUI() {
         Log.d(TAG, "createUI: Primer inicio")
         recoveredState = false
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 
 
@@ -256,6 +257,7 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     private fun updateUI(runningUIState: RunningUIState) {
         // Se recupera una carrera
         if (recoveredState){
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback)
             Log.d(TAG, "updateUI: Recupero ${runningUIState.status}")
             when (runningUIState.status) {
                 ActivityStatus.RUNNING -> updateUIRunning()
@@ -264,6 +266,7 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
             }
             recoveredState = false
         }
+        // Pintado normal
         else{
 
             if (STATUS != runningUIState.status){
@@ -311,20 +314,28 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     }
 
     // 4.* Actualizar elementos interfaz
-    private fun updateUIStats(time:Int, distance:Int,speed:Int){
+    private fun updateUIStats(time:Int, distance:Int,speed:Float){
         with(binding){
-            tvPanelDistance.text = String.format("%.2f",distance / 3600.0)
+            if (distance < 0 || time < 0)
+                return
+
+            tvPanelDistance.text = (distance/1000f).format(2)
             tvPanelTime.text = StatCounter.formatTime(time)
 
-            // Minutos por kilómetro
-            tvPanelSpeed.setSpeed(speed)
+            if (distance >= 50){
+                // Minutos por kilómetro
+                tvPanelSpeed.setSpeed(speed)
+            }
+
         }
     }
+
 
     // 4.* Actualizar UI para estado RUNNING
     private fun updateUIRunning(){
         Log.d(TAG, "updateUIRunning: UI Corriendo")
         with(binding){
+            btFinish.invisible()
             lyInfoPanel.expand()
 
             btMapButton.apply {
@@ -332,6 +343,7 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
                 setTextColor(resources.getColor(com.gf.common.R.color.white))
                 backgroundTintList = ColorStateList.valueOf(resources.getColor(com.gf.common.R.color.purple_secondary))
             }
+            btFinish.invisible()
 
 
             STATUS = ActivityStatus.RUNNING
@@ -344,6 +356,7 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
         Log.d(TAG, "updateUIPause: UI Pausada")
         with(binding){
             btFinish.visible()
+            lyInfoPanel.visible()
             btMapButton.apply {
                 text = getString(com.gf.common.R.string.btmap_reanudar)
                 setTextColor(resources.getColor(com.gf.common.R.color.purple_secondary))
@@ -354,26 +367,25 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
         }
     }
 
-    private fun TextView.setSpeed(speed: Int){
-        if (speed == 0)
-            text = "00:00"
-        else{
-            val speedMinsKm = ((1.0 / speed) / 60.0)
+    private fun TextView.setSpeed(speed: Float){
+        text = if (speed > 0) {
+            val speedMinsPerKilometer = ((1 / speed) / 60) * 1000
 
             // Calcula los minutos y segundos
-            val minutos = (speedMinsKm).toInt()
-            val segundos = ((speedMinsKm * 60) % 60).toInt()
+            val minutos = (speedMinsPerKilometer).toInt()
+            val segundos = ((speedMinsPerKilometer * 60) % 60).toInt()
 
             // Formatea la cadena en "mm:ss"
-            text = String.format("%02d:%02d", minutos, segundos)
+            String.format("%02d:%02d", minutos, segundos)
         }
-
+        else
+            "0:00"
     }
 
     private val requestMultiplePermissions =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             if (permissions.all { it.value })
-                createMap()
+                initializeView()
             else
                 handleNoGps()
 
@@ -409,7 +421,38 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     private fun handleNoGps() {
         toast(com.gf.common.R.string.error_no_location)
         onBackPressed()
+    }
 
+    override fun onDestroyView() {
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        super.onDestroyView()
+    }
+
+
+
+    override fun onStart() {
+        binding.mapView.onStart()
+        super.onStart()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        binding.mapView.onSaveInstanceState(outState)
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onResume() {
+        binding.mapView.onResume()
+        super.onResume()
+    }
+
+    override fun onLowMemory() {
+        binding.mapView.onLowMemory()
+        super.onLowMemory()
+    }
+
+    override fun onStop() {
+        binding.mapView.onStop()
+        super.onStop()
     }
 
     private fun sendCommandToService(action: String) =

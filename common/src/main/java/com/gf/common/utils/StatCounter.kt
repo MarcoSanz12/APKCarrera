@@ -24,7 +24,7 @@ class StatCounter() {
 
     }
 
-   val queue : MutableList<Pair<Int,Int>> = mutableListOf()
+    val queue : MutableList<Pair<Int,Int>> = mutableListOf()
 
     // Estadísticas
 
@@ -34,17 +34,22 @@ class StatCounter() {
     // Distancia - Metros
     var totalDistance = 0
 
-    val lastSpeed : Int
-        get() = lastDistance / lastTime
+    val lastSpeed : Float
+        get() =
+            if (lastTime == 0 || lastDistance == 0)
+                0F
+            else{
+                lastDistance.toFloat() / lastTime.toFloat()
+            }
+
+
+
+
     val lastDistance : Int
         get() = queue.sumOf { it.first }
 
     val lastTime : Int
-        get() =
-            if (queue.isEmpty())
-                1
-            else
-                queue.sumOf { it.second }
+        get() = queue.sumOf { it.second }
 
 
     /**

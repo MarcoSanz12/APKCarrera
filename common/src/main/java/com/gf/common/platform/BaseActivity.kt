@@ -1,7 +1,5 @@
 package com.gf.common.platform
 
-import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import com.gf.common.dialog.LoadingDialog
@@ -9,6 +7,7 @@ import com.gf.common.dialog.LoadingDialog
 abstract class BaseActivity : AppCompatActivity() {
 
     abstract val navController : NavController
+    abstract val actionBarTitle : String
     private var loadingDialog : LoadingDialog? = null
 
     fun showLoadingDialog(msg:String){

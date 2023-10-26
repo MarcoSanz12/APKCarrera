@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.viewbinding.ViewBinding
@@ -30,17 +31,20 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     protected lateinit var preferences : SharedPreferences
 
 
-    private lateinit var activity: BaseActivity
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         Log.d("STATUS_LIFE","${this.javaClass.simpleName} - ${this.lifecycle.currentState.name}")
-        activity = requireActivity() as BaseActivity
         MAIN = CoroutineScope(Dispatchers.Main)
+
         preferences = requireContext().getSharedPreferences(
             requireContext().packageName + "_preferences",
             Context.MODE_PRIVATE
         )
+
+        requireActivity().onBackPressedDispatcher.addCallback {
+            onBackPressed()
+        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,7 +116,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     }
 
     protected fun onBackPressed(){
-        Navigation.findNavController(binding.root).navigateUp()
+        (requireActivity() as BaseActivity).navController.navigateUp()
     }
 
     protected fun startScheduleTimerOnMain(delay : Long = 0, period : Long = 1000, run: () -> Unit) : Timer {

@@ -17,6 +17,7 @@ import com.cotesa.common.extensions.distanceTo
 import com.gf.apkcarrera.MainActivity
 import com.gf.common.entity.ActivityStatus
 import com.gf.common.entity.RunningUIState
+import com.gf.common.extensions.toLatLng
 import com.gf.common.utils.Constants.ACTION_PAUSE_RUNNING
 import com.gf.common.utils.Constants.ACTION_SHOW_RUNNING_FRAGMENT
 import com.gf.common.utils.Constants.ACTION_START_OR_RESUME_RUNNING
@@ -53,14 +54,24 @@ class ServiceRunning : LifecycleService() {
     private val locationRequest: LocationRequest
         get() = LocationRequest.Builder( Priority.PRIORITY_HIGH_ACCURACY,1000).build()
 
-    var oldLocation : Location? = null
     var lastLocation : Location? = null
+    val pointsLastPoint : LatLng?
+        get() = points.flatten().lastOrNull()
+
+    private val distanceLastPoint : Double
+        get () =
+            if (pointsLastPoint != null && lastLocation != null)
+                pointsLastPoint!!.distanceTo(lastLocation!!.toLatLng())
+            else
+                0.0
+
 
     // VAR Timer Carrera
     lateinit var timer: Timer
     var clockTime = 0
-    var innerClockTime = 0
 
+    // VAR AutoPause
+    private var timeWithoutPoints : Int = 0
     var lastRegisterTime = 0
 
     var STATUS = ActivityStatus.RUNNING
@@ -73,8 +84,9 @@ class ServiceRunning : LifecycleService() {
         private val _uiState = MutableStateFlow<RunningUIState?>(null)
         val uiState get() = _uiState.asStateFlow()
 
-        private const val MAX_PAUSED_POINTS = 5
-        private const val PAUSE_MIN_DISTANCE = 30
+        private const val PAUSE_MIN_DISTANCE = 1
+        private const val RESUME_MIN_DISTANCE = 30
+        private const val PAUSE_MIN_TIME = 30
 
         private const val SPEED_STAT_MIN_TIME = 60
         private const val SPEED_STAT_MIN_DISTANCE = 300
@@ -141,9 +153,9 @@ class ServiceRunning : LifecycleService() {
 
             when (STATUS){
                 ActivityStatus.RUNNING ->
-                    action1AddPoint(lastLocation!!)
+                    action1AddPoint(p0.lastLocation!!)
                 ActivityStatus.PAUSE ->
-                    action2Paused(lastLocation!!)
+                    action2Paused(p0.lastLocation!!)
                 else ->{}
             }
 
@@ -171,20 +183,6 @@ class ServiceRunning : LifecycleService() {
             lastRegisterTime = clockTime
 
         }
-        // Si pasan más de 20 segundos desde el último registro de un punto
-        else if (clockTime - lastRegisterTime > 20){
-            pauseRunning()
-            updateUi(
-                RunningUIState(
-                    time = clockTime,
-                    distance = statCounter.totalDistance,
-                    speedLastKm = statCounter.lastSpeed,
-                    points = points,
-                    status = STATUS
-                )
-            )
-
-        }
     }
 
     private fun action2Paused(location: Location){
@@ -195,18 +193,11 @@ class ServiceRunning : LifecycleService() {
         }catch (ex:Exception){
             0.0
         }
-        Log.d(TAG, "action2Paused: Pausado ($distance -> Unpause in $PAUSE_MIN_DISTANCE)")
 
 
-        // Si se recorren 15 metros desde el punto de pausa se reanuda la actividad
-        if (distance > PAUSE_MIN_DISTANCE){
-            Log.d(TAG, "action2Paused: Se recupera la carrera")
-            STATUS = ActivityStatus.RUNNING
-        }
     }
 
     private fun pauseRunning(){
-        pausedPoints = 0
         points.add(mutableListOf())
         STATUS = ActivityStatus.PAUSE
     }
@@ -214,19 +205,43 @@ class ServiceRunning : LifecycleService() {
     private fun startTimer(){
         timer = Timer().apply {
             schedule(timerTask {
-                innerClockTime++
                 if (STATUS == ActivityStatus.RUNNING){
-                    clockTime++
-                    updateUi(
-                        RunningUIState(
-                            time = clockTime,
-                            distance = statCounter.totalDistance,
-                            speedLastKm = statCounter.lastSpeed,
-                            points = points,
-                            status = STATUS
-                        )
-                    )
+
+                    if (lastLocation == null || pointsLastPoint == null || distanceLastPoint <= PAUSE_MIN_DISTANCE) {
+                        timeWithoutPoints++
+                        Log.d(TAG, "Time between points [$timeWithoutPoints / $PAUSE_MIN_TIME]")
+                    }
+                    else{
+                        timeWithoutPoints = 0
+                        Log.d(TAG, "Time between points RESET")
+                    }
+
+
+                    if (timeWithoutPoints > PAUSE_MIN_TIME){
+                        pauseRunning()
+                        timeWithoutPoints = 0
+                    }
                 }
+                else if (STATUS == ActivityStatus.PAUSE){
+                    Log.d(TAG, "action2Paused: Pausado ($distanceLastPoint -> Unpause in $RESUME_MIN_DISTANCE)")
+                    if (pointsLastPoint!!.distanceTo(lastLocation!!.toLatLng()) >= RESUME_MIN_DISTANCE){
+                        Log.d(TAG, "action2Paused: Se recupera la carrera")
+                        STATUS = ActivityStatus.RUNNING
+                    }
+                }
+
+                clockTime++
+                updateUi(
+                    RunningUIState(
+                        time = clockTime,
+                        distance = statCounter.totalDistance,
+                        speedLastKm = statCounter.lastSpeed,
+                        points = points,
+                        status = STATUS
+                    )
+                )
+                // Si se recorren 15 metros desde el punto de pausa se reanuda la actividad
+
 
             },0,1000)
         }

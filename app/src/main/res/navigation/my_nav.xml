@@ -32,7 +32,7 @@
         android:id="@+id/fragmentSplash"
         android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentSplash"
         android:label=""
-        tools:layout="@layout/frg00_splash" />
+        tools:layout="@layout/frg00_splash"/>
     <!-- 01_Feed -->
     <fragment
         android:id="@+id/fragmentFeed"

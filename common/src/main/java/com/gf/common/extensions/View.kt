@@ -2,8 +2,6 @@ package com.gf.common.extensions
 
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
@@ -18,8 +16,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.cotesa.common.extensions.notNull
 import com.bumptech.glide.request.target.Target
+import com.cotesa.common.extensions.notNull
 import com.gf.common.R
 import java.io.File
 import kotlin.math.abs
@@ -31,6 +29,15 @@ fun View.visible() {
 
 fun View.invisible() {
     this.visibility = View.GONE
+}
+
+fun View.visible(isVisible : Boolean) : Boolean {
+    if (isVisible)
+        visible()
+    else
+        invisible()
+
+    return isVisible
 }
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View =

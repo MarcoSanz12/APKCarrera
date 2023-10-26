@@ -9,19 +9,56 @@
     tools:context=".MainActivity">
 
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/my_toolbar"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ly_actionbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:elevation="4dp"
         android:theme="@style/Theme.APKCarrera"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:navigationIcon="?attr/homeAsUpIndicator"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleTextColor="@color/white" />
+        app:titleTextColor="@color/white" >
+        <!-- Botón regresar -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/actionbar_back"
+            style="@style/ActionbarButton"
+            app:icon="@drawable/icon_back"
+            android:visibility="gone"
+            app:iconSize="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible" />
+        <!-- Titulo -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/actionbar_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="10dp"
+            tools:text="Titulo de prueba"
+            android:gravity="center_vertical"
+            app:autoSizeTextType="uniform"
+            android:maxLines="1"
+            app:autoSizeMinTextSize="@dimen/text_size_small_12"
+            app:autoSizeMaxTextSize="22dp"
+            app:layout_constraintStart_toEndOf="@id/actionbar_back"
+            app:layout_constraintEnd_toStartOf="@id/actionbar_buttons"/>
+        <!-- Botones -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/actionbar_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/actionbar_bt_activity_type"
+                style="@style/ActionbarButton"
+                app:icon="@drawable/icon_run"
+                 />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.fragment.app.FragmentContainerView
@@ -33,7 +70,7 @@
         app:defaultNavHost="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/my_toolbar"
+        app:layout_constraintTop_toBottomOf="@id/ly_actionbar"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:navGraph="@navigation/my_nav"
         tools:layout_editor_absoluteX="1dp"

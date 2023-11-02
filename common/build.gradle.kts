@@ -28,6 +28,9 @@ android {
             )
         }
     }
+    dataBinding{
+        enable = true
+    }
 
     buildFeatures {
         viewBinding = true
@@ -54,18 +57,19 @@ dependencies {
     api("com.google.firebase:firebase-firestore-ktx")
     api("androidx.core:core-ktx:1.10.1")
     api("androidx.appcompat:appcompat:1.6.1")
-    api("com.google.android.material:material:1.9.0")
+    api("com.google.android.material:material:1.10.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     // Navigation
-    api("androidx.navigation:navigation-fragment-ktx:2.7.3")
-    api("androidx.navigation:navigation-ui-ktx:2.7.3")
-    api ("androidx.navigation:navigation-dynamic-features-fragment:2.7.3")
+    api("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    api("androidx.navigation:navigation-ui-ktx:2.7.5")
+    api ("androidx.navigation:navigation-dynamic-features-fragment:2.7.5")
 
     //DATABINDING
-    api ("androidx.databinding:databinding-common:8.1.1")
+    api ("androidx.databinding:databinding-common:8.1.2")
+
 
     // Corrutinas
     api ("androidx.appcompat:appcompat:1.6.1")

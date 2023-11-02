@@ -10,6 +10,8 @@ import androidx.core.view.children
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.NavigationUiSaveStateControl
 import androidx.navigation.ui.setupWithNavController
 import com.gf.apkcarrera.databinding.ActivityMainBinding
 import com.gf.apkcarrera.features.f3_running.service.ServiceRunning
@@ -50,6 +52,7 @@ class MainActivity : BaseActivity() {
     val buttonsLayout : LinearLayoutCompat by lazy { binding.actionbarButtons }
     val btActivityType : MaterialButton by lazy { binding.actionbarBtActivityType }
 
+    @OptIn(NavigationUiSaveStateControl::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         val screenSplash = installSplashScreen()
         screenSplash.setKeepOnScreenCondition{false}
@@ -60,13 +63,16 @@ class MainActivity : BaseActivity() {
 
         navigateToRunningFragmentIfNeeded(intent)
 
-
-        with(bottomNavigationView){
-            setupWithNavController(navController)
-            setOnItemSelectedListener {
-                navController.navigateToMenuItem(it)
-            }
-        }
+        NavigationUI.setupWithNavController(binding.bottomNavigationView,navController,false)
+        /*
+            Navegación bug
+                with(bottomNavigationView){
+                    setupWithNavController(navController)
+                    setOnItemSelectedListener {
+                        navController.navigateToMenuItem(it)
+                    }
+                }
+        */
         // Back Button
         backButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()

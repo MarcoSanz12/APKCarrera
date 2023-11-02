@@ -1,6 +1,258 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:clipToPadding="false"
+        android:paddingTop="20dp"
+        android:paddingBottom="40dp"
+        android:fillViewport="true"
+        android:background="@color/white">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- Cabecera -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stateListAnimator="@animator/animator_button"
+                app:cardCornerRadius="5dp">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ly_cabecera"
+                    android:layout_width="match_parent"
+                    android:background="@color/blue_primary"
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="5dp"
+                    android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                    <!-- Tipo de actividad -->
+                    <ImageView
+                        android:id="@+id/iv_activity_type"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/icon_run"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+                    <!-- Titulo -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/SearchLayout"
+                        android:id="@+id/ly_title"
+                        android:layout_width="0dp"
+                        app:placeholderText="@string/end_give_title"
+                        app:layout_constraintTop_toTopOf="@id/iv_activity_type"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/iv_activity_type"
+                        app:layout_constraintBottom_toBottomOf="@id/iv_activity_type"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            style="@style/SearchEditext"
+                            android:id="@+id/et_title"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Imágenes -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_images"
+                        android:layout_width="match_parent"
+                        android:layout_height="192dp"
+                        android:orientation="horizontal"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_activity_type"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/item_image" />
+
+                    <!-- Botón alternar Visibilidad -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/bt_visibility"
+                        style="@style/Theme.SplashScreen.IconBackground"
+                        android:layout_width="78dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginTop="10dp"
+                        app:iconGravity="textStart"
+                        app:cornerRadius="5dp"
+                        app:iconPadding="0dp"
+                        app:iconSize="35dp"
+                        app:backgroundTint="@color/selector_visibility_background"
+                        app:iconTint="@color/white"
+                        android:checkable="true"
+                        app:icon="@drawable/selector_visibility"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/rv_images" />
+
+                    <!-- Mensaje Visibilidad -->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_visibility"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        tools:text="¡Todo el mundo contemplará tus hazañas!"
+                        android:text="@string/stat_distance_activity"
+                        android:textColor="@color/white"
+                        android:maxLines="2"
+                        android:paddingHorizontal="5dp"
+                        android:gravity="center_vertical"
+                        app:autoSizeMinTextSize="@dimen/text_size_dwarf_10"
+                        app:autoSizeMaxTextSize="@dimen/text_size_standard_14"
+                        app:autoSizeTextType="uniform"
+                        app:layout_constraintStart_toEndOf="@id/bt_visibility"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/bt_visibility"
+                        app:layout_constraintBottom_toBottomOf="@id/bt_visibility"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <!-- Estadísticas -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginVertical="5dp"
+                android:layout_marginHorizontal="5dp">
+                <!-- Distancia - Tiempo-->
+                <include
+                    android:id="@+id/statistic1"
+                    layout="@layout/custom_double_statistic"
+                    app:color="@{@color/statistic1}"
+                    app:title_left="@{@string/end_stat_distance}"
+                    app:title_right="@{@string/end_stat_time}"
+                    app:content_left="0.00 km"
+                    app:content_right="0:00 min"/>
+                <!-- Ritmo - Velocidad max-->
+                <include
+                    android:id="@+id/statistic2"
+                    layout="@layout/custom_double_statistic"
+                    app:color="@{@color/statistic2}"
+                    app:title_left="@{@string/end_stat_rythm}"
+                    app:title_right="@{@string/end_stat_max_speed}"
+                    app:content_left="0.00 min/km"
+                    app:content_right="0:00 min/km"/>
+                <!-- Desnivel - Altitud max-->
+                <include
+                    android:id="@+id/statistic2"
+                    layout="@layout/custom_double_statistic"
+                    app:color="@{@color/statistic3}"
+                    app:title_left="@{@string/end_stat_desnivel}"
+                    app:title_right="@{@string/end_stat_max_altitude}"
+                    app:content_left="0 metros"
+                    app:content_right="0 metros"/>
+            </LinearLayout>
+
+            <!-- Mensaje motivacional -->
+            <com.google.android.material.card.MaterialCardView
+                app:cardCornerRadius="5dp"
+                android:stateListAnimator="@animator/animator_button"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/friends_card_size">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/layerdrawer_item_friend_background"
+                    android:paddingHorizontal="@dimen/horizontal_margin_card">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/iv_star"
+                        android:layout_width="@dimen/friends_card_size"
+                        android:layout_height="@dimen/friends_card_size"
+                        android:padding="3dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                        tools:src="@drawable/icon_star_placeholder"
+                        android:tint="@color/yellow"
+                        android:background="@color/blue_primary"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_congratulation_title"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="5dp"
+                        android:gravity="center_vertical"
+                        android:textSize="@dimen/text_size_large_16"
+                        app:layout_constraintBottom_toTopOf="@+id/guideline"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/iv_star"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="@string/end_message"/>
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_congratulation_message"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="5dp"
+                        android:gravity="center_vertical"
+                        tools:text="Has corrido más rápido que una Gaviota Europea promedio cargando un coco"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_small_12"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/iv_star"
+                        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.5" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Botones -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:weightSum="10"
+                android:layout_gravity="bottom"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:layout_marginBottom="20dp"
+                android:layout_marginHorizontal="10dp">
+                <!-- Descartar -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/bt_discard"
+                    android:text="@string/end_button_discard"
+                    android:layout_weight="3"
+                    android:stateListAnimator="@animator/animator_button"
+                    app:backgroundTint="@color/red"
+                    app:rippleColor="@color/red_ripple"
+                    style="@style/StandardButton" />
+                <View
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"/>
+
+                <!-- Terminar -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/bt_end"
+                    android:text="@string/end_button_end"
+                    android:layout_weight="3"
+                    android:stateListAnimator="@animator/animator_button"
+                    app:backgroundTint="@color/green"
+                    app:rippleColor="@color/green_ripple"
+                    style="@style/StandardButton" />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

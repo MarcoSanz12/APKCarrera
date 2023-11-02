@@ -9,7 +9,9 @@
     <color name="lightPrimary">#5265FF</color>
     <color name="grey">#292929</color>
     <color name="green">#29B41C</color>
+    <color name="green_ripple">#9F4DBC42</color>
     <color name="red">#8A0000</color>
+    <color name="red_ripple">#80914949</color>
     <color name="yellow">#F7EC07</color>
     <color name="white">#FFFFFF</color>
     <color name="background">#E9E9E9</color>
@@ -30,4 +32,11 @@
     <color name="ruta10">#66CAC6</color>
     <color name="ruta11">#342E67</color>
     <color name="ruta12">#FF00E5</color>
+
+    <!-- Statistics -->
+    <color name="statistic1">#306CAF</color>
+    <color name="statistic2">#BF0811</color>
+    <color name="statistic3">#00765F</color>
+    <color name="statistic4">#D67924</color>
+
 </resources>

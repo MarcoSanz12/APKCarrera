@@ -4,7 +4,12 @@
     <string name="title_login">Iniciar sesión</string>
     <string name="title_register">Crear cuenta</string>
     <string name="title_recover_account">Recuperar cuenta</string>
-    <string name="title_feed">Actividad</string>
+    <string name="title_feed">Actividades</string>
+    <string name="title_activity">Actividad</string>
+    <string name="title_friends">Amigos</string>
+    <string name="title_friends_requests">Solicitudes</string>
+    <string name="title_friends_add">Añadir amigo</string>
+
 
     <!-- BottomNavigationView -->
     <string name="bnv_feed">Inicio</string>
@@ -57,6 +62,9 @@
     <string name="stat_distance_activity"><font color="#6A6A6A" size="10" style="regular">Distancia</font>\n%s km</string>
     <string name="stat_rythm_activity"><font color="#6A6A6A" size="10" style="regular">Ritmo</font>\n%s /km</string>
     <string name="stat_time_activity"><font color="#6A6A6A" size="10" style="regular">Tiempo</font>\n%s</string>
+    <string name="add_friend">AGREGAR</string>
+    <string name="tab_friends">Amigos</string>
+    <string name="tab_requests">Solicitudes</string>
 
 
     <!-- Fragment03 - Registrar actividad -->
@@ -88,6 +96,12 @@
     <string name="settings_logout">Cerrar sesión</string>
     <string name="logout_succesful">Sesión cerrada</string>
     <string name="loggin_out">Cerrando sesión\nEspere porfavor</string>
+
+    <!-- Fragment05 - Perfil -->
+    <string name="profile_activities">ACTIVIDADES</string>
+    <string name="profile_add_friend">AÑADIR AMIGO</string>
+    <string name="profile_remove_friend">ELIMINAR AMIGO</string>
+    <string name="profile_statistics">Estadísticas</string>
 
 
 

@@ -8,9 +8,6 @@ plugins {
     id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 
 }
-
-
-
 android {
     namespace = "com.gf.apkcarrera"
     compileSdk = 34
@@ -41,11 +38,11 @@ android {
         compose = false
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "18"
     }
     packaging {
         resources {
@@ -62,7 +59,7 @@ android {
 
 dependencies {
 
-    val room_version = "2.5.0"
+    val room_version = "2.5.2"
 
     implementation("com.google.gms:google-services:4.3.15")
     implementation (project(":common"))
@@ -70,8 +67,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
-    implementation ("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.48.1")
+    implementation ("com.google.dagger:hilt-android:2.48.1")
 
     // Expandable Layout
     implementation("net.cachapa.expandablelayout:expandablelayout:2.9.2")

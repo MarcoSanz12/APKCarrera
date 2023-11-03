@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.databinding.Frg03RunningBinding
-import com.gf.apkcarrera.features.f3_running.service.ServiceRunning
+import com.gf.apkcarrera.features.f3_running.service.RunningService
 import com.gf.common.entity.ActivityStatus
 import com.gf.common.entity.RunningUIState
 import com.gf.common.extensions.collectFlowOnce
@@ -42,7 +42,7 @@ import java.util.Timer
 
 
 @AndroidEntryPoint
-class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
+class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
 
     private val TAG = "FragmentRunning"
 
@@ -127,7 +127,7 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
             Log.d(TAG, "UI Location: ${p0.lastLocation?.accuracy}")
             if (p0.lastLocation?.accuracy!! <= 50){
                 lastLocation = p0.lastLocation?.toLatLng()
-                binding.mapView.getMapAsync(this@FragmentRunning)
+                binding.mapView.getMapAsync(this@RunningFragment)
                 fusedLocationProviderClient.removeLocationUpdates(this)
             }
         }
@@ -240,7 +240,7 @@ class FragmentRunning : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
             Looper.getMainLooper()
         )
 
-        collectFlowOnce(ServiceRunning.uiState, ::updateUI, ::createUI)
+        collectFlowOnce(RunningService.uiState, ::updateUI, ::createUI)
     }
 
 

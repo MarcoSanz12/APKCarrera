@@ -4,10 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="title_left" type="String" />
-        <variable name="title_right" type="String" />
-        <variable name="content_left" type="String" />
-        <variable name="content_right" type="String" />
+        <variable name="titleLeft" type="String" />
+        <variable name="titleRight" type="String" />
+        <variable name="contentLeft" type="String" />
+        <variable name="contentRight" type="String" />
         <variable name="color" type="int" />
     </data>
     <com.google.android.material.card.MaterialCardView
@@ -46,7 +46,7 @@
                 android:id="@+id/tv_title_left"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:text="@{title_left}"
+                android:text="@{titleLeft}"
                 tools:text="Titulo izda"
                 android:textStyle="bold"
                 app:autoSizeTextType="uniform"
@@ -65,7 +65,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 tools:text="Titulo drcha"
-                android:text="@{title_right}"
+                android:text="@{titleRight}"
                 android:textStyle="bold"
                 app:autoSizeTextType="uniform"
                 android:autoSizeMaxTextSize="12sp"
@@ -82,7 +82,7 @@
                 android:id="@+id/tv_content_left"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:text="@{content_left}"
+                android:text="@{contentLeft}"
                 tools:text="Contenido izda"
                 android:textColor="@color/black"
                 app:autoSizeTextType="uniform"
@@ -100,7 +100,7 @@
                 android:id="@+id/tv_content_right"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:text="@{content_right}"
+                android:text="@{contentRight}"
                 tools:text="Contenido drcha"
                 android:textColor="@color/black"
                 app:autoSizeTextType="uniform"

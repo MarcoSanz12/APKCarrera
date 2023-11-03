@@ -5,19 +5,26 @@ import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
-import android.text.Html
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.TextUtils
+import android.text.*
 import android.text.style.StyleSpan
 import android.util.Patterns
+import java.text.Normalizer
+
 
 fun String.Companion.empty() = ""
 fun String.fromHTML(): Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
     Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
 } else {
     Html.fromHtml(this)
+}
+
+fun String.stripAccents(): String {
+    val temp = Normalizer.normalize(this, Normalizer.Form.NFD)
+    return Regex("\\p{InCombiningDiacriticalMarks}+").replace(temp, "")
+}
+
+fun String.removeWhiteSpaces(): String {
+    return this.replace("\\s".toRegex(), "")
 }
 
 fun String.textStyle(): SpannableStringBuilder {

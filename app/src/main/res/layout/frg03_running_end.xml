@@ -125,28 +125,28 @@
                     android:id="@+id/statistic1"
                     layout="@layout/custom_double_statistic"
                     app:color="@{@color/statistic1}"
-                    app:title_left="@{@string/end_stat_distance}"
-                    app:title_right="@{@string/end_stat_time}"
-                    app:content_left="0.00 km"
-                    app:content_right="0:00 min"/>
+                    app:titleLeft="@{@string/end_stat_distance}"
+                    app:titleRight="@{@string/end_stat_time}"
+                    app:contentLeft='@{"0.00 km"}'
+                    app:contentRight='@{"0.00 km"}'/>
                 <!-- Ritmo - Velocidad max-->
                 <include
                     android:id="@+id/statistic2"
                     layout="@layout/custom_double_statistic"
                     app:color="@{@color/statistic2}"
-                    app:title_left="@{@string/end_stat_rythm}"
-                    app:title_right="@{@string/end_stat_max_speed}"
-                    app:content_left="0.00 min/km"
-                    app:content_right="0:00 min/km"/>
+                    app:titleLeft="@{@string/end_stat_rythm}"
+                    app:titleRight="@{@string/end_stat_max_speed}"
+                    app:contentLeft='@{"0.00 km"}'
+                    app:contentRight='@{"0.00 km"}'/>
                 <!-- Desnivel - Altitud max-->
                 <include
-                    android:id="@+id/statistic2"
+                    android:id="@+id/statistic3"
                     layout="@layout/custom_double_statistic"
                     app:color="@{@color/statistic3}"
-                    app:title_left="@{@string/end_stat_desnivel}"
-                    app:title_right="@{@string/end_stat_max_altitude}"
-                    app:content_left="0 metros"
-                    app:content_right="0 metros"/>
+                    app:titleLeft="@{@string/end_stat_desnivel}"
+                    app:titleRight="@{@string/end_stat_max_altitude}"
+                    app:contentLeft='@{"0.00 km"}'
+                    app:contentRight='@{"0.00 km"}'/>
             </LinearLayout>
 
             <!-- Mensaje motivacional -->

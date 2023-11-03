@@ -1,28 +1,45 @@
 package com.gf.common.extensions
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-import android.widget.ImageView.ScaleType
+import android.widget.TextView
 import androidx.annotation.LayoutRes
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import com.cotesa.common.extensions.notNull
-import com.gf.common.R
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import java.io.File
 import kotlin.math.abs
 
 
+/**
+ * Función que intenta cambiar el texto de un TextView, si no hay texto (es decir valor nulo) hará la vista [View.GONE]
+ * @param text El texto a cargar
+ */
+fun TextView.cargarText(pText : String?) : Boolean{
+    text = pText?.fromHTML()
+    visible(pText != null)
+    return pText != null
+}
+
+fun TextView.cargarText(pText : String?,vistasSecundarias : List<View>) : Boolean{
+    text = pText
+    (pText != null).let {vis->
+        visible(vis)
+        vistasSecundarias.forEach { visible(vis) }
+    }
+    return pText != null
+}
 fun View.visible() {
     this.visibility = View.VISIBLE
 }
@@ -31,13 +48,11 @@ fun View.invisible() {
     this.visibility = View.GONE
 }
 
-fun View.visible(isVisible : Boolean) : Boolean {
-    if (isVisible)
-        visible()
+fun View.visible(visible:Boolean?){
+    if (visible == true)
+        this.visible()
     else
-        invisible()
-
-    return isVisible
+        this.invisible()
 }
 
 fun ViewGroup.inflate(@LayoutRes layoutRes: Int): View =
@@ -67,36 +82,11 @@ fun ImageView.loadFromUrlLocal(context: Context, url: String) {
     Glide.with(this.context.applicationContext)
         .load(if (file.exists()) file.absolutePath else url)
         .transition(DrawableTransitionOptions.withCrossFade())
-        .error(context.getDrawable(R.drawable.ic_launcher_foreground))
-        .listener(object : RequestListener<Drawable> {
-            override fun onLoadFailed(
-                e: GlideException?,
-                model: Any?,
-                target: Target<Drawable>?,
-                isFirstResource: Boolean
-            ): Boolean {
-                // Error al cargar la imagen
-                this@loadFromUrlLocal.scaleType = ScaleType.FIT_CENTER
-                return false
-            }
-
-            override fun onResourceReady(
-                resource: Drawable?,
-                model: Any?,
-                target: Target<Drawable>?,
-                dataSource: DataSource?,
-                isFirstResource: Boolean
-            ): Boolean {
-                // Imagen cargada exitosamente
-                this@loadFromUrlLocal.scaleType = detectar(resource)
-                return false
-            }
-        })
         .into(this)
 }
 
-fun detectar(resource :Drawable?) : ScaleType{
-    var scaleType = ScaleType.CENTER_CROP
+fun detectar(resource :Drawable?) : ImageView.ScaleType{
+    var scaleType = ImageView.ScaleType.CENTER_CROP
     resource.notNull {
         val ancho = resource!!.intrinsicWidth
         val alto = resource.intrinsicHeight
@@ -104,18 +94,24 @@ fun detectar(resource :Drawable?) : ScaleType{
         val diff = abs(ancho - alto)
 
         scaleType = if(diff>50){
-            ScaleType.CENTER_CROP
+            ImageView.ScaleType.CENTER_CROP
         } else{
-            ScaleType.FIT_CENTER
+            ImageView.ScaleType.FIT_CENTER
         }
     }
     return scaleType
 }
 
+fun View.hideKeyboard(){
+    this.clearFocus()
+    val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+}
+
 fun ImageView.loadFromUrlOverrideParams(
     url: String,
     imageWidthPixels: Int,
-    imageHeightPixels: Int
+    imageHeightPixels: Int,
 ) =
     Glide.with(this.context.applicationContext)
         .load(url)
@@ -124,7 +120,7 @@ fun ImageView.loadFromUrlOverrideParams(
         .apply(RequestOptions.bitmapTransform(RoundedCorners(4)))
         .into(this)
 fun ImageView.loadFromDrawable(
-    drawable: Int
+    drawable: Int,
 ) =
     Glide.with(this.context.applicationContext)
         .load(drawable)
@@ -162,7 +158,23 @@ fun ImageView.loadFromUrlWithError(url: String, idDrawable: Int) {
     }
 }
 
+fun TabLayout.addOnTabSelectedListener(onTabSelected : (tab: TabLayout.Tab?) -> Unit ){
+    addOnTabSelectedListener(object : OnTabSelectedListener{
+        override fun onTabSelected(tab: TabLayout.Tab?) {
+            onTabSelected(tab)
+        }
+
+        override fun onTabUnselected(tab: TabLayout.Tab?) {
+        }
+
+        override fun onTabReselected(tab: TabLayout.Tab?) {
+        }
+
+    })
+}
+
 
 val Int.dp: Int
     get() = (this * Resources.getSystem().displayMetrics.density + 0.5f).toInt()
+
 

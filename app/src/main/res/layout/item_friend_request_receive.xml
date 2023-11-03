@@ -5,6 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="5dp"
     app:cardBackgroundColor="@color/blue_primary"
+    android:layout_marginTop="10dp"
+    android:stateListAnimator="@animator/animator_button"
     android:layout_width="match_parent"
     android:layout_height="@dimen/friends_card_size">
 

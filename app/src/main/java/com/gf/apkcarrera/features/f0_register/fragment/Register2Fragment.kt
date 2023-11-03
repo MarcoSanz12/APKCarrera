@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Random
 
 @AndroidEntryPoint
-class FragmentRegister2 : BaseCameraFragment<Frg00Register2Binding>() {
+class Register2Fragment : BaseCameraFragment<Frg00Register2Binding>() {
 
     private val viewModel: RegisterViewModel by activityViewModels()
     private val user by lazy {viewModel.request ?: LoginRequest() }

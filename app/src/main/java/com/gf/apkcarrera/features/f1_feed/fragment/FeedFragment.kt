@@ -14,7 +14,7 @@ import com.gf.common.platform.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FragmentFeed : BaseFragment<Frg01FeedBinding>() {
+class FeedFragment : BaseFragment<Frg01FeedBinding>() {
 
     val viewModel: MainViewModel by activityViewModels()
 
@@ -34,16 +34,12 @@ class FragmentFeed : BaseFragment<Frg01FeedBinding>() {
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
 
     private fun handleUserLoaded(userModel: UserModel?) {
         binding.apply {
-            tvName.setText(userModel?.name)
-            tvUid.setText(userModel?.uid)
-            tvUsername.setText(userModel?.username)
+            tvName.text = userModel?.name
+            tvUid.text = userModel?.uid
+            tvUsername.text = userModel?.username
             ivProfilePic.setImageBitmap(userModel?.picture?.toBitmap())
         }
     }

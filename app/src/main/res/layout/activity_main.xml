@@ -54,9 +54,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/actionbar_bt_activity_type"
                 style="@style/ActionbarButton"
-                app:icon="@drawable/icon_run"
-                 />
-
+                app:icon="@drawable/icon_run" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -85,9 +83,9 @@
         app:itemActiveIndicatorStyle="@color/transparent"
         app:itemIconSize="35dp"
         app:itemIconTint="@drawable/bottom_nav_item_selector"
-        app:itemRippleColor="@color/orange_quaternary_transp"
+        app:itemRippleColor="@color/bottom_menu_ripple"
         app:itemTextColor="@drawable/bottom_nav_item_selector"
-        app:labelVisibilityMode="labeled"
+        app:labelVisibilityMode="selected"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

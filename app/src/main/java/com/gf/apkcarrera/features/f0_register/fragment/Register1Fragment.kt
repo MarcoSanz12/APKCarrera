@@ -17,7 +17,7 @@ import com.gf.common.platform.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FragmentRegister1 : BaseFragment<Frg00Register1Binding>() {
+class Register1Fragment : BaseFragment<Frg00Register1Binding>() {
 
     val viewModel: RegisterViewModel by activityViewModels()
 

@@ -52,7 +52,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".features.f3_running.service.ServiceRunning"
+            android:name=".features.f3_running.service.RunningService"
             android:foregroundServiceType="location"/>
     </application>
 

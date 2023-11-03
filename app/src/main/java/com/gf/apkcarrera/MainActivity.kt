@@ -12,12 +12,12 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUiSaveStateControl
-import androidx.navigation.ui.setupWithNavController
-import com.gf.apkcarrera.databinding.ActivityMainBinding
-import com.gf.apkcarrera.features.f3_running.service.ServiceRunning
 import com.gf.common.extensions.invisible
-import com.gf.common.extensions.navigateToMenuItem
 import com.gf.common.extensions.visible
+import com.gf.apkcarrera.databinding.ActivityMainBinding
+import com.gf.apkcarrera.features.f3_running.service.RunningService
+import com.gf.common.extensions.navigateToMenuItem
+
 import com.gf.common.platform.BaseActivity
 import com.gf.common.utils.Constants.ACTION_SHOW_RUNNING_FRAGMENT
 import com.gf.common.utils.Constants.ACTION_STOP_RUNNING
@@ -64,15 +64,17 @@ class MainActivity : BaseActivity() {
         navigateToRunningFragmentIfNeeded(intent)
 
         NavigationUI.setupWithNavController(binding.bottomNavigationView,navController,false)
-        /*
-            Navegación bug
+
+            /*Navegación bug
                 with(bottomNavigationView){
                     setupWithNavController(navController)
                     setOnItemSelectedListener {
                         navController.navigateToMenuItem(it)
                     }
                 }
-        */
+                */
+
+
         // Back Button
         backButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -130,7 +132,7 @@ class MainActivity : BaseActivity() {
     }
 
     fun sendCommandToService (action : String) =
-        Intent(this, ServiceRunning::class.java).also {
+        Intent(this, RunningService::class.java).also {
             it.action = action
             this.startService(it)
         }

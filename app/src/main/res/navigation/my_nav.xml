@@ -16,7 +16,7 @@
     <!-- 00_Inicial -->
     <fragment
         android:id="@+id/fragmentInitial"
-        android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentInitial"
+        android:name="com.gf.apkcarrera.features.f0_register.fragment.InitialFragment"
         android:label=""
         tools:layout="@layout/frg00_initial" >
         <action
@@ -30,19 +30,19 @@
     <!-- 00_Splash -->
     <fragment
         android:id="@+id/fragmentSplash"
-        android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentSplash"
+        android:name="com.gf.apkcarrera.features.f0_register.fragment.SplashFragment"
         android:label=""
         tools:layout="@layout/frg00_splash"/>
     <!-- 01_Feed -->
     <fragment
         android:id="@+id/fragmentFeed"
-        android:name="com.gf.apkcarrera.features.f1_feed.fragment.FragmentFeed"
+        android:name="com.gf.apkcarrera.features.f1_feed.fragment.FeedFragment"
         android:label="@string/title_feed"
         tools:layout="@layout/frg01_feed" />
     <!-- 02_Amigos -->
     <fragment
         android:id="@+id/fragmentRunning"
-        android:name="com.gf.apkcarrera.features.f3_running.fragments.FragmentRunning"
+        android:name="com.gf.apkcarrera.features.f3_running.fragments.RunningFragment"
         android:label="FragmentRunning"
         tools:layout="@layout/frg03_running" />
     <action
@@ -53,19 +53,19 @@
     <!-- 03_Activity -->
     <fragment
         android:id="@+id/fragmentFriends"
-        android:name="com.gf.apkcarrera.features.f2_friends.fragments.FragmentFriends"
+        android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsFragment"
         android:label="FragmentFriends"
         tools:layout="@layout/frg02_friends" />
     <!-- 04_Ajustes-->
     <fragment
         android:id="@+id/fragmentSettings"
-        android:name="com.gf.apkcarrera.features.f4_settings.fragments.FragmentSettings"
+        android:name="com.gf.apkcarrera.features.f4_settings.fragments.SettingsFragment"
         android:label="FragmentSettings"
         tools:layout="@layout/frg04_settings" />
     <!-- 05_Perfil -->
     <fragment
         android:id="@+id/fragmentProfile"
-        android:name="com.gf.apkcarrera.features.f5_profile.fragments.FragmentProfile"
+        android:name="com.gf.apkcarrera.features.f5_profile.fragments.ProfileFragment"
         android:label="FragmentProfile"
         tools:layout="@layout/frg05_profile" />
 
@@ -85,7 +85,7 @@
 
         <fragment
             android:id="@+id/fragmentRegister1"
-            android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentRegister1"
+            android:name="com.gf.apkcarrera.features.f0_register.fragment.Register1Fragment"
             android:label="@string/title_register"
             tools:layout="@layout/frg00_register1" >
             <action
@@ -94,7 +94,7 @@
         </fragment>
         <fragment
             android:id="@+id/fragmentRegister2"
-            android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentRegister2"
+            android:name="com.gf.apkcarrera.features.f0_register.fragment.Register2Fragment"
             android:label="@string/title_register"
             tools:layout="@layout/frg00_register2" />
 
@@ -105,7 +105,7 @@
         <!-- Login -->
         <fragment
             android:id="@+id/fragmentLogin"
-            android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentLogin"
+            android:name="com.gf.apkcarrera.features.f0_register.fragment.LoginFragment"
             android:label="@string/title_login"
             tools:layout="@layout/frg00_login">
             <action
@@ -116,7 +116,7 @@
         <!-- Recuperar cuenta-->
         <fragment
             android:id="@+id/fragmentRecoverPass"
-            android:name="com.gf.apkcarrera.features.f0_register.fragment.FragmentRecoverPass"
+            android:name="com.gf.apkcarrera.features.f0_register.fragment.RecoverPassFragment"
             android:label="@string/title_recover_account"
             tools:layout="@layout/frg00_recover_pass" />
         <fragment

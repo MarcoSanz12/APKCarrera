@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -37,11 +39,11 @@ android {
         compose = false
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "18"
     }
 }
 
@@ -55,7 +57,7 @@ dependencies {
     api(platform("com.google.firebase:firebase-bom:32.2.0"))
     api("com.google.firebase:firebase-analytics-ktx")
     api("com.google.firebase:firebase-firestore-ktx")
-    api("androidx.core:core-ktx:1.10.1")
+    api("androidx.core:core-ktx:1.12.0")
     api("androidx.appcompat:appcompat:1.6.1")
     api("com.google.android.material:material:1.10.0")
     testImplementation("junit:junit:4.13.2")
@@ -73,9 +75,9 @@ dependencies {
 
     // Corrutinas
     api ("androidx.appcompat:appcompat:1.6.1")
-    api ("org.jetbrains.kotlin:kotlin-stdlib:1.8.22")
-    api ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    api ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    api ("org.jetbrains.kotlin:kotlin-stdlib:1.9.20")
+    api ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    api ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     api ("androidx.constraintlayout:constraintlayout:2.1.4")
     api ("androidx.recyclerview:recyclerview:1.3.1")
@@ -90,8 +92,8 @@ dependencies {
     api("com.google.code.gson:gson:2.9.0")
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    implementation("com.google.dagger:hilt-android:2.48.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.48.1")
 
     // Viewmodel
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
@@ -114,9 +116,7 @@ dependencies {
     api(platform("com.google.firebase:firebase-bom:32.2.0"))
     api("com.google.firebase:firebase-firestore-ktx:24.7.0")
     api("com.google.firebase:firebase-auth-ktx")
+    api("com.google.firebase:firebase-analytics-ktx")
 
-    // WorkManager
-    api("androidx.work:work-runtime-ktx:2.8.0")
-    api ("androidx.work:work-multiprocess:2.8.0")
 
 }

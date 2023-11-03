@@ -41,7 +41,7 @@ import java.util.Timer
 import kotlin.concurrent.timerTask
 
 @AndroidEntryPoint
-class ServiceRunning : LifecycleService() {
+class RunningService : LifecycleService() {
 
     // VAR Servicio
     private val TAG = "ServiceRunning"

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="titleLeft" type="String" />
+        <variable name="titleRight" type="String" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+        <!-- Linea medio -->
+        <View
+            android:id="@+id/gl_mid"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_left"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="1dp"
+            android:layout_height="30dp"
+            android:background="@color/lightGrey"/>
+
+        <!-- Línea horizontal -->
+        <View
+            android:id="@+id/gl_top"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_left"
+
+            android:background="@color/lightGrey"/>
+
+        <!-- Titulo Arriba Izda -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title_left"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{titleLeft}"
+            tools:text="Titulo izda"
+            android:textStyle="bold"
+            app:autoSizeTextType="uniform"
+            android:textColor="@color/blue_primary"
+            android:autoSizeMaxTextSize="12sp"
+            android:autoSizeMinTextSize="8sp"
+            android:gravity="center"
+            android:paddingHorizontal="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/gl_mid"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!-- Titulo Arriba Drcha -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title_right"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="Titulo drcha"
+            android:text="@{titleRight}"
+            android:textStyle="bold"
+            app:autoSizeTextType="uniform"
+            android:textColor="@color/blue_primary"
+            android:autoSizeMaxTextSize="12sp"
+            android:autoSizeMinTextSize="8sp"
+            android:gravity="center"
+            android:paddingHorizontal="5dp"
+            app:layout_constraintStart_toStartOf="@id/gl_mid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!-- Contenido Izda -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_content_left"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            tools:text="Contenido izda"
+            android:textColor="@color/black"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="20sp"
+            app:autoSizeMinTextSize="18sp"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/gl_mid"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_left"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <!-- Contenido Izda -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_content_right"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            tools:text="Contenido drcha"
+            android:textColor="@color/black"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="20sp"
+            app:autoSizeMinTextSize="18sp"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            app:layout_constraintStart_toStartOf="@id/gl_mid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title_right"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

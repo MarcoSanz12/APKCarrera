@@ -9,7 +9,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:clipToPadding="false"
-        android:paddingTop="20dp"
         android:paddingBottom="40dp"
         android:fillViewport="true"
         android:background="@color/white">
@@ -76,8 +75,8 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/bt_visibility"
                         style="@style/Theme.SplashScreen.IconBackground"
-                        android:layout_width="78dp"
-                        android:layout_height="50dp"
+                        android:layout_width="60dp"
+                        android:layout_height="48dp"
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="10dp"
                         app:iconGravity="textStart"
@@ -118,41 +117,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginVertical="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="0dp"
                 android:layout_marginHorizontal="5dp">
                 <!-- Distancia - Tiempo-->
                 <include
                     android:id="@+id/statistic1"
-                    layout="@layout/custom_double_statistic"
-                    app:color="@{@color/statistic1}"
+                    layout="@layout/custom_double_statistic_v2"
                     app:titleLeft="@{@string/end_stat_distance}"
-                    app:titleRight="@{@string/end_stat_time}"
-                    app:contentLeft='@{"0.00 km"}'
-                    app:contentRight='@{"0.00 km"}'/>
+                    app:titleRight="@{@string/end_stat_time}"/>
                 <!-- Ritmo - Velocidad max-->
                 <include
                     android:id="@+id/statistic2"
-                    layout="@layout/custom_double_statistic"
-                    app:color="@{@color/statistic2}"
+                    layout="@layout/custom_double_statistic_v2"
                     app:titleLeft="@{@string/end_stat_rythm}"
-                    app:titleRight="@{@string/end_stat_max_speed}"
-                    app:contentLeft='@{"0.00 km"}'
-                    app:contentRight='@{"0.00 km"}'/>
+                    app:titleRight="@{@string/end_stat_max_speed}"/>
                 <!-- Desnivel - Altitud max-->
                 <include
                     android:id="@+id/statistic3"
-                    layout="@layout/custom_double_statistic"
-                    app:color="@{@color/statistic3}"
+                    layout="@layout/custom_double_statistic_v2"
                     app:titleLeft="@{@string/end_stat_desnivel}"
-                    app:titleRight="@{@string/end_stat_max_altitude}"
-                    app:contentLeft='@{"0.00 km"}'
-                    app:contentRight='@{"0.00 km"}'/>
+                    app:titleRight="@{@string/end_stat_max_altitude}"/>
             </LinearLayout>
 
             <!-- Mensaje motivacional -->
             <com.google.android.material.card.MaterialCardView
                 app:cardCornerRadius="5dp"
                 android:stateListAnimator="@animator/animator_button"
+                android:layout_marginHorizontal="6dp"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/friends_card_size">
 

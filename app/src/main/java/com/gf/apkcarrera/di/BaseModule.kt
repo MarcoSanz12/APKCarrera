@@ -1,6 +1,6 @@
 package com.gf.apkcarrera.di
 
-import com.gf.apkcarrera.features.f3_running.viewmodel.ActivityViewModel
+import com.gf.apkcarrera.features.f3_running.viewmodel.RunningViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,6 +12,6 @@ import javax.inject.Singleton
 object BaseModule {
     @Provides
     @Singleton
-    fun providesActivityViewModel() : ActivityViewModel = ActivityViewModel()
+    fun providesActivityViewModel() : RunningViewModel = RunningViewModel()
 
 }

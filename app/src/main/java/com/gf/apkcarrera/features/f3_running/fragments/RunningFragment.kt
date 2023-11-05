@@ -11,11 +11,16 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.activityViewModels
 import com.gf.apkcarrera.MainActivity
+import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg03RunningBinding
 import com.gf.apkcarrera.features.f3_running.service.RunningService
+import com.gf.apkcarrera.features.f3_running.viewmodel.RunningViewModel
 import com.gf.common.entity.ActivityStatus
 import com.gf.common.entity.RunningUIState
+import com.gf.common.entity.activity.ActivityModelSimple
+import com.gf.common.entity.activity.RegistryPoint
 import com.gf.common.extensions.collectFlowOnce
 import com.gf.common.extensions.format
 import com.gf.common.extensions.invisible
@@ -57,8 +62,15 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     private var timer: Timer? = null
     private var recoveredState: Boolean = true
     private var STATUS: ActivityStatus = ActivityStatus.LOCATING
-    private var uiPoints = listOf<LatLng>()
+    private var uiPoints = listOf<RegistryPoint>()
     private var lastLocation : LatLng? = null
+
+    // VAR Stats
+    private var timeList = listOf<Int>()
+    private var distance = 0
+    private var points = listOf<List<RegistryPoint>>()
+
+    private val runningViewModel : RunningViewModel by activityViewModels()
 
     private val fusedLocationProviderClient: FusedLocationProviderClient
         get() = LocationServices.getFusedLocationProviderClient(requireContext())
@@ -76,9 +88,23 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
 
 
     companion object {
-        private const val LOCATION_MIN_ACCURACY = 30
         private const val MIN_CAM_ZOOM = 16f
         private const val CAM_ZOOM = 18f
+
+        fun TextView.setSpeed(speed: Float){
+            text = if (speed > 0) {
+                val speedMinsPerKilometer = ((1 / speed) / 60) * 1000
+
+                // Calcula los minutos y segundos
+                val minutos = (speedMinsPerKilometer).toInt()
+                val segundos = ((speedMinsPerKilometer * 60) % 60).toInt()
+
+                // Formatea la cadena en "mm:ss"
+                String.format("%02d:%02d", minutos, segundos)
+            }
+            else
+                "0:00"
+        }
     }
 
     // 1. Checkeo de permisos, si hay buscar usuario
@@ -104,7 +130,6 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
             requestPermissions()
     }
 
-
     // 1. Configurar los botones
     private fun adjustButtons() {
         with(binding) {
@@ -115,6 +140,12 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
                 } else if (STATUS == ActivityStatus.RUNNING) {
                     sendCommandToService(Constants.ACTION_PAUSE_RUNNING)
                     updateUIPause()
+                }
+            }
+
+            btFinish.setOnClickListener {
+                if (STATUS == ActivityStatus.PAUSE){
+                    updateUIEnd()
                 }
             }
         }
@@ -232,7 +263,6 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
             )
         }
 
-
         // Actualizar cámara
         fusedLocationProviderClient.requestLocationUpdates(
             trackingRequest,
@@ -242,8 +272,6 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
 
         collectFlowOnce(RunningService.uiState, ::updateUI, ::createUI)
     }
-
-
 
     // 4. Si es la primera vez que se inicia la carrera
     private fun createUI() {
@@ -255,6 +283,9 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
 
     // 4. Si ya se había iniciado la carrera
     private fun updateUI(runningUIState: RunningUIState) {
+        if (STATUS == ActivityStatus.STOP)
+            return
+
         // Se recupera una carrera
         if (recoveredState){
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
@@ -278,6 +309,11 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
                 }
             }
         }
+
+        distance = runningUIState.distance
+        points = runningUIState.points
+        timeList = runningUIState.timeList
+
         updateUIPolyline(runningUIState.points)
         updateUIStats(
             runningUIState.time,
@@ -287,7 +323,7 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     }
 
     // 4.* Actualizar lineas del UI
-    private fun updateUIPolyline(points:List<List<LatLng>>){
+    private fun updateUIPolyline(points:List<List<RegistryPoint>>){
 
         if (uiPoints == points.flatten())
             return
@@ -304,7 +340,7 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
                 width(8f) // Grosor de la línea en píxeles
             }
             it.forEach {
-                polylineOptions.add(it)
+                polylineOptions.add(it.latLng)
             }
 
             polylineOptions.points
@@ -326,7 +362,6 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
                 // Minutos por kilómetro
                 tvPanelSpeed.setSpeed(speed)
             }
-
         }
     }
 
@@ -344,7 +379,6 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
                 backgroundTintList = ColorStateList.valueOf(resources.getColor(com.gf.common.R.color.purple_secondary))
             }
             btFinish.invisible()
-
 
             STATUS = ActivityStatus.RUNNING
             btMylocation.isChecked = true
@@ -367,19 +401,18 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
         }
     }
 
-    private fun TextView.setSpeed(speed: Float){
-        text = if (speed > 0) {
-            val speedMinsPerKilometer = ((1 / speed) / 60) * 1000
+    private fun updateUIEnd() {
+        Log.d(TAG, "updateUIEnd: UI End")
+        timer?.cancel()
+        STATUS = ActivityStatus.STOP
+        map.snapshot {bitmap->
+            bitmap ?: return@snapshot
 
-            // Calcula los minutos y segundos
-            val minutos = (speedMinsPerKilometer).toInt()
-            val segundos = ((speedMinsPerKilometer * 60) % 60).toInt()
-
-            // Formatea la cadena en "mm:ss"
-            String.format("%02d:%02d", minutos, segundos)
+            runningViewModel.postActivityModelSimple(
+                ActivityModelSimple(points,timeList,distance,bitmap)
+            )
+            navigate(R.id.action_fragmentRunning_to_fragmentRunningEnd)
         }
-        else
-            "0:00"
     }
 
     private val requestMultiplePermissions =
@@ -388,12 +421,10 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
                 initializeView()
             else
                 handleNoGps()
-
         }
 
     @SuppressLint("InlinedApi")
     private fun checkPermissions(): Boolean {
-
         permissionToAsk = mutableSetOf(
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION
@@ -410,7 +441,6 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
                 Manifest.permission.POST_NOTIFICATIONS
             )
         )
-
     }
 
     private fun requestPermissions() =
@@ -425,10 +455,9 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
 
     override fun onDestroyView() {
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        fusedLocationProviderClient.removeLocationUpdates(trackingCallback)
         super.onDestroyView()
     }
-
-
 
     override fun onStart() {
         binding.mapView.onStart()

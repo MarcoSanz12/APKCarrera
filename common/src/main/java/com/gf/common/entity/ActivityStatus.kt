@@ -5,5 +5,6 @@ enum class ActivityStatus {
     READY,
     RUNNING,
     PAUSE,
+    STOP,
     DONE
 }

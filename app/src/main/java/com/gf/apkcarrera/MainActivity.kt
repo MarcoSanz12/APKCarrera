@@ -12,12 +12,10 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUiSaveStateControl
-import com.gf.common.extensions.invisible
-import com.gf.common.extensions.visible
 import com.gf.apkcarrera.databinding.ActivityMainBinding
 import com.gf.apkcarrera.features.f3_running.service.RunningService
-import com.gf.common.extensions.navigateToMenuItem
-
+import com.gf.common.extensions.invisible
+import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseActivity
 import com.gf.common.utils.Constants.ACTION_SHOW_RUNNING_FRAGMENT
 import com.gf.common.utils.Constants.ACTION_STOP_RUNNING
@@ -33,7 +31,7 @@ class MainActivity : BaseActivity() {
 
     private val noActionBarIds = setOf(R.id.fragmentSplash,R.id.fragmentInitial)
     private val noBottomNavigationViewIds = setOf(R.id.fragmentSplash,R.id.fragmentInitial,R.id.fragmentLogin,R.id.fragmentRegister1,R.id.fragmentRegister2,
-        R.id.fragmentRecoverPass,R.id.fragmentRunning)
+        R.id.fragmentRecoverPass,R.id.fragmentRunning, R.id.fragmentRunningEnd)
     private val topLevelIds = setOf(R.id.fragmentSplash,R.id.fragmentInitial, R.id.fragmentFeed)
 
     lateinit var binding: ActivityMainBinding

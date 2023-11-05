@@ -41,21 +41,36 @@
         tools:layout="@layout/frg01_feed" />
     <!-- 02_Amigos -->
     <fragment
+        android:id="@+id/fragmentFriends"
+        android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsFragment"
+        android:label="FragmentFriends"
+        tools:layout="@layout/frg02_friends" />
+
+    <!-- 03_Running -->
+
+    <!-- Running -->
+    <fragment
         android:id="@+id/fragmentRunning"
         android:name="com.gf.apkcarrera.features.f3_running.fragments.RunningFragment"
         android:label="FragmentRunning"
-        tools:layout="@layout/frg03_running" />
+        tools:layout="@layout/frg03_running" >
+        <action
+            android:id="@+id/action_fragmentRunning_to_fragmentRunningEnd"
+            app:destination="@id/fragmentRunningEnd"/>
+    </fragment>
     <action
         android:id="@+id/action_global_fragmentRunning"
         app:destination="@id/fragmentRunning"
         app:launchSingleTop="true"/>
 
-    <!-- 03_Activity -->
+    <!-- Running End-->
     <fragment
-        android:id="@+id/fragmentFriends"
-        android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsFragment"
-        android:label="FragmentFriends"
-        tools:layout="@layout/frg02_friends" />
+        android:id="@+id/fragmentRunningEnd"
+        android:name="com.gf.apkcarrera.features.f3_running.fragments.RunningEndFragment"
+        android:label="FragmentRunningEnd"
+        tools:layout="@layout/frg03_running_end"/>
+
+
     <!-- 04_Ajustes-->
     <fragment
         android:id="@+id/fragmentSettings"
@@ -68,15 +83,6 @@
         android:name="com.gf.apkcarrera.features.f5_profile.fragments.ProfileFragment"
         android:label="FragmentProfile"
         tools:layout="@layout/frg05_profile" />
-
-
-
-
-
-
-
-
-
 
     <!-- Navigation Registro -->
     <navigation

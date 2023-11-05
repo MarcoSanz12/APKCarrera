@@ -29,7 +29,7 @@ class StatCounter() {
     // Estadísticas
 
     // Tiempo - Segundos
-    private val totalTime = mutableListOf<Int>()
+    val totalTime = mutableListOf<Int>()
 
     // Distancia - Metros
     var totalDistance = 0

@@ -1,11 +1,12 @@
 package com.gf.common.entity
 
-import com.google.android.gms.maps.model.LatLng
+import com.gf.common.entity.activity.RegistryPoint
 
 data class RunningUIState(
     val time : Int,
     val distance : Int,
     val speedLastKm : Float,
-    val points : List<List<LatLng>>,
+    val timeList : List<Int>,
+    val points : List<List<RegistryPoint>>,
     val status : ActivityStatus
 )

@@ -90,6 +90,9 @@
     <string name="end_message">¡Enhorabuena!</string>
     <string name="end_button_discard">DESCARTAR</string>
     <string name="end_button_end">TERMINAR</string>
+    <string name="service_status_movin">En movimiento</string>
+    <string name="service_status_paused">Pausado</string>
+    <string name="service_status_end">Detenido</string>
 
     <!-- Fragment04 - Ajustes -->
     <string name="settings_help">Ayuda</string>

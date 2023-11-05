@@ -17,7 +17,9 @@ import com.cotesa.common.extensions.distanceTo
 import com.gf.apkcarrera.MainActivity
 import com.gf.common.entity.ActivityStatus
 import com.gf.common.entity.RunningUIState
+import com.gf.common.entity.activity.RegistryPoint
 import com.gf.common.extensions.toLatLng
+import com.gf.common.utils.Constants.ACTION_END_RUNNING
 import com.gf.common.utils.Constants.ACTION_PAUSE_RUNNING
 import com.gf.common.utils.Constants.ACTION_SHOW_RUNNING_FRAGMENT
 import com.gf.common.utils.Constants.ACTION_START_OR_RESUME_RUNNING
@@ -56,7 +58,7 @@ class RunningService : LifecycleService() {
 
     var lastLocation : Location? = null
     val pointsLastPoint : LatLng?
-        get() = points.flatten().lastOrNull()
+        get() = points.flatten().lastOrNull()?.latLng
 
     private val distanceLastPoint : Double
         get () =
@@ -68,6 +70,8 @@ class RunningService : LifecycleService() {
 
     // VAR Timer Carrera
     lateinit var timer: Timer
+
+    lateinit var notificationBuilder: NotificationCompat.Builder
     var clockTime = 0
 
     // VAR AutoPause
@@ -75,21 +79,19 @@ class RunningService : LifecycleService() {
     var lastRegisterTime = 0
 
     var STATUS = ActivityStatus.RUNNING
-    var points : MutableList<MutableList<LatLng>> = mutableListOf(mutableListOf())
+    var userPaused = false
+
+    var points : MutableList<MutableList<RegistryPoint>> = mutableListOf(mutableListOf())
     var pausedPoints = 0
     val statCounter = StatCounter()
 
     companion object{
-
         private val _uiState = MutableStateFlow<RunningUIState?>(null)
         val uiState get() = _uiState.asStateFlow()
 
         private const val PAUSE_MIN_DISTANCE = 1
         private const val RESUME_MIN_DISTANCE = 30
         private const val PAUSE_MIN_TIME = 30
-
-        private const val SPEED_STAT_MIN_TIME = 60
-        private const val SPEED_STAT_MIN_DISTANCE = 300
     }
 
     // 1. Comandos para controlar el servicio
@@ -103,17 +105,20 @@ class RunningService : LifecycleService() {
                         startForegroundService()
                         startTimer()
                         isUnresumed = false
-
                     }
                     else{
                         Log.d(TAG, "onStartCommand: RESUME_RUNNING")
                     }
                 }
                 ACTION_PAUSE_RUNNING->{
+                    userPaused = true
                     pauseRunning()
                     Log.d(TAG, "onStartCommand: PAUSE_RUNNING")
                 }
                 ACTION_STOP_RUNNING ->{
+                    STATUS = ActivityStatus.STOP
+                }
+                ACTION_END_RUNNING->{
                     STATUS = ActivityStatus.DONE
                     stopTimer()
                     stopService()
@@ -131,7 +136,7 @@ class RunningService : LifecycleService() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         createNotificationChannel(notificationManager)
 
-        val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+        notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setAutoCancel(false)
             .setOngoing(true)
             .setSmallIcon(com.gf.common.R.drawable.icon_run)
@@ -139,7 +144,7 @@ class RunningService : LifecycleService() {
             .setContentText("00:00:00")
             .setContentIntent(getMainActivityPendingIntent())
 
-        startForeground(NOTIFICATION_ID,notificationBuilder.build())
+        startForeground(NOTIFICATION_ID, notificationBuilder.build())
         fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, null)
     }
 
@@ -162,6 +167,22 @@ class RunningService : LifecycleService() {
         }
     }
 
+    private fun updateNotification(){
+        with(notificationBuilder){
+            val title = when(STATUS){
+                ActivityStatus.RUNNING -> getString(com.gf.common.R.string.service_status_movin)
+                ActivityStatus.DONE -> getString(com.gf.common.R.string.service_status_end)
+                ActivityStatus.PAUSE -> getString(com.gf.common.R.string.service_status_paused)
+                ActivityStatus.STOP -> getString(com.gf.common.R.string.service_status_end)
+                else -> ""
+            }
+            setContentTitle(title)
+            setContentText(StatCounter.formatTime(clockTime))
+
+            startForeground(NOTIFICATION_ID,notificationBuilder.build())
+        }
+    }
+
     @SuppressLint("MissingPermission")
     private fun action1AddPoint(location: Location) {
         val locLatLng = LatLng(location.latitude, location.longitude)
@@ -173,27 +194,19 @@ class RunningService : LifecycleService() {
         var segmentDistance = 10.0
 
         if (points.last().isNotEmpty())
-            segmentDistance = points.flatten().last().distanceTo(locLatLng)
+            segmentDistance = points.flatten().last().latLng.distanceTo(locLatLng)
 
 
         if (segmentDistance >= 10) {
             pausedPoints = 0
-            points.last().add(locLatLng)
             statCounter.add(segmentDistance.toInt(),clockTime-lastRegisterTime)
+            points.last().add(RegistryPoint(location,statCounter.totalDistance,clockTime))
             lastRegisterTime = clockTime
 
         }
     }
 
     private fun action2Paused(location: Location){
-
-        val curLatLng = LatLng(location.latitude,location.longitude)
-        val distance = try{
-            curLatLng.distanceTo(points.flatten().last())
-        }catch (ex:Exception){
-            0.0
-        }
-
 
     }
 
@@ -205,6 +218,9 @@ class RunningService : LifecycleService() {
     private fun startTimer(){
         timer = Timer().apply {
             schedule(timerTask {
+                if (STATUS == ActivityStatus.DONE)
+                    return@timerTask
+
                 if (STATUS == ActivityStatus.RUNNING){
 
                     if (lastLocation == null || pointsLastPoint == null || distanceLastPoint <= PAUSE_MIN_DISTANCE) {
@@ -219,10 +235,14 @@ class RunningService : LifecycleService() {
 
                     if (timeWithoutPoints > PAUSE_MIN_TIME){
                         pauseRunning()
+                        userPaused = false
                         timeWithoutPoints = 0
                     }
+
+                    clockTime++
                 }
-                else if (STATUS == ActivityStatus.PAUSE){
+                // 2. Tick Parado y pausa automática
+                else if (STATUS == ActivityStatus.PAUSE && !userPaused){
                     Log.d(TAG, "action2Paused: Pausado ($distanceLastPoint -> Unpause in $RESUME_MIN_DISTANCE)")
                     if (pointsLastPoint!!.distanceTo(lastLocation!!.toLatLng()) >= RESUME_MIN_DISTANCE){
                         Log.d(TAG, "action2Paused: Se recupera la carrera")
@@ -230,19 +250,18 @@ class RunningService : LifecycleService() {
                     }
                 }
 
-                clockTime++
+
+                updateNotification()
                 updateUi(
                     RunningUIState(
                         time = clockTime,
                         distance = statCounter.totalDistance,
                         speedLastKm = statCounter.lastSpeed,
+                        timeList = statCounter.totalTime,
                         points = points,
                         status = STATUS
                     )
                 )
-                // Si se recorren 15 metros desde el punto de pausa se reanuda la actividad
-
-
             },0,1000)
         }
     }
@@ -252,13 +271,14 @@ class RunningService : LifecycleService() {
     }
 
     private fun stopService(){
+        updateUi(null)
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
         stopSelf()
     }
 
 
     // Emitir datos
-    private fun updateUi(uiState : RunningUIState) {
+    private fun updateUi(uiState : RunningUIState?) {
         lifecycleScope.launch {
             _uiState.emit(uiState)
         }

@@ -4,13 +4,18 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
@@ -172,6 +177,78 @@ fun TabLayout.addOnTabSelectedListener(onTabSelected : (tab: TabLayout.Tab?) -> 
 
     })
 }
+
+fun RecyclerView.assignNonScrollableLinearLayoutManager(){
+    this.layoutManager = object : LinearLayoutManager(context) {
+        override fun canScrollVertically() = false
+        override fun canScrollHorizontally(): Boolean = false
+    }
+}
+
+private fun getColorVersionCheck(colorId: Int,context: Context) : Int =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        context.getColor(colorId)
+    else
+        context.resources.getColor(colorId)
+
+
+fun RecyclerView.assignNonScrollableGridLayoutManager(spanCount: Int){
+    this.layoutManager = object : GridLayoutManager(context,spanCount){
+        override fun canScrollVertically() = false
+        override fun canScrollHorizontally(): Boolean = false
+    }
+}
+
+/**
+ * Asigna un [LinearLayoutManager] y le carga un layoutAnimation al inicializarse
+ *
+ * @param adapter Adaptador genérico a asignarle
+ * @param animationId Id del layoutAnimation a cargar
+ * @param scrollable Indica si el [LinearLayoutManager] será o no scrolleable [Por defecto true]
+ *
+ * @return El adaptador ya creado
+ */
+fun <VH : RecyclerView.ViewHolder, ADAPTER : RecyclerView.Adapter<VH>> RecyclerView.assignAnimatedAdapter(adapter:ADAPTER, animationId : Int, scrollable : Boolean = true) : ADAPTER{
+    val animation = AnimationUtils.loadLayoutAnimation(
+        context,
+        animationId
+    )
+    layoutAnimation = animation
+    if (scrollable)
+        layoutManager = LinearLayoutManager(context)
+    else
+        assignNonScrollableLinearLayoutManager()
+    this.adapter = adapter
+    return adapter
+}
+
+/**
+ * Asigna un [GridLayoutManager] y le carga un layoutAnimation al inicializarse
+ *
+ * @param adapter Adaptador genérico a asignarle
+ * @param animationId Id del layoutAnimation a cargar
+ * @param spanCount Número de columnas que tendrá el adaptador
+ * @param scrollable Indica si el [GridLayoutManager] será o no scrolleable [Por defecto true]
+ *
+ * @return El adaptador ya creado
+ */
+
+fun <VH : RecyclerView.ViewHolder, ADAPTER : RecyclerView.Adapter<VH>> RecyclerView.assignGridAnimatedAdapter(adapter:ADAPTER, animationId : Int, spanCount : Int, scrollable: Boolean = true) : ADAPTER{
+    val animation = AnimationUtils.loadLayoutAnimation(
+        context,
+        animationId
+    )
+    layoutAnimation = animation
+    if (scrollable)
+        layoutManager = GridLayoutManager(context,spanCount)
+    else
+        assignNonScrollableGridLayoutManager(spanCount)
+
+    this.adapter = adapter
+    return adapter
+}
+
+fun View.playAnimation(animId : Int) = startAnimation(AnimationUtils.loadAnimation(context,animId))
 
 
 val Int.dp: Int

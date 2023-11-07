@@ -29,6 +29,8 @@
                     android:paddingHorizontal="20dp"
                     android:paddingTop="10dp"
                     android:paddingBottom="5dp"
+                    android:clipToPadding="false"
+                    android:clipChildren="false"
                     android:layout_height="wrap_content">
 
                     <!-- Tipo de actividad -->
@@ -60,16 +62,63 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Imágenes -->
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_images"
-                        android:layout_width="match_parent"
+                    <ScrollView
+                        android:id="@+id/sv_imagenes"
+                        android:layout_width="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
                         android:layout_height="192dp"
                         android:orientation="horizontal"
                         android:clipChildren="false"
                         android:clipToPadding="false"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_activity_type"
-                        tools:itemCount="2"
-                        tools:listitem="@layout/item_image" />
+                        app:layout_constraintTop_toBottomOf="@+id/iv_activity_type">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:clipChildren="false"
+                            android:clipToPadding="false"
+                            android:divider="@drawable/divider_5dp"
+                            android:showDividers="middle"
+                            android:orientation="horizontal">
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="192dp"
+                                android:layout_height="match_parent">
+
+                                <com.google.android.gms.maps.MapView
+                                    android:id="@+id/map"
+                                    android:layout_width="192dp"
+                                    android:layout_height="match_parent"
+                                    android:name="com.google.android.gms.maps.MapFragment"/>
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rv_images"
+                                android:layout_width="match_parent"
+                                android:layout_height="192dp"
+                                android:orientation="horizontal"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                tools:itemCount="2"
+                                tools:listitem="@layout/item_image"/>
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cv_add_image"
+                                android:layout_height="match_parent"
+                                android:layout_width="192dp"
+                                app:cardBackgroundColor="@color/lightGrey">
+
+                                <ImageView
+                                    android:layout_width="80dp"
+                                    android:layout_height="80dp"
+                                    android:layout_gravity="center"
+                                    app:tint="@color/background"
+                                    android:src="@drawable/icon_add_photo"
+                                    />
+
+                            </com.google.android.material.card.MaterialCardView>
+                        </LinearLayout>
+
+                    </ScrollView>
 
                     <!-- Botón alternar Visibilidad -->
                     <com.google.android.material.button.MaterialButton
@@ -88,7 +137,7 @@
                         android:checkable="true"
                         app:icon="@drawable/selector_visibility"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/rv_images" />
+                        app:layout_constraintTop_toBottomOf="@+id/sv_imagenes" />
 
                     <!-- Mensaje Visibilidad -->
                     <com.google.android.material.textview.MaterialTextView

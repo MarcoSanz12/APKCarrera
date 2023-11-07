@@ -9,6 +9,7 @@
     <string name="title_friends">Amigos</string>
     <string name="title_friends_requests">Solicitudes</string>
     <string name="title_friends_add">Añadir amigo</string>
+    <string name="todos">Todos</string>
 
 
     <!-- BottomNavigationView -->

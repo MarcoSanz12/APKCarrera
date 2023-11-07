@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.checkbox.MaterialCheckBox
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CheckBox"
+    android:layout_height="wrap_content"
+    android:id="@+id/checkbox"
+    android:checked="false"
+    tools:background="@color/gris_standard"
+    tools:text="Pollo con patata"
+    />

@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="dim_2sp">2sp</dimen>
+    <dimen name="dim_10dp">10dp</dimen>
     <dimen name="dim_50dp">50dp</dimen>
     <dimen name="dim_55dp">55dp</dimen>
     <!-- Horizontal margin -->
     <dimen name="horizontal_margin_standard">30dp</dimen>
     <dimen name="horizontal_margin_small">16dp</dimen>
     <dimen name="horizontal_margin_card">8dp</dimen>
+
+    <!-- Filtros -->
+    <item name="filter_line_size_x1" type="dimen">30dp</item>
+    <item name="filter_line_size_x2" type="dimen">37dp</item>
+    <item name="filter_line_size_x3" type="dimen">45dp</item>
 
     <!-- Text sizes -->
     <dimen name="text_size_ultralarge_20">20sp</dimen>

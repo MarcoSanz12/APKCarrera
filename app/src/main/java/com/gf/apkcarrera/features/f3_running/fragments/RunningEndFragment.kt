@@ -1,26 +1,31 @@
 package com.gf.apkcarrera.features.f3_running.fragments
 
+import android.graphics.Bitmap
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg03RunningEndBinding
+import com.gf.apkcarrera.features.f3_running.adapter.RunningImagesAdapter
 import com.gf.apkcarrera.features.f3_running.fragments.RunningFragment.Companion.setSpeed
 import com.gf.apkcarrera.features.f3_running.viewmodel.RunningViewModel
 import com.gf.common.entity.activity.ActivityModelSimple
 import com.gf.common.entity.activity.RegistryPoint
+import com.gf.common.extensions.assignAnimatedAdapter
 import com.gf.common.extensions.collectFlow
 import com.gf.common.extensions.format
 import com.gf.common.extensions.toast
-import com.gf.common.platform.BaseFragment
+import com.gf.common.platform.BaseCameraFragment
 import com.gf.common.utils.Constants
 import com.gf.common.utils.StatCounter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class RunningEndFragment : BaseFragment<Frg03RunningEndBinding>() {
+class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
 
     private val runningViewModel : RunningViewModel by activityViewModels()
+    private lateinit var adapter : RunningImagesAdapter
+
 
     override fun initObservers() {
         with(runningViewModel){
@@ -29,10 +34,33 @@ class RunningEndFragment : BaseFragment<Frg03RunningEndBinding>() {
     }
 
     override fun initializeView() {
-        binding.btEnd.setOnClickListener {
-            sendCommandToService(Constants.ACTION_END_RUNNING)
-            baseActivity.navController.popBackStack(R.id.fragmentFeed,false)
-            toast("Carrera guardada :D")
+        with(binding){
+
+            // Adaptador imágenes
+            adapter = rvImages.assignAnimatedAdapter(RunningImagesAdapter(listOf(),::onImageClick), com.gf.common.R.anim.animation_layout_fade_in,false)
+
+            // Añadir imagen
+            cvAddImage.setOnClickListener {
+                try{
+                    uploadImage(195,195)
+
+                }catch (ex: Throwable){
+                    ex.printStackTrace()
+                }
+            }
+
+            // Guardar carrera
+            binding.btEnd.setOnClickListener {
+                sendCommandToService(Constants.ACTION_END_RUNNING)
+                baseActivity.navController.popBackStack(R.id.fragmentFeed,false)
+                toast("Carrera guardada :D")
+            }
+        }
+    }
+
+    override fun onImageLoadedListener(img: Bitmap?) {
+        img?.let {
+            adapter.addImage(img)
         }
     }
 
@@ -61,6 +89,10 @@ class RunningEndFragment : BaseFragment<Frg03RunningEndBinding>() {
             // Altitud máxima
             statistic3.tvContentRight.text = "${getMaxAltitude(activityModelSimple.points)} metros"
         }
+    }
+
+    private fun onImageClick(bitmaps: List<Bitmap>, i: Int) {
+        (requireActivity() as MainActivity).showZoomableImage(bitmaps,i)
     }
 
     private fun getDesnivelPositivo(points : List<List<RegistryPoint>>) : Int{

@@ -1,6 +1,7 @@
 package com.gf.apkcarrera
 
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.widget.LinearLayoutCompat
@@ -14,6 +15,7 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUiSaveStateControl
 import com.gf.apkcarrera.databinding.ActivityMainBinding
 import com.gf.apkcarrera.features.f3_running.service.RunningService
+import com.gf.common.dialog.MultimediaDialog
 import com.gf.common.extensions.invisible
 import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseActivity
@@ -39,6 +41,9 @@ class MainActivity : BaseActivity() {
     // VAR UI Elements
     val actionbar : ConstraintLayout by lazy { findViewById(R.id.ly_actionbar) }
     val bottomNavigationView : BottomNavigationView by lazy { findViewById(R.id.bottomNavigationView) }
+
+    // Galeria de fotos
+    private var multimediaDialog : MultimediaDialog? = null
 
 
     override var actionBarTitle: String
@@ -105,6 +110,39 @@ class MainActivity : BaseActivity() {
             }
 
         }
+    }
+
+    /**
+     * Abre [MultimediaDialog] cargando un [Multimedia]
+     *
+     * @param images Imágen a cargar
+     *
+     * @return **True** si no es null o **False** si es null
+     */
+    fun showZoomableImage(image : Bitmap?) : Boolean =
+        if (image != null)
+            showZoomableImage(listOf(image))
+        else
+            false
+
+    /**
+     * Abre [MultimediaDialog] cargando una [List] de [Bitmap] y abre por defecto
+     * el que este en la posicion [position]
+     *
+     * @param images Lista de imágenes a cargar
+     * @param position Posición de la primera imágen que se abrirá
+     *
+     * @return **True** si la lista no esta vacía o **False** si la lista está vacía
+     */
+    fun showZoomableImage(images : List<Bitmap>, position : Int = 0) : Boolean {
+        return if (images.isEmpty() || multimediaDialog?.isShowing == true)
+            false
+        else{
+            multimediaDialog = MultimediaDialog(this,images,position)
+            multimediaDialog!!.show()
+            true
+        }
+
     }
 
     override fun onNewIntent(intent: Intent?) {

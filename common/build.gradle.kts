@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -72,6 +70,8 @@ dependencies {
     //DATABINDING
     api ("androidx.databinding:databinding-common:8.1.2")
 
+    // Expandable Layout
+    implementation("net.cachapa.expandablelayout:expandablelayout:2.9.2")
 
     // Corrutinas
     api ("androidx.appcompat:appcompat:1.6.1")

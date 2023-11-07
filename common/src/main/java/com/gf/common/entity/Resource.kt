@@ -9,7 +9,8 @@ abstract class Resource : Serializable {
     abstract fun getName(): String
 
     enum class ResourceType(var char: String) {
-        IMAGE("image")
+        IMAGE("image"),
+        FILTRO("filter")
     }
 
 

@@ -409,7 +409,7 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
             bitmap ?: return@snapshot
 
             runningViewModel.postActivityModelSimple(
-                ActivityModelSimple(points,timeList,distance,bitmap)
+                ActivityModelSimple(points,timeList,distance)
             )
             navigate(R.id.action_fragmentRunning_to_fragmentRunningEnd)
         }
@@ -465,7 +465,12 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        binding.mapView.onSaveInstanceState(outState)
+        try {
+            binding.mapView.onSaveInstanceState(outState)
+        }catch (ex:NullPointerException){
+            ex.printStackTrace()
+        }
+
         super.onSaveInstanceState(outState)
     }
 
@@ -475,12 +480,12 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     }
 
     override fun onLowMemory() {
-        binding.mapView.onLowMemory()
+        binding.mapView?.onLowMemory()
         super.onLowMemory()
     }
 
     override fun onStop() {
-        binding.mapView.onStop()
+        binding.mapView?.onStop()
         super.onStop()
     }
 

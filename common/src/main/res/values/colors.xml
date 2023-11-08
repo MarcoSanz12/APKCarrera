@@ -11,9 +11,9 @@
     <color name="lightPrimary">#5265FF</color>
     <color name="grey">#292929</color>
     <color name="green">#29B41C</color>
-    <color name="green_ripple">#804DBC42</color>
+    <color name="green_ripple">#98CD93</color>
     <color name="red">#8A0000</color>
-    <color name="red_ripple">#808A0000</color>
+    <color name="red_ripple">#C88787</color>
     <color name="yellow">#F7EC07</color>
     <color name="white">#FFFFFF</color>
     <color name="background">#E9E9E9</color>

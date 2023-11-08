@@ -17,6 +17,7 @@ import com.gf.apkcarrera.databinding.ActivityMainBinding
 import com.gf.apkcarrera.features.f3_running.service.RunningService
 import com.gf.common.dialog.MultimediaDialog
 import com.gf.common.extensions.invisible
+import com.gf.common.extensions.navigateToMenuItem
 import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseActivity
 import com.gf.common.utils.Constants.ACTION_SHOW_RUNNING_FRAGMENT
@@ -66,16 +67,16 @@ class MainActivity : BaseActivity() {
 
         navigateToRunningFragmentIfNeeded(intent)
 
-        NavigationUI.setupWithNavController(binding.bottomNavigationView,navController,false)
+        // Navegación OG
+        // NavigationUI.setupWithNavController(binding.bottomNavigationView,navController,false)
 
-            /*Navegación bug
-                with(bottomNavigationView){
-                    setupWithNavController(navController)
-                    setOnItemSelectedListener {
-                        navController.navigateToMenuItem(it)
-                    }
-                }
-                */
+        with(bottomNavigationView){
+
+            setOnItemSelectedListener {
+                navController.navigateToMenuItem(it)
+            }
+        }
+
 
 
         // Back Button
@@ -108,7 +109,6 @@ class MainActivity : BaseActivity() {
             buttonsLayout.children.forEach {
                 it.invisible()
             }
-
         }
     }
 

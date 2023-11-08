@@ -15,28 +15,54 @@ class ActivityModel() : Model() {
     override var uid: String = ""
 
     @ColumnInfo("userid")
-     var userid : String = ""
+    var userid : String = ""
 
     @ColumnInfo("title")
-     var title : String = ""
+    var title : String = ""
+
+    @ColumnInfo("type")
+    var type : ActivityType = ActivityType.RUN
 
     @ColumnInfo("points")
-     var points : List<List<LatLng>> = mutableListOf()
+    var points : List<List<RegistryPoint>> = emptyList()
+
+    @ColumnInfo("images")
+    var images : List<String> = emptyList()
 
     @ColumnInfo("time")
-     var time : List<Int> = listOf()
+    var time : List<Int> = emptyList()
 
     @ColumnInfo("distance")
-     var distance : Int = 0
+    var distance : Int = 0
+
+    @ColumnInfo("speed")
+    var speed : Double = 0.0
 
     @ColumnInfo("visibility")
-     var visibility : Boolean = true
+    var visibility : Boolean = true
 
     override fun getModelFromDoc(doc: DocumentSnapshot) {
-        TODO("Not yet implemented")
+        userid = doc.get("userid") as String
+        title = doc.get("title") as String
+        type = doc.get("type") as ActivityType
+        points = doc.get("points") as List<List<RegistryPoint>>
+        images = doc.get("images") as List<String>
+        time = doc.get("time") as List<Int>
+        distance = doc.get("distance") as Int
+        speed = doc.get("speed") as Double
+        visibility = doc.get("visibility") as Boolean
     }
 
-    override fun setModelToMap(): HashMap<String, Any> {
-        TODO("Not yet implemented")
-    }
+    override fun setModelToMap(): HashMap<String, Any> =
+        hashMapOf(
+            "userid" to userid,
+            "title" to title,
+            "type" to type,
+            "points" to points,
+            "images" to images,
+            "time" to time,
+            "distance" to distance,
+            "speed" to speed,
+            "visibility" to visibility
+        )
 }

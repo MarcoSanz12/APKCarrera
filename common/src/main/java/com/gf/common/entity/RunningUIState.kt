@@ -1,5 +1,6 @@
 package com.gf.common.entity
 
+import com.gf.common.entity.activity.ActivityStatus
 import com.gf.common.entity.activity.RegistryPoint
 
 data class RunningUIState(

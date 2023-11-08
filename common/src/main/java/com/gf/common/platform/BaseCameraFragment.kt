@@ -43,6 +43,10 @@ abstract class BaseCameraFragment<VB : ViewBinding> : BaseFragment<VB>() {
         requestPhotoPermission()
     }
 
+    protected fun uploadImage(){
+        requestPhotoPermission()
+    }
+
     abstract fun onImageLoadedListener(img: Bitmap?)
 
     private fun requestPhotoPermission() {
@@ -162,7 +166,10 @@ abstract class BaseCameraFragment<VB : ViewBinding> : BaseFragment<VB>() {
                 )!!
 
 
-                imageBitmap = scaleBitmap(imageBitmap!!,camWidth,camHeight)
+                if (camWidth != 0 || camHeight != 0){
+                    imageBitmap = scaleBitmap(imageBitmap!!,camWidth,camHeight)
+                }
+
                 onImageLoadedListener(imageBitmap!!)
 
 

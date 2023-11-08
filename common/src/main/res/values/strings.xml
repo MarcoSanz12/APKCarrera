@@ -106,6 +106,22 @@
     <string name="profile_add_friend">AÑADIR AMIGO</string>
     <string name="profile_remove_friend">ELIMINAR AMIGO</string>
     <string name="profile_statistics">Estadísticas</string>
+    <!-- Mensajes Visiblidad-->
+    <string name="visibilty_default_on">Esta actividad será visible para tus amigos</string>
+
+
+    <string-array name="visibility_message_on">
+        <item>¡Todo el mundo contemplará tus hazañas!</item>
+        <item>Esta actividad será visible para tus amigos</item>
+        <item>¡Que vean tus progresos!</item>
+
+    </string-array>
+
+    <string-array name="visibility_message_off">
+        <item>No te preocupes, nadie sabrá de tus secretos</item>
+        <item>Esta actividad será visible solo para ti</item>
+        <item>Escondámosla, no queremos darles envidia</item>
+    </string-array>
 
 
 

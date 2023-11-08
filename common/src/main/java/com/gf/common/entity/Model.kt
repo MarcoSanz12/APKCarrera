@@ -6,8 +6,6 @@ abstract class Model() {
 
     abstract var uid : String
 
-
-
     abstract fun getModelFromDoc (doc : DocumentSnapshot)
 
     abstract fun setModelToMap() : HashMap<String,Any>

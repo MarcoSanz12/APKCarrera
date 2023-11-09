@@ -1,18 +1,34 @@
 package com.gf.apkcarrera.features.f3_running.viewmodel
 
+import com.gf.apkcarrera.features.f3_running.usecase.SaveActivityUseCase
+import com.gf.common.entity.activity.ActivityModel
 import com.gf.common.entity.activity.ActivityModelSimple
 import com.gf.common.platform.BaseViewModel
+import com.gf.common.response.UploadActivityResponse
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
 
 
-class RunningViewModel : BaseViewModel() {
+@HiltViewModel
+class RunningViewModel @Inject constructor(
+    val saveActivityUseCase: SaveActivityUseCase
+): BaseViewModel() {
 
     private val _activityModelSimple = MutableStateFlow<ActivityModelSimple?>(null)
     val activityModelSimple get() = _activityModelSimple.asStateFlow()
 
+    private val _uploadedActivityResponse = MutableStateFlow<UploadActivityResponse?>(null)
+    val uploadedActivityResponse = _uploadedActivityResponse.asStateFlow()
+
     fun postActivityModelSimple(activityModelSimple: ActivityModelSimple) =
         launch {
             _activityModelSimple.emit(activityModelSimple)
+        }
+
+    fun uploadActivityModel(activityModel: ActivityModel) =
+        launch {
+            _uploadedActivityResponse.emit(saveActivityUseCase(activityModel))
         }
 }

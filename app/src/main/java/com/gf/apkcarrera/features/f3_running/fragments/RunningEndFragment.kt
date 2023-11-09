@@ -2,34 +2,34 @@ package com.gf.apkcarrera.features.f3_running.fragments
 
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cotesa.common.extensions.toBase64
 import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg03RunningEndBinding
 import com.gf.apkcarrera.features.f3_running.adapter.RunningImagesAdapter
 import com.gf.apkcarrera.features.f3_running.fragments.RunningFragment.Companion.setSpeed
 import com.gf.apkcarrera.features.f3_running.viewmodel.RunningViewModel
+import com.gf.common.entity.activity.ActivityModel
 import com.gf.common.entity.activity.ActivityModelSimple
+import com.gf.common.entity.activity.ActivityType
+import com.gf.common.entity.activity.RegistryField
 import com.gf.common.entity.activity.RegistryPoint
 import com.gf.common.extensions.adjustCamera
 import com.gf.common.extensions.assignAnimatedAdapter
 import com.gf.common.extensions.collectFlow
+import com.gf.common.extensions.collectFlowOnce
 import com.gf.common.extensions.format
 import com.gf.common.extensions.paintPolyline
 import com.gf.common.extensions.toast
 import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseCameraFragment
+import com.gf.common.response.UploadActivityResponse
 import com.gf.common.utils.Constants
 import com.gf.common.utils.StatCounter
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMapOptions
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,6 +39,7 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
     private val runningViewModel : RunningViewModel by activityViewModels()
     private lateinit var adapter : RunningImagesAdapter
 
+
     companion object{
         private const val MAX_IMAGES = 10
         private const val VISIBLE_DEFAULT = true
@@ -47,6 +48,7 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
     override fun initObservers() {
         with(runningViewModel){
             collectFlow(activityModelSimple,Lifecycle.State.STARTED,::activityLoaded)
+            collectFlowOnce(uploadedActivityResponse,::activitySaved)
         }
     }
 
@@ -69,15 +71,65 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
                 }
             }
 
-            // Guardar carrera
-            binding.btEnd.setOnClickListener {
-                sendCommandToService(Constants.ACTION_END_RUNNING)
-                baseActivity.navController.popBackStack(R.id.fragmentFeed,false)
-                toast("Carrera guardada :D")
-            }
-
             binding.btVisibility.setOnClickListener(::onVisibilityClick)
         }
+    }
+
+    private fun saveActivity(activityModelSimple: ActivityModelSimple) {
+        val activityModel = ActivityModel().apply {
+            // Titulo
+            title = binding.etTitle.text.toString()
+
+            // Tipo
+            type = ActivityType.RUN
+
+            // Puntos
+            points = activityModelSimple.points.toRegistryFields()
+
+            // Imágenes
+            images = adapter.resourceList.map { it.image.toBase64() }
+
+            // Distancia
+            distance = activityModelSimple.distance
+
+            // Tiempo
+            time = activityModelSimple.time
+
+            // Visibiliy
+            visibility = binding.btVisibility.isChecked
+
+        }
+
+        runningViewModel.uploadActivityModel(activityModel)
+    }
+
+    private fun activitySaved(uploadActivityResponse: UploadActivityResponse) {
+        when (uploadActivityResponse){
+            is UploadActivityResponse.Succesful -> {
+                sendCommandToService(Constants.ACTION_END_RUNNING)
+                baseActivity.navController.popBackStack(R.id.fragmentFeed,false)
+                toast("Carrera guardada")
+            }
+            is UploadActivityResponse.Error -> {
+                toast("Error al guardar")
+            }
+        }
+    }
+
+    private fun List<List<RegistryPoint>>.toRegistryFields() : List<RegistryField> {
+        val registryFields = mutableListOf<RegistryField>()
+        for (list in this){
+            for (point in list){
+                registryFields.add(
+                    RegistryField(
+                        listNo = list.indexOf(point),
+                        position = this.indexOf(list),
+                        registryPoint = point)
+                )
+            }
+
+        }
+        return registryFields
     }
 
     private fun onVisibilityClick(view: View?) {
@@ -127,6 +179,11 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
             // Altitud máxima
             statistic3.tvContentRight.text = "${getMaxAltitude(activityModelSimple.points)} metros"
 
+            // Guardar carrera
+            binding.btEnd.setOnClickListener {
+                saveActivity(activityModelSimple)
+
+            }
             loadMap(activityModelSimple.points)
         }
     }

@@ -1,5 +1,6 @@
 package com.gf.apkcarrera.di
 
+import com.gf.apkcarrera.features.f3_running.repository.RunningRepository
 import com.gf.apkcarrera.repository.RegisterRepository
 import com.gf.apkcarrera.repository.MainRepository
 import dagger.Binds
@@ -19,5 +20,11 @@ abstract class ApplicationModule {
 
     @Binds
     @Singleton
+    abstract fun bindRunningRepository(repository: RunningRepository.RunningRepositoryImpl) : RunningRepository
+
+    @Binds
+    @Singleton
     abstract fun bindMainRepository(repository: MainRepository.MainRepositoryImpl) : MainRepository
+
+
 }

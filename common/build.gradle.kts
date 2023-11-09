@@ -83,6 +83,9 @@ dependencies {
     api ("androidx.recyclerview:recyclerview:1.3.1")
     api ("com.github.bumptech.glide:glide:4.11.0")
 
+    // FlexLayout
+    api ("com.google.android.flexbox:flexbox:3.0.0")
+
     // Room
 
     api("androidx.room:room-runtime:$room_version")

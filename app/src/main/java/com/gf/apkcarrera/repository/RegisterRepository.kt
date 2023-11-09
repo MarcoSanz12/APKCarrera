@@ -1,6 +1,7 @@
 package com.gf.apkcarrera.repository
 
 import android.content.Context
+import android.content.SharedPreferences
 import com.gf.common.db.APKCarreraDatabase
 import com.gf.common.entity.user.LoginRequest
 import com.gf.common.entity.user.UserModel
@@ -35,6 +36,7 @@ interface RegisterRepository {
     class RegisterRepositoryImpl
     @Inject constructor(
         @ApplicationContext val context: Context,
+        val preferences: SharedPreferences,
         val networkHandler: NetworkHandler,
         val database: APKCarreraDatabase,
         val auth: FirebaseAuth,
@@ -42,9 +44,6 @@ interface RegisterRepository {
         val analytics: FirebaseAnalytics
     ) : RegisterRepository {
 
-        val preferences = context.getSharedPreferences(
-            context.packageName + "_preferences",
-            Context.MODE_PRIVATE)
 
         override suspend fun register(user: LoginRequest): Either<Failure, UserModel> {
 

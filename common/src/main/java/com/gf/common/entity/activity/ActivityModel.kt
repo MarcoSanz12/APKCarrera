@@ -24,7 +24,7 @@ class ActivityModel() : Model() {
     var type : ActivityType = ActivityType.RUN
 
     @ColumnInfo("points")
-    var points : List<List<RegistryPoint>> = emptyList()
+    var points : List<RegistryField> = emptyList()
 
     @ColumnInfo("images")
     var images : List<String> = emptyList()
@@ -35,9 +35,6 @@ class ActivityModel() : Model() {
     @ColumnInfo("distance")
     var distance : Int = 0
 
-    @ColumnInfo("speed")
-    var speed : Double = 0.0
-
     @ColumnInfo("visibility")
     var visibility : Boolean = true
 
@@ -45,11 +42,10 @@ class ActivityModel() : Model() {
         userid = doc.get("userid") as String
         title = doc.get("title") as String
         type = doc.get("type") as ActivityType
-        points = doc.get("points") as List<List<RegistryPoint>>
+        points = doc.get("points") as List<RegistryField>
         images = doc.get("images") as List<String>
         time = doc.get("time") as List<Int>
         distance = doc.get("distance") as Int
-        speed = doc.get("speed") as Double
         visibility = doc.get("visibility") as Boolean
     }
 
@@ -62,7 +58,6 @@ class ActivityModel() : Model() {
             "images" to images,
             "time" to time,
             "distance" to distance,
-            "speed" to speed,
             "visibility" to visibility
         )
 }

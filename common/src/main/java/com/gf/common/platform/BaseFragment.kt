@@ -3,6 +3,8 @@ package com.gf.common.platform
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +15,15 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.gf.common.R
 import com.gf.common.exception.Failure
+import com.gf.common.extensions.hideKeyboard
 import com.gf.common.extensions.putAny
+import com.gf.common.extensions.showKeyboard
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import net.cachapa.expandablelayout.ExpandableLayout
 import java.lang.reflect.ParameterizedType
 import java.util.Timer
 import kotlin.concurrent.timerTask
@@ -30,6 +36,18 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     protected lateinit var preferences : SharedPreferences
 
     protected val baseActivity : BaseActivity by lazy { requireActivity() as BaseActivity }
+
+    private val mExpandables : Set<ExpandableLayout>
+        get() = setOfNotNull(mLySearch,mLyFilter)
+
+    // VAR Search
+    private var mLySearch : ExpandableLayout? = null
+    private var mEtSearch : TextInputEditText? = null
+
+    private lateinit var mSearchTextWatcher : TextWatcher
+
+    // VAR Filter
+    private var mLyFilter : BaseFilter? = null
 
 
 
@@ -53,10 +71,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         Log.d("STATUS_LIFE","${this.javaClass.simpleName} - CREATE")
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - RESUME")
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -80,21 +94,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         _bi = null
         MAIN.cancel()
         Log.d("STATUS_LIFE","${this.javaClass.simpleName} - DESTROY VIEW")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - DESTROY")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - DETACH")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("STATUS_LIFE","${this.javaClass.simpleName} - STOP")
     }
 
     protected fun showLoadingDialog(msg:String) = (requireActivity() as BaseActivity).showLoadingDialog(msg)
@@ -129,7 +128,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
             },delay,period)
         }
     }
-
     protected fun startTimerOnMain(delay : Long = 0, run: () -> Unit) : Timer {
         return Timer().apply {
             schedule(timerTask {
@@ -146,6 +144,50 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         Log.e("ERROR",failure?.message ?: "Error en FragmentRegister2")
     }
 
+    private fun assignActionBarButtons(){
+        // Search
+        mLySearch = binding.root.findViewWithTag(getString(R.string.expandable_tag_search))
+        mEtSearch = mLySearch?.getChildAt(0)?.findViewWithTag(getString(R.string.expandable_tag_search))
 
+        //Filter
+        mLyFilter = binding.root.findViewWithTag(getString(R.string.expandable_tag_filter))
+    }
+
+    fun setOnAddFriendClickListener(listener: View.OnClickListener) {
+        baseActivity.setOnAddFriendByClickListener(listener)
+    }
+    fun setOnSearchTextWatcher(onTextChanged :(text : String) -> Unit){
+        setOnSearchTextWatcher(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                onTextChanged(s.toString())
+            }
+        })
+    }
+
+    fun setOnSearchTextWatcher(textWatcher: TextWatcher) {
+        mLySearch?.let { expandable ->
+            baseActivity.setOnSearchByClickListener {
+                mLyFilter?.collapse(true)
+                expandable.toggle()
+                if (expandable.isExpanded)
+                    mEtSearch!!.showKeyboard()
+                else
+                    mEtSearch!!.hideKeyboard()
+            }
+
+            if (this::mSearchTextWatcher.isInitialized)
+                mEtSearch!!.removeTextChangedListener(mSearchTextWatcher)
+
+            mSearchTextWatcher = textWatcher
+            mEtSearch!!.addTextChangedListener(mSearchTextWatcher)
+
+        }
+    }
 
 }

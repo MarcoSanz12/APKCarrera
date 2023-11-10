@@ -51,10 +51,62 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- Bt Tipo Actividad -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/actionbar_bt_activity_type"
                 style="@style/ActionbarButton"
+                tools:visibility="gone"
+                app:iconSize="35dp"
                 app:icon="@drawable/icon_run" />
+
+            <!-- Bt Añadir Amigo -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/actionbar_bt_add_friend"
+                style="@style/ActionbarButtonCheckable"
+                tools:visibility="gone"
+                app:icon="@drawable/icon_add_friend" />
+
+            <!-- Bt Buscador -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/actionbar_bt_search"
+                style="@style/ActionbarButtonCheckable"
+                tools:visibility="gone"
+                app:iconSize="35dp"
+                app:icon="@drawable/icon_search" />
+
+            <!-- Bt Filtro -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/actionbar_bt_filter"
+                style="@style/ActionbarButtonCheckable"
+                tools:visibility="gone"
+                app:iconSize="35dp"
+                app:icon="@drawable/icon_filter" />
+
+            <!-- Bt Guardar -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/actionbar_bt_save"
+                style="@style/ActionbarButtonCheckable"
+                tools:visibility="gone"
+                app:icon="@drawable/icon_save"
+                app:iconSize="35dp"/>
+
+            <!-- Bt Borrar -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/actionbar_bt_delete"
+                style="@style/ActionbarButtonCheckable"
+                tools:visibility="gone"
+                app:icon="@drawable/icon_delete"
+                app:iconSize="35dp"/>
+
+            <!-- Bt Bandera -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/actionbar_bt_flag"
+                style="@style/ActionbarButtonCheckable"
+                tools:visibility="gone"
+                app:icon="@drawable/icon_flag"
+                app:iconSize="35dp"/>
+
         </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.constraintlayout.widget.ConstraintLayout>
 

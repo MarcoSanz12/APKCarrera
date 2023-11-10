@@ -15,8 +15,8 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.cotesa.common.extensions.distanceTo
 import com.gf.apkcarrera.MainActivity
-import com.gf.common.entity.activity.ActivityStatus
 import com.gf.common.entity.RunningUIState
+import com.gf.common.entity.activity.ActivityStatus
 import com.gf.common.entity.activity.RegistryPoint
 import com.gf.common.extensions.toLatLng
 import com.gf.common.utils.Constants.ACTION_END_RUNNING

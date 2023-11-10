@@ -56,6 +56,8 @@
     <string name="no_camera">No se ha podido detectar la cámara del dispositivo</string>
     <string name="loading_signing_in">Iniciando sesión</string>
     <string name="loading_signing_up">Creando cuenta</string>
+    <string name="expandable_tag_search" translatable="false">EXPANDABLE_TAG_SEARCH</string>
+    <string name="expandable_tag_filter" translatable="false">EXPANDABLE_TAG_FILTER</string>
 
 
     <!-- Fragment02 - Amigos -->
@@ -66,6 +68,7 @@
     <string name="add_friend">AGREGAR</string>
     <string name="tab_friends">Amigos</string>
     <string name="tab_requests">Solicitudes</string>
+    <string name="search_placeholder">Buscar amigos...</string>
 
 
     <!-- Fragment03 - Registrar actividad -->
@@ -106,6 +109,7 @@
     <string name="profile_add_friend">AÑADIR AMIGO</string>
     <string name="profile_remove_friend">ELIMINAR AMIGO</string>
     <string name="profile_statistics">Estadísticas</string>
+
     <!-- Mensajes Visiblidad-->
     <string name="visibilty_default_on">Esta actividad será visible para tus amigos</string>
 

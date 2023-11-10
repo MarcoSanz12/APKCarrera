@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -17,7 +18,6 @@ import com.gf.apkcarrera.databinding.ActivityMainBinding
 import com.gf.apkcarrera.features.f3_running.service.RunningService
 import com.gf.common.dialog.MultimediaDialog
 import com.gf.common.extensions.invisible
-import com.gf.common.extensions.navigateToMenuItem
 import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseActivity
 import com.gf.common.utils.Constants.ACTION_SHOW_RUNNING_FRAGMENT
@@ -54,7 +54,6 @@ class MainActivity : BaseActivity() {
         }
     val backButton : MaterialButton by lazy { binding.actionbarBack }
     val buttonsLayout : LinearLayoutCompat by lazy { binding.actionbarButtons }
-    val btActivityType : MaterialButton by lazy { binding.actionbarBtActivityType }
 
     @OptIn(NavigationUiSaveStateControl::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,14 +67,15 @@ class MainActivity : BaseActivity() {
         navigateToRunningFragmentIfNeeded(intent)
 
         // Navegación OG
-        // NavigationUI.setupWithNavController(binding.bottomNavigationView,navController,false)
+        NavigationUI.setupWithNavController(binding.bottomNavigationView,navController,false)
 
+        /*
+        Navegación experimental custom
         with(bottomNavigationView){
-
-            setOnItemSelectedListener {
-                navController.navigateToMenuItem(it)
-            }
-        }
+                setOnItemSelectedListener {
+                    navController.navigateToMenuItem(it)
+                }
+            }*/
 
 
 
@@ -145,6 +145,14 @@ class MainActivity : BaseActivity() {
 
     }
 
+
+    private fun MaterialButton.setOnActionBarClickListener(listener: View.OnClickListener) {
+        this.apply {
+            visible()
+            setOnClickListener(listener)
+        }
+    }
+
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         navigateToRunningFragmentIfNeeded(intent)
@@ -172,4 +180,53 @@ class MainActivity : BaseActivity() {
             it.action = action
             this.startService(it)
         }
+
+    // Listeners de botones
+
+    /**
+     * Asigna un [View.OnClickListener] al botón Filtro y lo pone visible
+     */
+    override fun setOnFilterByClickListener(listener: View.OnClickListener) =
+        binding.actionbarBtFilter.setOnActionBarClickListener(listener)
+
+    /**
+     * Asigna un [View.OnClickListener] al botón Buscar y lo pone visible
+     */
+    override fun setOnSearchByClickListener(listener: View.OnClickListener) =
+        binding.actionbarBtSearch.setOnActionBarClickListener(listener)
+
+    /**
+     * Asigna un [View.OnClickListener] al botón Activity Type y lo pone visible
+     */
+    override fun setOnActivityTypeByClickListener(listener: View.OnClickListener) {
+        binding.actionbarBtActivityType.setOnActionBarClickListener(listener)
+    }
+
+    /**
+     * Asigna un [View.OnClickListener] al botón Añadir amigo y lo pone visible
+     */
+    override fun setOnAddFriendByClickListener(listener: View.OnClickListener) {
+        binding.actionbarBtAddFriend.setOnActionBarClickListener(listener)
+    }
+
+    /**
+     * Asigna un [View.OnClickListener] al botón Bandera y lo pone visible
+     */
+    override fun setOnFlagByClickListener(listener: View.OnClickListener) {
+        binding.actionbarBtFlag.setOnActionBarClickListener(listener)
+    }
+
+    /**
+     * Asigna un [View.OnClickListener] al botón Guardar y lo pone visible
+     */
+    override fun setOnSaveByClickListener(listener: View.OnClickListener) {
+        binding.actionbarBtSave.setOnActionBarClickListener(listener)
+    }
+
+    /**
+     * Asigna un [View.OnClickListener] al botón Borrar y lo pone visible
+     */
+    override fun setOnDeleteByClickListener(listener: View.OnClickListener) {
+        binding.actionbarBtDelete.setOnActionBarClickListener(listener)
+    }
 }

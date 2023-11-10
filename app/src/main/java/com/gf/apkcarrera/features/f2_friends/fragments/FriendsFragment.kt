@@ -1,8 +1,8 @@
 package com.gf.apkcarrera.features.f2_friends.fragments
 
-import com.gf.common.extensions.addOnTabSelectedListener
 import com.gf.apkcarrera.databinding.Frg02FriendsBinding
 import com.gf.apkcarrera.features.f2_friends.adapter.FriendsViewpagerAdapter
+import com.gf.common.extensions.addOnTabSelectedListener
 import com.gf.common.platform.BaseFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator

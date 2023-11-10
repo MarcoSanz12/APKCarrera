@@ -1,11 +1,10 @@
 package com.gf.apkcarrera.di
 
 import com.gf.apkcarrera.features.f3_running.repository.RunningRepository
-import com.gf.apkcarrera.repository.RegisterRepository
 import com.gf.apkcarrera.repository.MainRepository
+import com.gf.apkcarrera.repository.RegisterRepository
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton

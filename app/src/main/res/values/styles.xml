@@ -53,10 +53,15 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:padding">0dp</item>
         <item name="backgroundTint">@color/transparent</item>
-        <item name="iconTint">@color/white</item>
+        <item name="iconTint">@color/selector_actionbarbutton</item>
         <item name="iconSize">40dp</item>
         <item name="iconPadding">0dp</item>
         <item name="iconGravity">textStart</item>
+    </style>
+
+    <style name="ActionbarButtonCheckable" parent="ActionbarButton">
+        <item name="android:checkable">true</item>
+        <item name="android:checked">false</item>
     </style>
 
     <style name="SearchLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
@@ -88,8 +93,8 @@
 
     <style name="SearchText">
         <item name="android:textSize">@dimen/text_size_large_16</item>
-        <item name="android:textStyle">bold</item>
-        <item name="textColor">@color/white</item>
+        <item name="android:textStyle">italic</item>
+        <item name="textColor">@color/background</item>
     </style>
 
     <style name="StandardButton" parent="Widget.Material3.Button">

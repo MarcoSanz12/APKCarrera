@@ -4,5 +4,4 @@
     android:layout_height="192dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Small"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:src="@drawable/face_default"/>
+    android:src="@drawable/face_default" />

@@ -17,9 +17,9 @@ import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg03RunningBinding
 import com.gf.apkcarrera.features.f3_running.service.RunningService
 import com.gf.apkcarrera.features.f3_running.viewmodel.RunningViewModel
-import com.gf.common.entity.activity.ActivityStatus
 import com.gf.common.entity.RunningUIState
 import com.gf.common.entity.activity.ActivityModelSimple
+import com.gf.common.entity.activity.ActivityStatus
 import com.gf.common.entity.activity.RegistryPoint
 import com.gf.common.extensions.collectFlowOnce
 import com.gf.common.extensions.format

@@ -3,13 +3,13 @@ package com.gf.apkcarrera.features.f0_register.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.gf.common.extensions.isValidEmail
 import com.gf.apkcarrera.databinding.Frg00LoginBinding
 import com.gf.apkcarrera.features.f0_register.viewmodel.RegisterViewModel
 import com.gf.common.R
 import com.gf.common.entity.user.LoginRequest
 import com.gf.common.entity.user.UserModel
 import com.gf.common.extensions.isEmpty
+import com.gf.common.extensions.isValidEmail
 import com.gf.common.extensions.textToString
 import com.gf.common.platform.BaseFragment
 import com.gf.common.utils.Constants

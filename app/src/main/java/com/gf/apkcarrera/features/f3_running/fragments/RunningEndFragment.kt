@@ -65,7 +65,6 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
             cvAddImage.setOnClickListener {
                 try{
                     uploadImage()
-
                 }catch (ex: Throwable){
                     ex.printStackTrace()
                 }
@@ -97,7 +96,6 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
 
             // Visibiliy
             visibility = binding.btVisibility.isChecked
-
         }
 
         runningViewModel.uploadActivityModel(activityModel)
@@ -118,17 +116,10 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
 
     private fun List<List<RegistryPoint>>.toRegistryFields() : List<RegistryField> {
         val registryFields = mutableListOf<RegistryField>()
-        for (list in this){
-            for (point in list){
-                registryFields.add(
-                    RegistryField(
-                        listNo = list.indexOf(point),
-                        position = this.indexOf(list),
-                        registryPoint = point)
-                )
-            }
-
+        this.forEach {
+            registryFields.add(RegistryField(it))
         }
+
         return registryFields
     }
 

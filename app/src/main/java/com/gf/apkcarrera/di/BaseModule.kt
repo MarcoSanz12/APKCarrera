@@ -2,7 +2,6 @@ package com.gf.apkcarrera.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.gf.apkcarrera.features.f3_running.viewmodel.RunningViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

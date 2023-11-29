@@ -19,6 +19,7 @@ import com.gf.common.utils.Constants.Login.LOG_EMAIL
 import com.gf.common.utils.Constants.Login.LOG_PASSWORD
 import com.gf.common.utils.Constants.Login.LOG_UID
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 import java.util.Random
 
 @AndroidEntryPoint
@@ -68,6 +69,7 @@ class Register2Fragment : BaseCameraFragment<Frg00Register2Binding>() {
 
             request!!.apply {
                 name = etName.textToString()
+                searchname = name.trim().lowercase(Locale.getDefault())
             }
 
             showLoadingDialog(getString(R.string.loading_signing_up))

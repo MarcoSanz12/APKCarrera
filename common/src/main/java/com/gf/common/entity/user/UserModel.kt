@@ -12,6 +12,7 @@ class UserModel() : Model() {
     constructor(request: LoginRequest) : this() {
         uid = request.uid
         username = request.username
+        searchname = request.searchname
         name = request.name
         picture = request.picture
         friendList = request.friendList
@@ -23,6 +24,9 @@ class UserModel() : Model() {
 
     @ColumnInfo("username")
     var username: String = ""
+
+    @ColumnInfo("searchname")
+    var searchname : String = ""
 
     @ColumnInfo("name")
     var name: String = ""
@@ -38,13 +42,15 @@ class UserModel() : Model() {
         picture = doc.get("picture") as String
         name = doc.get("name") as String
         friendList = doc.get("friendList") as List<String>
+        searchname = doc.get("searchname") as String
     }
 
     override fun setModelToMap() = hashMapOf(
         "username" to username,
         "name" to name,
         "picture" to picture,
-        "friendList" to friendList
+        "friendList" to friendList,
+        "searchname" to searchname
     )
 
 

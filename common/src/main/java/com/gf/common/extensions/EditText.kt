@@ -14,4 +14,5 @@ fun EditText.showKeyboard(){
     context.showKeyboard(this)
 }
 
+
 fun EditText.isEmpty() : Boolean = this.textToString().isEmpty()

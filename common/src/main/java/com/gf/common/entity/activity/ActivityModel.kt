@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.gf.common.entity.Model
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.DocumentSnapshot
 
 @Entity(tableName = "activities")
@@ -13,6 +12,9 @@ class ActivityModel() : Model() {
     @PrimaryKey
     @ColumnInfo("uid")
     override var uid: String = ""
+
+    @ColumnInfo("timestamp")
+    var timestamp : Long = 0L
 
     @ColumnInfo("userid")
     var userid : String = ""
@@ -40,6 +42,7 @@ class ActivityModel() : Model() {
 
     override fun getModelFromDoc(doc: DocumentSnapshot) {
         userid = doc.get("userid") as String
+        timestamp = doc.get("timestamp") as Long
         title = doc.get("title") as String
         type = doc.get("type") as ActivityType
         points = doc.get("points") as List<RegistryField>
@@ -52,6 +55,7 @@ class ActivityModel() : Model() {
     override fun setModelToMap(): HashMap<String, Any> =
         hashMapOf(
             "userid" to userid,
+            "timestamp" to timestamp,
             "title" to title,
             "type" to type,
             "points" to points,

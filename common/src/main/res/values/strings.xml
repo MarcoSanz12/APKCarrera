@@ -66,9 +66,14 @@
     <string name="stat_rythm_activity"><font color="#6A6A6A" size="10" style="regular">Ritmo</font>\n%s /km</string>
     <string name="stat_time_activity"><font color="#6A6A6A" size="10" style="regular">Tiempo</font>\n%s</string>
     <string name="add_friend">AGREGAR</string>
+    <string name="cancel_friend">CANCELAR SOLICITUD</string>
     <string name="tab_friends">Amigos</string>
     <string name="tab_requests">Solicitudes</string>
-    <string name="search_placeholder">Buscar amigos...</string>
+    <string name="search_placeholder">Buscar...</string>
+    <string name="search_in_progress">Buscando amigos</string>
+    <string name="search_min_chars">Escriba un mínimo de 3 caracteres</string>
+    <string name="friend_sending_request">Enviando solicitud</string>
+    <string name="friend_canceling_request">Enviando solicitud</string>
 
 
     <!-- Fragment03 - Registrar actividad -->
@@ -112,6 +117,7 @@
 
     <!-- Mensajes Visiblidad-->
     <string name="visibilty_default_on">Esta actividad será visible para tus amigos</string>
+    <string name="wanted_message">¡Vaya! No hemos podido encontrar a tu amig@</string>
 
 
     <string-array name="visibility_message_on">

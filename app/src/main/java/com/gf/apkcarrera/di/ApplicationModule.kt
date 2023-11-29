@@ -1,5 +1,6 @@
 package com.gf.apkcarrera.di
 
+import com.gf.apkcarrera.features.f2_friends.repository.FriendsRepository
 import com.gf.apkcarrera.features.f3_running.repository.RunningRepository
 import com.gf.apkcarrera.repository.MainRepository
 import com.gf.apkcarrera.repository.RegisterRepository
@@ -20,6 +21,10 @@ abstract class ApplicationModule {
     @Binds
     @Singleton
     abstract fun bindRunningRepository(repository: RunningRepository.RunningRepositoryImpl) : RunningRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindFriendsRepository(repository: FriendsRepository.FriendsRepositoryImpl) : FriendsRepository
 
     @Binds
     @Singleton

@@ -15,6 +15,8 @@ class LoginRequest : Model() {
 
     var picture: String = ""
 
+    var searchname : String = ""
+
     var name: String = ""
 
     var friendList: List<String> = listOf()
@@ -22,6 +24,7 @@ class LoginRequest : Model() {
     override fun getModelFromDoc(doc: DocumentSnapshot) {
         username = doc.get("username") as String
         picture = doc.get("picture") as String
+        searchname = doc.get("searchname") as String
         name = doc.get("name") as String
         friendList = doc.get("friendList") as List<String>
     }
@@ -29,6 +32,7 @@ class LoginRequest : Model() {
     override fun setModelToMap()= hashMapOf(
         "username" to username,
         "name" to name,
+        "searchname" to searchname,
         "picture" to picture,
         "friendList" to friendList
     )

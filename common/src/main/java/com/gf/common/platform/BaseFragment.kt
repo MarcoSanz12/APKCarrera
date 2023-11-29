@@ -18,6 +18,7 @@ import com.gf.common.exception.Failure
 import com.gf.common.extensions.hideKeyboard
 import com.gf.common.extensions.putAny
 import com.gf.common.extensions.showKeyboard
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -190,4 +191,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         }
     }
 
+    fun snackbar(text : String) = Snackbar.make(binding.root,text,Snackbar.LENGTH_SHORT).show()
+
+    fun snackbar(textId : Int) = snackbar(getString(textId))
 }

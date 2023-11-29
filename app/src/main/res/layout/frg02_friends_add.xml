@@ -1,22 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_top"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.20"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_bot"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="20dp"
-        android:paddingHorizontal="8dp"
+        app:layout_constraintTop_toBottomOf="@id/ly_buscador"
         android:background="@color/transparent"
-        android:clipToPadding="false"
-        android:clipChildren="false"
-        android:layout_alignParentTop="true"
+        android:paddingHorizontal="8dp"
+        android:fadingEdge="vertical"
+        android:paddingVertical="20dp"
         tools:listitem="@layout/item_friend_request_send" />
+
+    <!-- Aviso usuario no encontrado -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ly_results_not_found"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingHorizontal="10dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/gl_top"
+        app:layout_constraintBottom_toBottomOf="@id/gl_bot"
+        >
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_wanted_left"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.01"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_wanted_right"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.47"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_wanted_top"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.65"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_wanted_bot"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9"/>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="@id/gl_wanted_left"
+            app:layout_constraintEnd_toEndOf="@id/gl_wanted_right"
+            android:src="@drawable/ic_willy_wanted"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_wanted_name"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginVertical="5dp"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="26sp"
+            app:autoSizeMinTextSize="10sp"
+            tools:text="graxgamer888"
+            android:textColor="@color/black"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="@id/gl_wanted_top"
+            app:layout_constraintBottom_toBottomOf="@id/gl_wanted_bot"
+            app:layout_constraintStart_toStartOf="@id/gl_wanted_left"
+            app:layout_constraintEnd_toEndOf="@id/gl_wanted_right"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="@id/gl_wanted_right"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="30sp"
+            app:autoSizeMinTextSize="10sp"
+            android:autoSizeStepGranularity="10sp"
+            android:layout_marginHorizontal="5dp"
+            android:maxLines="2"
+            android:text="@string/wanted_message"
+            android:textColor="@color/black"
+            android:gravity="center"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <!-- Buscador -->
-    <include
-        layout="@layout/custom_buscador"/>
-</RelativeLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ly_buscador"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="10dp"
+        android:paddingTop="10dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_search"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:icon="@drawable/icon_search"
+            app:iconTint="@color/blue_primary"
+            app:strokeWidth="2dp"
+            app:strokeColor="@color/blue_primary_ripple"
+            app:backgroundTint="@color/white"
+            app:cornerRadius="10dp"
+            app:rippleColor="@color/blue_primary_ripple"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ly_search"
+            app:layout_constraintBottom_toBottomOf="@id/ly_search"
+            style="@style/RoundButton"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ly_search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            app:placeholderTextAppearance="@style/HintTextAppearance"
+            app:placeholderText="@string/search_placeholder"
+            app:boxBackgroundMode="filled"
+            app:boxStrokeColor="@color/orange_quaternary"
+            app:hintEnabled="false"
+            app:expandedHintEnabled="false"
+            app:endIconMode="clear_text"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bt_search">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_search"
+                android:maxLines="3"
+                android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

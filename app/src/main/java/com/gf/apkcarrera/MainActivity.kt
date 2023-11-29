@@ -75,7 +75,8 @@ class MainActivity : BaseActivity() {
                 setOnItemSelectedListener {
                     navController.navigateToMenuItem(it)
                 }
-            }*/
+            }
+            */
 
 
 
@@ -108,6 +109,11 @@ class MainActivity : BaseActivity() {
             // Ocultar botones
             buttonsLayout.children.forEach {
                 it.invisible()
+
+                // Uncheck a todos los botones
+                if ((it as? MaterialButton)?.isCheckable == true){
+                    it.isChecked = false
+                }
             }
         }
     }

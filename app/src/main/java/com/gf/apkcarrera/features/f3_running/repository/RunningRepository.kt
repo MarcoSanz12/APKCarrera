@@ -6,7 +6,7 @@ import android.util.Log
 import com.gf.common.db.APKCarreraDatabase
 import com.gf.common.entity.activity.ActivityModel
 import com.gf.common.platform.NetworkHandler
-import com.gf.common.response.UploadActivityResponse
+import com.gf.common.response.GenericResponse
 import com.gf.common.utils.Constants.Login.LOG_UID
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 
 interface RunningRepository {
 
-    suspend fun saveActivity(activityModel: ActivityModel) : UploadActivityResponse
+    suspend fun saveActivity(activityModel: ActivityModel) : GenericResponse
 
     @Singleton
     class RunningRepositoryImpl
@@ -35,11 +35,11 @@ interface RunningRepository {
         companion object{
             private const val TAG = "RunningRepository"
         }
-        override suspend fun saveActivity(activityModel: ActivityModel): UploadActivityResponse{
+        override suspend fun saveActivity(activityModel: ActivityModel): GenericResponse{
             if (!networkHandler.isConnected)
-                return UploadActivityResponse.Error
+                return GenericResponse.Error
 
-            val userId = preferences.getString(LOG_UID,null) ?: return UploadActivityResponse.Error
+            val userId = preferences.getString(LOG_UID,null) ?: return GenericResponse.Error
 
             activityModel.userid = userId
 
@@ -47,11 +47,11 @@ interface RunningRepository {
                 firestore.collection("activities").document().set(activityModel.setModelToMap()).await()
             }.fold(
                 onSuccess = {
-                    return UploadActivityResponse.Succesful
+                    return GenericResponse.Succesful
                 },
                 onFailure = {
                     Log.e(TAG,it.stackTraceToString())
-                    return UploadActivityResponse.Error
+                    return GenericResponse.Error
                 }
             )
         }

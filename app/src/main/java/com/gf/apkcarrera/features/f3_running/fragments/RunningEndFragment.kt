@@ -27,7 +27,7 @@ import com.gf.common.extensions.paintPolyline
 import com.gf.common.extensions.toast
 import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseCameraFragment
-import com.gf.common.response.UploadActivityResponse
+import com.gf.common.response.GenericResponse
 import com.gf.common.utils.Constants
 import com.gf.common.utils.StatCounter
 import com.google.android.material.button.MaterialButton
@@ -79,6 +79,9 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
             // Titulo
             title = binding.etTitle.text.toString()
 
+            // Fecha guardado
+            timestamp = System.currentTimeMillis()/1000
+
             // Tipo
             type = ActivityType.RUN
 
@@ -101,14 +104,14 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
         runningViewModel.uploadActivityModel(activityModel)
     }
 
-    private fun activitySaved(uploadActivityResponse: UploadActivityResponse) {
-        when (uploadActivityResponse){
-            is UploadActivityResponse.Succesful -> {
+    private fun activitySaved(genericResponse: GenericResponse) {
+        when (genericResponse){
+            is GenericResponse.Succesful -> {
                 sendCommandToService(Constants.ACTION_END_RUNNING)
                 baseActivity.navController.popBackStack(R.id.fragmentFeed,false)
                 toast("Carrera guardada")
             }
-            is UploadActivityResponse.Error -> {
+            is GenericResponse.Error -> {
                 toast("Error al guardar")
             }
         }

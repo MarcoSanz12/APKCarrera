@@ -10,7 +10,8 @@ abstract class Resource : Serializable {
 
     enum class ResourceType(var char: String) {
         IMAGE("image"),
-        FILTRO("filter")
+        FILTRO("filter"),
+        FRIEND ("friend")
     }
 
 

@@ -12,7 +12,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -43,17 +42,20 @@ interface RunningRepository {
 
             activityModel.userid = userId
 
-            runCatching {
-                firestore.collection("activities").document().set(activityModel.setModelToMap()).await()
-            }.fold(
-                onSuccess = {
-                    return GenericResponse.Succesful
-                },
-                onFailure = {
-                    Log.e(TAG,it.stackTraceToString())
-                    return GenericResponse.Error
-                }
-            )
+            var response : GenericResponse = GenericResponse.Succesful
+
+            firestore.runTransaction {
+                firestore.collection("activities").document().set(activityModel.setModelToMap())
+                firestore.collection("users").document(userId).update("lastActivity",activityModel.timestamp)
+            }.addOnSuccessListener {
+                response = GenericResponse.Succesful
+            }.addOnFailureListener {
+                Log.e(TAG,it.stackTraceToString())
+                response = GenericResponse.Error
+            }
+
+            return response
+
         }
     }
 }

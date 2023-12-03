@@ -1,8 +1,9 @@
 package com.gf.common.db.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
 import com.gf.common.entity.user.UserModel
 
 @Dao
@@ -20,7 +21,7 @@ interface UserDao {
     @Query("SELECT friendList FROM users WHERE uid = :uid")
     suspend fun getFriendListByUid(uid: String): List<String>
 
-    @Upsert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addUser(user: UserModel)
 
     @Query("DELETE FROM users")

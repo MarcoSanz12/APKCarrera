@@ -34,6 +34,9 @@ class UserModel() : Model() {
     @ColumnInfo("picture")
     var picture: String = ""
 
+    @ColumnInfo("lastActivity")
+    var lastActivity : Long = 0L
+
     @ColumnInfo("friendList")
     var friendList : List<String> = listOf()
 
@@ -42,6 +45,7 @@ class UserModel() : Model() {
         picture = doc.get("picture") as String
         name = doc.get("name") as String
         friendList = doc.get("friendList") as List<String>
+        lastActivity = doc.get("lastActivity") as Long
         searchname = doc.get("searchname") as String
     }
 
@@ -49,6 +53,7 @@ class UserModel() : Model() {
         "username" to username,
         "name" to name,
         "picture" to picture,
+        "lastActivity" to lastActivity,
         "friendList" to friendList,
         "searchname" to searchname
     )

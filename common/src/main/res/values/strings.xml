@@ -73,7 +73,11 @@
     <string name="search_in_progress">Buscando amigos</string>
     <string name="search_min_chars">Escriba un mínimo de 3 caracteres</string>
     <string name="friend_sending_request">Enviando solicitud</string>
+    <string name="friend_cancel_request">Cancelando solicitud</string>
+    <string name="friend_accepting_request">Aceptando solicitud</string>
+    <string name="friend_ignoring_request">Rechazando solicitud</string>
     <string name="friend_canceling_request">Enviando solicitud</string>
+    <string name="friend_no_requests">No tienes peticiones pendientes</string>
 
 
     <!-- Fragment03 - Registrar actividad -->

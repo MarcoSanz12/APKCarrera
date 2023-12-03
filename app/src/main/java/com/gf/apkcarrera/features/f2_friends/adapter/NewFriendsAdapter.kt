@@ -16,8 +16,8 @@ import com.gf.common.extensions.visible
 import com.google.android.material.button.MaterialButton
 
 class NewFriendsAdapter(friendList : List<FriendModel>,
-    val onAddFriendClick : (friend: FriendModel) -> Unit,
-    val onCancelFriendClick : (friend: FriendModel) -> Unit
+                        val onAddFriendClick : (friend: FriendModel) -> Unit,
+                        val onCancelFriendClick : (friend: FriendModel) -> Unit
 ) : BaseAdapter<FriendModel>(friendList,R.layout.item_friend_request_send) {
     override fun renderOnViewHolder(resource: FriendModel, view: View) {
         val image = view.findViewById<ImageView>(R.id.iv_profile_pic)
@@ -30,7 +30,7 @@ class NewFriendsAdapter(friendList : List<FriendModel>,
             image.setImageBitmap(resource.image.toBitmap()!!)
 
         // 2. Nombre
-            name.text = resource.uname
+        name.text = resource.uname
 
         // 3. Botón añadir (Si no lo habiamos añadido)
         fun setAddButton() {
@@ -52,7 +52,29 @@ class NewFriendsAdapter(friendList : List<FriendModel>,
             ADDED_ME -> setAddButton()
             UNKNOWN -> setAddButton()
         }
+    }
+
+    fun friendRequestSent(friendId : String) : Boolean{
+        val updatedList = resourceListFiltered.map {
+            if (it.uid == friendId)
+                FriendModel(it,ADDED_BY_ME)
+            else
+                FriendModel(it)
         }
+        actualizarLista(updatedList)
+        return updatedList.isEmpty()
+    }
+
+    fun friendRequestCanceled(friendId : String) : Boolean{
+        val updatedList = resourceListFiltered.map {
+            if (it.uid == friendId)
+                FriendModel(it,UNKNOWN)
+            else
+                FriendModel(it)
+        }
+        actualizarLista(updatedList)
+        return updatedList.isEmpty()
+    }
 
 }
 

@@ -60,11 +60,10 @@ class FriendsAddFragment : BaseFragment<Frg02FriendsAddBinding>() {
     override fun initObservers() {
         with (viewModel){
             collectFlow(friendListState,Lifecycle.State.STARTED,::onListLoaded)
-            collectFlow(friendAddedState,Lifecycle.State.STARTED,::onFriendAdded)
+            collectFlow(friendActionOkState,Lifecycle.State.STARTED,::onRequestSent)
+            collectFlow(friendActionCancelState,Lifecycle.State.STARTED,::onRequestCanceled)
         }
     }
-
-
 
     private fun onSearchClick(view:View){
         binding.tvSearch.hideKeyboard()
@@ -73,6 +72,7 @@ class FriendsAddFragment : BaseFragment<Frg02FriendsAddBinding>() {
             snackbar(com.gf.common.R.string.search_min_chars)
         // Solo buscar si no está buscando o ya ha buscado eso
         else if (!isSearching && lastSearch != binding.tvSearch.textToString()){
+            lastSearch = binding.tvSearch.textToString()
             showLoadingDialog(getString(com.gf.common.R.string.search_in_progress))
             viewModel.searchNewFriends(binding.tvSearch.textToString())
             isSearching = true
@@ -82,19 +82,38 @@ class FriendsAddFragment : BaseFragment<Frg02FriendsAddBinding>() {
     private fun addFriendClick(friendModel: FriendModel) {
         if (friendModel.uid.isNotEmpty()){
             showLoadingDialog(getString(com.gf.common.R.string.friend_sending_request))
-            viewModel.addFriend(friendModel.uid)
+            viewModel.sendFriendRequest(friendModel.uid)
         }
 
     }
 
     private fun cancelFriendClick(friendModel: FriendModel) {
-
+        if (friendModel.uid.isNotEmpty()){
+            showLoadingDialog(getString(com.gf.common.R.string.friend_cancel_request))
+            viewModel.cancelFriendRequest(friendModel.uid)
+        }
     }
 
-    private fun onFriendAdded(friendResponse: FriendResponse) {
+    // Envío de petición
+    private fun onRequestSent(friendResponse: FriendResponse) {
         hideLoadingDialog()
-        if (friendResponse is FriendResponse.Succesful)
-           viewModel.searchNewFriends(lastSearch)
+        if (friendResponse is FriendResponse.Succesful){
+            val isEmptyList = adapter.friendRequestSent(friendResponse.friendId)
+            hideList(isEmptyList)
+        }
+        else
+            toast(com.gf.common.R.string.generic_error)
+    }
+
+
+
+    // Cancelación de petición
+    private fun onRequestCanceled(friendResponse: FriendResponse) {
+        hideLoadingDialog()
+        if (friendResponse is FriendResponse.Succesful){
+            val isEmptyList = adapter.friendRequestCanceled(friendResponse.friendId)
+            hideList(isEmptyList)
+        }
         else
             toast(com.gf.common.R.string.generic_error)
     }
@@ -117,5 +136,16 @@ class FriendsAddFragment : BaseFragment<Frg02FriendsAddBinding>() {
     }
 
     private fun onAddFriendDismiss(view: View) = onBackPressed()
+
+    private fun hideList(isEmptyList : Boolean){
+        if (isEmptyList){
+            binding.lyResultsNotFound.visible()
+            binding.rvList.invisible()
+        }
+        else{
+            binding.lyResultsNotFound.invisible()
+            binding.rvList.visible()
+        }
+    }
 
 }

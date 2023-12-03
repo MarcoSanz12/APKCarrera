@@ -1,11 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/transparent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:paddingVertical="20dp"
-    android:paddingHorizontal="8dp"
-    android:clipChildren="false"
-    android:clipToPadding="false"
-    tools:listitem="@layout/item_friend_request_receive" />
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:paddingVertical="20dp"
+        android:paddingHorizontal="8dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/item_friend_request_receive" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/ly_results_not_found"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/friend_no_requests"
+        android:textColor="@color/blue_primary"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="12sp"
+        android:paddingHorizontal="10dp"
+        android:visibility="gone"
+        android:gravity="center"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

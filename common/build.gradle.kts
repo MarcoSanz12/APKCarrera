@@ -66,6 +66,7 @@ dependencies {
     api("androidx.navigation:navigation-fragment-ktx:2.7.5")
     api("androidx.navigation:navigation-ui-ktx:2.7.5")
     api ("androidx.navigation:navigation-dynamic-features-fragment:2.7.5")
+    api("androidx.hilt:hilt-navigation-fragment:1.1.0")
 
     //DATABINDING
     api ("androidx.databinding:databinding-common:8.1.2")

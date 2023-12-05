@@ -19,6 +19,8 @@ class LoginRequest : Model() {
 
     var name: String = ""
 
+    var lastActivity : Long = 0L
+
     var friendList: List<String> = listOf()
 
     override fun getModelFromDoc(doc: DocumentSnapshot) {
@@ -26,6 +28,7 @@ class LoginRequest : Model() {
         picture = doc.get("picture") as String
         searchname = doc.get("searchname") as String
         name = doc.get("name") as String
+        lastActivity = doc.get("lastActivity") as Long
         friendList = doc.get("friendList") as List<String>
     }
 
@@ -33,6 +36,7 @@ class LoginRequest : Model() {
         "username" to username,
         "name" to name,
         "searchname" to searchname,
+        "lastActivity" to lastActivity,
         "picture" to picture,
         "friendList" to friendList
     )

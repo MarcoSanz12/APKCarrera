@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_friends"
+    app:startDestination="@id/fragmentFriends">
+    <fragment
+        android:id="@+id/fragmentFriends"
+        android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsFragment"
+        android:label="FragmentFriends"
+        tools:layout="@layout/frg02_friends">
+        <action
+            android:id="@+id/action_fragmentFriends_to_fragmentAddFriends"
+            app:destination="@id/fragmentAddFriends" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentAddFriends"
+        android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsAddFragment"
+        android:label="FragmentAddFriends"
+        tools:layout="@layout/frg02_friends_add" />
+    <fragment
+        android:id="@+id/friendsListFragment"
+        android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsListFragment"
+        android:label="FriendsListFragment"
+        tools:layout="@layout/frg02_friends_list"/>
+    <fragment
+        android:id="@+id/friendsRequestsFragment"
+        android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsRequestsFragment"
+        android:label="FriendsRequestsFragment"
+        tools:layout="@layout/frg02_friends_request"/>
+</navigation>

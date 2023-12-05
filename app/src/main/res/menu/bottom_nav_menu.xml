@@ -9,7 +9,7 @@
         android:enabled="true"
         android:title="@string/bnv_feed" />
     <item
-        android:id="@id/fragmentFriends"
+        android:id="@+id/nav_friends"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="@string/bnv_friends"

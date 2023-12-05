@@ -39,23 +39,6 @@
         android:name="com.gf.apkcarrera.features.f1_feed.fragment.FeedFragment"
         android:label="@string/title_feed"
         tools:layout="@layout/frg01_feed" />
-    <!-- 02_Amigos -->
-    <fragment
-        android:id="@+id/fragmentFriends"
-        android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsFragment"
-        android:label="FragmentFriends"
-        tools:layout="@layout/frg02_friends" >
-        <action
-            android:id="@+id/action_fragmentFriends_to_fragmentAddFriends"
-            app:destination="@id/fragmentAddFriends" />
-    </fragment>
-
-    <!-- Add friends -->
-    <fragment
-        android:id="@+id/fragmentAddFriends"
-        android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsAddFragment"
-        android:label="FragmentAddFriends"
-        tools:layout="@layout/frg02_friends_add"/>
 
     <!-- 03_Running -->
 
@@ -140,5 +123,6 @@
             android:id="@+id/placeholder"
             tools:layout="@layout/frg01_feed" />
     </navigation>
+  <include app:graph="@navigation/nav_friends"/>
 
 </navigation>

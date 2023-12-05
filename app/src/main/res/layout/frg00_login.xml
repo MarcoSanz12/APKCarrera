@@ -75,7 +75,6 @@
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:maxLength="50"
-                        android:text="pruebados@gmail.com"
                         style="@style/register_editext"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,7 +105,6 @@
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:maxLength="30"
-                        android:text="prueba123"
                         android:imeOptions="actionDone"/>
                 </com.google.android.material.textfield.TextInputLayout>
 

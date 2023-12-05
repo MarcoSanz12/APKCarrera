@@ -1,7 +1,9 @@
 package com.gf.apkcarrera.features.f2_friends.fragments
 
-import androidx.fragment.app.viewModels
+import android.util.Log
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.Lifecycle
+import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg02FriendsRequestBinding
 import com.gf.apkcarrera.features.f2_friends.adapter.FriendsRequestsAdapter
 import com.gf.apkcarrera.features.f2_friends.viewmodel.FriendsViewModel
@@ -19,8 +21,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FriendsRequestsFragment : BaseFragment<Frg02FriendsRequestBinding>() {
 
-    private val viewModel : FriendsViewModel by viewModels()
+    private val viewModel : FriendsViewModel by hiltNavGraphViewModels(R.id.nav_friends)
     private lateinit var adapter : FriendsRequestsAdapter
+
+    companion object{
+        private const val TAG = "FriendsRequestsFragment"
+    }
 
     override fun initializeView() {
         adapter = FriendsRequestsAdapter(listOf(),::acceptFriendClick,::ignoreFriendClick)
@@ -30,14 +36,16 @@ class FriendsRequestsFragment : BaseFragment<Frg02FriendsRequestBinding>() {
             adapter = adapter,
             animationId = com.gf.common.R.anim.animation_layout_fade_in
         )
+
+        viewModel.searchFriendRequests()
     }
 
     override fun initObservers() {
         with (viewModel){
-            collectFlow(friendListState, Lifecycle.State.STARTED,::onListLoaded)
-            collectFlow(friendActionOkState, Lifecycle.State.STARTED,::onRequestDone)
-            collectFlow(friendActionCancelState, Lifecycle.State.STARTED,::onRequestDone)
-            searchFriendRequests()
+            Log.d(TAG, "initObservers: Observando")
+            collectFlow(friendRequestsListState,Lifecycle.State.STARTED,::onListLoaded)
+            collectFlow(friendRequestOkState,Lifecycle.State.STARTED,::onRequestOk)
+            collectFlow(friendRequestIgnoreState,Lifecycle.State.STARTED,::onRequestIgnored)
         }
     }
 
@@ -58,7 +66,7 @@ class FriendsRequestsFragment : BaseFragment<Frg02FriendsRequestBinding>() {
     private fun onListLoaded(friendListResponse: FriendListResponse) {
         hideLoadingDialog()
         // 1. Si llega una lista con elementos
-        if ((friendListResponse as? FriendListResponse.Succesful)?.friendList?.isNotEmpty() == true){
+        if ((friendListResponse as? FriendListResponse.Succesful)?.friendList?.isNotEmpty() == true && this::adapter.isInitialized){
             adapter.actualizarLista(friendListResponse.friendList)
             binding.lyResultsNotFound.invisible()
             binding.rvList.visible()
@@ -70,7 +78,19 @@ class FriendsRequestsFragment : BaseFragment<Frg02FriendsRequestBinding>() {
         }
     }
 
-    private fun onRequestDone(friendResponse: FriendResponse) {
+    private fun onRequestOk(friendResponse: FriendResponse) {
+        // Actualizamos el flow de la lista de amigos
+
+        if (friendResponse is FriendResponse.Succesful){
+            Log.d(TAG, "onRequestOk: Aceptaste a ${adapter.resourceListFiltered.find { it.uid == friendResponse.friendId}?.uname }")
+            viewModel.friendAccepted(adapter.resourceListFiltered.find { it.uid == friendResponse.friendId }!!)
+        }
+
+
+        onRequestIgnored(friendResponse)
+    }
+
+    private fun onRequestIgnored(friendResponse: FriendResponse) {
         hideLoadingDialog()
         if (friendResponse is FriendResponse.Succesful){
             val isEmptyList = adapter.friendManaged(friendResponse.friendId)

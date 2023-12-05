@@ -20,8 +20,8 @@ import com.gf.common.dialog.MultimediaDialog
 import com.gf.common.extensions.invisible
 import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseActivity
+import com.gf.common.utils.Constants.ACTION_END_RUNNING
 import com.gf.common.utils.Constants.ACTION_SHOW_RUNNING_FRAGMENT
-import com.gf.common.utils.Constants.ACTION_STOP_RUNNING
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
@@ -170,7 +170,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
-        sendCommandToService(ACTION_STOP_RUNNING)
+        sendCommandToService(ACTION_END_RUNNING)
         super.onDestroy()
         Log.d("STATUS_LIFE","${this.javaClass.simpleName} - DESTROY")
     }

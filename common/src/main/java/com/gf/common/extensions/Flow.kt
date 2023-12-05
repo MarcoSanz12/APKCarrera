@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.cotesa.common.extensions.notNull
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -20,6 +21,17 @@ fun <T : Any, SF : StateFlow<T?>> androidx.fragment.app.Fragment.collectFlow(sta
     lifecycleScope.launch {
         repeatOnLifecycle(lifecycleState) {
             stateFlow.collect {
+                it.notNull {
+                    handleNotNull(it)
+                }
+            }
+        }
+    }
+
+fun <T : Any, SF : SharedFlow<T?>> androidx.fragment.app.Fragment.collectFlow(sharedFlow : SF, lifecycleState : Lifecycle.State = Lifecycle.State.STARTED, handleNotNull: (T) -> Unit) =
+    lifecycleScope.launch {
+        repeatOnLifecycle(lifecycleState) {
+            sharedFlow.collect {
                 it.notNull {
                     handleNotNull(it)
                 }

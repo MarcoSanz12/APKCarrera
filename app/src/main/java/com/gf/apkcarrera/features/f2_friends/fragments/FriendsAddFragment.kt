@@ -2,9 +2,10 @@ package com.gf.apkcarrera.features.f2_friends.fragments
 
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.Lifecycle
 import com.gf.apkcarrera.MainActivity
+import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg02FriendsAddBinding
 import com.gf.apkcarrera.features.f2_friends.adapter.NewFriendsAdapter
 import com.gf.apkcarrera.features.f2_friends.viewmodel.FriendsViewModel
@@ -25,11 +26,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FriendsAddFragment : BaseFragment<Frg02FriendsAddBinding>() {
 
-    private val viewModel : FriendsViewModel by viewModels()
+    private val viewModel : FriendsViewModel by hiltNavGraphViewModels(R.id.nav_friends)
     private lateinit var adapter : NewFriendsAdapter
 
     private var lastSearch = ""
     private var isSearching = false
+
 
     override fun initializeView() {
         (baseActivity as MainActivity).binding.actionbarBtAddFriend.isChecked = true
@@ -59,9 +61,9 @@ class FriendsAddFragment : BaseFragment<Frg02FriendsAddBinding>() {
 
     override fun initObservers() {
         with (viewModel){
-            collectFlow(friendListState,Lifecycle.State.STARTED,::onListLoaded)
-            collectFlow(friendActionOkState,Lifecycle.State.STARTED,::onRequestSent)
-            collectFlow(friendActionCancelState,Lifecycle.State.STARTED,::onRequestCanceled)
+            collectFlow(friendAddListState,Lifecycle.State.STARTED,::onListLoaded)
+            collectFlow(friendAddState,Lifecycle.State.STARTED,::onRequestSent)
+            collectFlow(friendCancelState,Lifecycle.State.STARTED,::onRequestCanceled)
         }
     }
 
@@ -122,7 +124,7 @@ class FriendsAddFragment : BaseFragment<Frg02FriendsAddBinding>() {
         isSearching = false
         hideLoadingDialog()
         // 1. Si llega una lista con elementos
-        if ((friendListResponse as? FriendListResponse.Succesful)?.friendList?.isNotEmpty() == true){
+        if ((friendListResponse as? FriendListResponse.Succesful)?.friendList?.isNotEmpty() == true && this::adapter.isInitialized){
             adapter.actualizarLista(friendListResponse.friendList)
             binding.lyResultsNotFound.invisible()
             binding.rvList.visible()

@@ -13,6 +13,7 @@ import com.gf.common.entity.user.LoginRequest
 import com.gf.common.extensions.isEmpty
 import com.gf.common.extensions.isValidEmail
 import com.gf.common.extensions.textToString
+import com.gf.common.extensions.toast
 import com.gf.common.platform.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,6 +21,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class Register1Fragment : BaseFragment<Frg00Register1Binding>() {
 
     val viewModel: RegisterViewModel by activityViewModels()
+
+    private var debugCounter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +48,31 @@ class Register1Fragment : BaseFragment<Frg00Register1Binding>() {
                     }
                     viewModel.request = user
                     viewModel.checkUserExists(user,::handleUserExists)
+                }
+            }
+
+            ivLogo.setOnClickListener {
+                debugCounter++
+                if (debugCounter == 3){
+                    toast("Auto user 1")
+                    etUsername.setText("prueba1")
+                    etEmail.setText("prueba1@gmail.com")
+                    etPassword.setText("prueba")
+                    etRepeatPassword.setText("prueba")
+                }
+                else if (debugCounter == 4){
+                    toast("Auto user 2")
+                    etUsername.setText("prueba2")
+                    etEmail.setText("prueba2@gmail.com")
+                    etPassword.setText("prueba")
+                    etRepeatPassword.setText("prueba")
+                }
+                else if (debugCounter > 4){
+                    etUsername.setText("")
+                    etEmail.setText("")
+                    etPassword.setText("")
+                    etRepeatPassword.setText("")
+                    debugCounter = 0
                 }
             }
         }

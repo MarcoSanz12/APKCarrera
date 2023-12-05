@@ -41,6 +41,7 @@ class UserModel() : Model() {
     var friendList : List<String> = listOf()
 
     override fun getModelFromDoc(doc: DocumentSnapshot) {
+        uid = doc.id
         username = doc.get("username") as String
         picture = doc.get("picture") as String
         name = doc.get("name") as String

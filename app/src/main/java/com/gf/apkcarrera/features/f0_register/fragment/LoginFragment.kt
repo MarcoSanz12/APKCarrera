@@ -11,12 +11,14 @@ import com.gf.common.entity.user.UserModel
 import com.gf.common.extensions.isEmpty
 import com.gf.common.extensions.isValidEmail
 import com.gf.common.extensions.textToString
+import com.gf.common.extensions.toast
 import com.gf.common.platform.BaseFragment
 import com.gf.common.utils.Constants
 
 class LoginFragment : BaseFragment<Frg00LoginBinding>() {
 
     private val viewModel: RegisterViewModel by activityViewModels()
+    private var debugCounter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,13 +42,33 @@ class LoginFragment : BaseFragment<Frg00LoginBinding>() {
                     ::handleUserLogin
                 )
             }
-
         }
 
         tvForgotPassword.setOnClickListener{
             navigate(com.gf.apkcarrera.R.id.action_fragmentLogin_to_fragmentRecoverPass)
         }
+
+        // Auto users
+        ivLogo.setOnClickListener {
+            debugCounter++
+            if (debugCounter == 3){
+                toast("Auto user 1")
+                etEmail.setText("prueba1@gmail.com")
+                etPassword.setText("prueba")
+            }
+            else if (debugCounter == 4){
+                toast("Auto user 2")
+                etEmail.setText("prueba2@gmail.com")
+                etPassword.setText("prueba")
+            }
+            else if (debugCounter > 4){
+                etEmail.setText("")
+                etPassword.setText("")
+                debugCounter = 0
+            }
+        }
     }
+
 
     private fun handleUserLogin(userModel: UserModel) {
         saveUserData(userModel)

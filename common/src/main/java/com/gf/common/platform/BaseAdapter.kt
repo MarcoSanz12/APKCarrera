@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.gf.common.functional.FilterGroup
 import com.cotesa.appcore.functional.IFilterable
 import com.gf.common.R
 import com.gf.common.entity.Resource
@@ -13,6 +12,7 @@ import com.gf.common.extensions.animateItem
 import com.gf.common.extensions.removeWhiteSpaces
 import com.gf.common.extensions.stripAccents
 import com.gf.common.functional.DiffUtilsGeneric
+import com.gf.common.functional.FilterGroup
 
 /**
  * Adaptador genérico para ser usado por listas de [Resource]

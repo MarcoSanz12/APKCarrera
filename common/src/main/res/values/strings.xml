@@ -75,9 +75,12 @@
     <string name="friend_sending_request">Enviando solicitud</string>
     <string name="friend_cancel_request">Cancelando solicitud</string>
     <string name="friend_accepting_request">Aceptando solicitud</string>
+    <string name="friend_removing">Eliminando amig@</string>
+    <string name="friend_removing_snackbar">Se ha eliminado a %s correctamente.</string>
     <string name="friend_ignoring_request">Rechazando solicitud</string>
     <string name="friend_canceling_request">Enviando solicitud</string>
     <string name="friend_no_requests">No tienes peticiones pendientes</string>
+    <string name="friend_no_friends">La lista está vacía</string>
 
 
     <!-- Fragment03 - Registrar actividad -->

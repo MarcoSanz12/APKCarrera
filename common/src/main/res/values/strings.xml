@@ -61,7 +61,12 @@
 
 
     <!-- Fragment02 - Amigos -->
-    <string name="last_activity">Última actividad: Hace %s</string>
+    <string name="last_activity_minutes">Última actividad: Hace %d minutos.</string>
+    <string name="last_activity_hours">Última actividad: Hace %d horas.</string>
+    <string name="last_activity_days">Última actividad: Hace %d días.</string>
+    <string name="last_activity_weeks">Última actividad: Hace %d semanas.</string>
+    <string name="last_activity_months">Última actividad: Hace %d meses.</string>
+    <string name="last_activity_years">Última actividad: Hace %d años.</string>
     <string name="stat_distance_activity"><font color="#6A6A6A" size="10" style="regular">Distancia</font>\n%s km</string>
     <string name="stat_rythm_activity"><font color="#6A6A6A" size="10" style="regular">Ritmo</font>\n%s /km</string>
     <string name="stat_time_activity"><font color="#6A6A6A" size="10" style="regular">Tiempo</font>\n%s</string>
@@ -121,6 +126,15 @@
     <string name="profile_add_friend">AÑADIR AMIGO</string>
     <string name="profile_remove_friend">ELIMINAR AMIGO</string>
     <string name="profile_statistics">Estadísticas</string>
+
+    <!-- Estadísticas-->
+    <string name="statistics_week">ESTA SEMANA</string>
+    <string name="statistics_year">ESTE AÑO</string>
+    <string name="statistics_all">TODO</string>
+    <string name="statistics_count">Actividades:</string>
+    <string name="statistics_time_total">Tiempo:</string>
+    <string name="statistics_distance_total">Distancia:</string>
+    <string name="statistics_speed_average">Velocidad promedio:</string>
 
     <!-- Mensajes Visiblidad-->
     <string name="visibilty_default_on">Esta actividad será visible para tus amigos</string>

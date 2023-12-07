@@ -3,6 +3,7 @@ package com.gf.apkcarrera.features.f5_profile.fragments
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.navArgs
 import com.cotesa.common.extensions.toBitmap
+import com.gf.apkcarrera.NavProfileArgs
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg05ProfileBinding
 import com.gf.apkcarrera.features.f5_profile.viewmodel.ProfileViewModel
@@ -17,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
 
     private val viewModel : ProfileViewModel by hiltNavGraphViewModels(R.id.nav_profile)
-    private val args : ProfileFragmentArgs by navArgs()
+    private val args : NavProfileArgs by navArgs()
 
     private lateinit var profile : UserModel
     private lateinit var activities : List<ActivityModel>
@@ -56,6 +57,9 @@ class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
 
             // Foto
             ivProfilePic.setImageBitmap(profile.picture.toBitmap())
+
+            // Estadisticas
+            btStats.setOnClickListener { navigate(R.id.action_fragmentProfile_to_statFragment) }
         }
     }
     private fun error(){

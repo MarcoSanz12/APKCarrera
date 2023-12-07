@@ -41,6 +41,7 @@ class FriendsListFragment : BaseFragment<Frg02FriendsListBinding>() {
     }
 
     private fun onFriendClick(friendModel: FriendModel) {
+        navigate(FriendsListFragmentDirections.actionGlobalNavProfile(friendModel.uid))
     }
 
     override fun initObservers() {
@@ -97,5 +98,6 @@ class FriendsListFragment : BaseFragment<Frg02FriendsListBinding>() {
             binding.rvList.visible()
         }
     }
+
 
 }

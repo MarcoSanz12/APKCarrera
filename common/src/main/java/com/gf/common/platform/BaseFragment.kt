@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavDirections
 import androidx.viewbinding.ViewBinding
 import com.gf.common.R
 import com.gf.common.exception.Failure
@@ -114,6 +115,10 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     protected fun navigate(id: Int){
         baseActivity.navController.navigate(id)
+    }
+
+    protected fun navigate(directions: NavDirections){
+        baseActivity.navController.navigate(directions)
     }
 
     protected fun onBackPressed(){

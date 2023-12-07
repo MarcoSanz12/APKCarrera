@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:showDividers="middle"
+        android:divider="@drawable/divider_10dp"
+        android:orientation="vertical">
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcv_week"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="5dp"
+            app:cardBackgroundColor="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="@string/statistics_week"
+                    style="@style/Statistic_CardTitle"
+                    android:backgroundTint="@color/stat1"/>
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="10dp"
+                    android:columnCount="2">
+                    <TextView
+                        android:id="@+id/tv_count_title_week"
+                        android:text="@string/statistics_count"
+                        style="@style/Statistic_Title" />
+
+                    <TextView
+                        android:id="@+id/tv_count_content_week"
+                        tools:text="1"
+                        style="@style/Statistic_Content" />
+
+                    <TextView
+                        android:id="@+id/tv_time_title_week"
+                        android:text="@string/statistics_time_total"
+                        style="@style/Statistic_Title" />
+
+                    <TextView
+                        android:id="@+id/tv_time_content_week"
+                        tools:text="0h 40m"
+                        style="@style/Statistic_Content" />
+
+                    <TextView
+                        android:id="@+id/tv_distance_title_week"
+                        android:text="@string/statistics_distance_total"
+                        style="@style/Statistic_Title" />
+
+                    <TextView
+                        android:id="@+id/tv_distance_content_week"
+                        tools:text="40 km"
+                        style="@style/Statistic_Content" />
+
+                    <TextView
+                        android:id="@+id/tv_speed_title_week"
+                        android:text="@string/statistics_speed_average"
+                        style="@style/Statistic_Title" />
+
+                    <TextView
+                        android:id="@+id/tv_speed_content_week"
+                        tools:text="6:50 min/km"
+                        style="@style/Statistic_Content" />
+
+                </GridLayout>
+
+            </LinearLayout>
+
+
+
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcv_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="5dp"
+            app:cardBackgroundColor="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="@string/statistics_year"
+                    style="@style/Statistic_CardTitle"
+                    android:backgroundTint="@color/stat2"/>
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="10dp"
+                    android:columnCount="2">
+                    <TextView
+                        android:id="@+id/tv_count_title_year"
+                        android:text="@string/statistics_count"
+                        style="@style/Statistic_Title" />
+
+                    <TextView
+                        android:id="@+id/tv_count_content_year"
+                        tools:text="1"
+                        style="@style/Statistic_Content" />
+
+                    <TextView
+                        android:id="@+id/tv_time_title_year"
+                        android:text="@string/statistics_time_total"
+                        style="@style/Statistic_Title" />
+
+                    <TextView
+                        android:id="@+id/tv_time_content_year"
+                        tools:text="0h 40m"
+                        style="@style/Statistic_Content" />
+
+                    <TextView
+                        android:id="@+id/tv_distance_title_year"
+                        android:text="@string/statistics_distance_total"
+                        style="@style/Statistic_Title" />
+
+                    <TextView
+                        android:id="@+id/tv_distance_content_year"
+                        tools:text="40 km"
+                        style="@style/Statistic_Content" />
+
+                    <TextView
+                        android:id="@+id/tv_speed_title_year"
+                        android:text="@string/statistics_speed_average"
+                        style="@style/Statistic_Title" />
+
+                    <TextView
+                        android:id="@+id/tv_speed_content_year"
+                        tools:text="6:50 min/km"
+                        style="@style/Statistic_Content" />
+
+                </GridLayout>
+
+            </LinearLayout>
+
+
+
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcv_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="5dp"
+            app:cardBackgroundColor="@color/white">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="@string/statistics_all"
+                    style="@style/Statistic_CardTitle" />
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="10dp"
+                    android:columnCount="2"
+                    android:backgroundTint="@color/stat3">
+                    <TextView
+                        android:id="@+id/tv_count_title_total"
+                        android:text="@string/statistics_count"
+                        style="@style/Statistic_Title" />
+
+                    <TextView
+                        android:id="@+id/tv_count_content_total"
+                        tools:text="1"
+                        style="@style/Statistic_Content" />
+
+                    <TextView
+                        android:id="@+id/tv_time_title_total"
+                        android:text="@string/statistics_time_total"
+                        style="@style/Statistic_Title" />
+
+                    <TextView
+                        android:id="@+id/tv_time_content_total"
+                        tools:text="0h 40m"
+                        style="@style/Statistic_Content" />
+
+                    <TextView
+                        android:id="@+id/tv_distance_title_total"
+                        android:text="@string/statistics_distance_total"
+                        style="@style/Statistic_Title" />
+
+                    <TextView
+                        android:id="@+id/tv_distance_content_total"
+                        tools:text="40 km"
+                        style="@style/Statistic_Content" />
+
+                    <TextView
+                        android:id="@+id/tv_speed_title_total"
+                        android:text="@string/statistics_speed_average"
+                        style="@style/Statistic_Title" />
+
+                    <TextView
+                        android:id="@+id/tv_speed_content_total"
+                        tools:text="6:50 min/km"
+                        style="@style/Statistic_Content" />
+
+                </GridLayout>
+
+            </LinearLayout>
+
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+
+</ScrollView>

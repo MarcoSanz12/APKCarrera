@@ -7,6 +7,10 @@ import com.cotesa.appcore.platform.BaseAdapter
 import com.cotesa.common.extensions.toBitmap
 import com.gf.apkcarrera.R
 import com.gf.common.entity.friend.FriendModel
+import com.gf.common.extensions.invisible
+import com.gf.common.extensions.visible
+import java.time.Duration
+import java.util.Date
 
 class FriendsAdapter(friendList : List<FriendModel>,
                      val onFriendClick : (friend: FriendModel) -> Unit,
@@ -28,8 +32,45 @@ class FriendsAdapter(friendList : List<FriendModel>,
         // 3. Botones
         removeButton.setOnClickListener{onRemoveClick(resource)}
 
+        // 4. Última actividad
+        lastActivity.setLastActivity(resource)
+
         // Clickar en el elemento
         view.setOnClickListener { onFriendClick(resource) }
+    }
+
+    private fun TextView.setLastActivity(friend:FriendModel){
+        if (friend.lastActivity != null && friend.lastActivity!! > 1000204201L){
+            val activityDate = Date().apply { time = friend.lastActivity!! * 1000 }.toInstant()
+            val currentDate = Date().apply { time = System.currentTimeMillis() }.toInstant()
+
+            val hoursBetween = Duration.between(activityDate,currentDate).toHours()
+
+            text = if (hoursBetween < 3){
+                val minutes = Duration.between(activityDate,currentDate).toMinutes()
+                context.getString(com.gf.common.R.string.last_activity_minutes,minutes)
+            }
+            // Horas
+            else if (hoursBetween < 25)
+                context.getString(com.gf.common.R.string.last_activity_hours,hoursBetween)
+            // Días
+            else if (hoursBetween < 169)
+                context.getString(com.gf.common.R.string.last_activity_days,(hoursBetween/24))
+            // Semanas
+            else if (hoursBetween < 673)
+                context.getString(com.gf.common.R.string.last_activity_weeks,(hoursBetween/168))
+            // Meses
+            else if (hoursBetween < 8065)
+                context.getString(com.gf.common.R.string.last_activity_months,(hoursBetween/672))
+            // Años
+            else
+                context.getString(com.gf.common.R.string.last_activity_years,(hoursBetween/8064))
+
+            visible()
+        }
+        else{
+            invisible()
+        }
     }
 
     fun friendRemoved(friendId : String) : Boolean {

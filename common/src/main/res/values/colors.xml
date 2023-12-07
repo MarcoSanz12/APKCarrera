@@ -50,4 +50,9 @@
     <color name="tab_selected">#7181FF</color>
     <color name="tab_unselected">#5265FF</color>
 
+    <!-- Estadísticas -->
+    <color name="stat1">#6170E0</color>
+    <color name="stat2">#3648CD</color>
+    <color name="stat3">#0D24D6</color>
+
 </resources>

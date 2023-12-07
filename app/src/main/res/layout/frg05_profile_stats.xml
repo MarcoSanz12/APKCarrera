@@ -1,0 +1,69 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_left"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.333"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_right"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.666"/>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/group_botones_top"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:tabMode="fixed"
+        app:tabRippleColor="@color/white"
+        app:tabUnboundedRipple="true"
+        app:tabIndicatorFullWidth="true"
+        app:tabPadding="0dp"
+        android:stateListAnimator="@animator/animator_button"
+        app:tabBackground="@color/blue_primary"
+        app:tabIconTint="@color/selector_checkbox"
+        app:tabIndicatorColor="@color/orange_quaternary"
+        app:tabIndicatorAnimationMode="elastic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- Linea medio -->
+    <View
+        android:id="@+id/line_left"
+        app:layout_constraintStart_toStartOf="@id/gl_left"
+        app:layout_constraintTop_toTopOf="@id/group_botones_top"
+        app:layout_constraintBottom_toBottomOf="@id/group_botones_top"
+        android:layout_width="1dp"
+        android:layout_height="30dp"
+        android:elevation="4dp"
+        android:background="@color/white"/>
+
+    <!-- Linea medio -->
+    <View
+        android:id="@+id/line_right"
+        app:layout_constraintStart_toStartOf="@id/gl_right"
+        app:layout_constraintTop_toTopOf="@id/group_botones_top"
+        app:layout_constraintBottom_toBottomOf="@id/group_botones_top"
+        android:layout_width="1dp"
+        android:layout_height="30dp"
+        android:elevation="4dp"
+        android:background="@color/white"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/group_botones_top" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

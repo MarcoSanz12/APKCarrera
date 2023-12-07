@@ -15,11 +15,14 @@ class ActivityModel() : Model() {
         userid = doc.get("userid") as String
         timestamp = doc.get("timestamp") as Long
         title = doc.get("title") as String
-        type = doc.get("type") as ActivityType
+        type = if ((doc.get("type") as? String) != null)
+                ActivityType.valueOf(doc.get("type") as String)
+            else
+                ActivityType.RUN
         points = doc.get("points") as List<RegistryField>
         images = doc.get("images") as List<String>
         time = doc.get("time") as List<Int>
-        distance = doc.get("distance") as Int
+        distance = (doc.get("distance") as Long).toInt()
         visibility = doc.get("visibility") as Boolean
     }
 

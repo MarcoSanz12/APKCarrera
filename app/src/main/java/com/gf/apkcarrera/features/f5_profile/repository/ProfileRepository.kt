@@ -49,9 +49,13 @@ interface ProfileRepository {
 
             return try {
                 val user = UserModel(firestore.collection("users").document(uid).get().await())
-                val activities = firestore.collection("activities").whereEqualTo("userid",uid).get().await().documents.map {
+                var activities = firestore.collection("activities").whereEqualTo("userid",uid).get().await().documents.map {
                     ActivityModel(it)
                 }
+
+                // Si no es el usuario, filtrar las carrerar privadas
+                if (uid == preferences.getString(Constants.Login.LOG_UID,null))
+                    activities = activities.filter { it.visibility }
 
 
                 // Guardamos en ROOM por si acaso

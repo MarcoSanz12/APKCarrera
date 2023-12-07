@@ -45,7 +45,7 @@
             android:layout_height="0dp"
             android:textSize="@dimen/text_size_small_12"
             android:textColor="@color/black"
-            android:text="@string/last_activity"
+            android:text="@string/last_activity_hours"
             android:layout_marginStart="5dp"
             android:gravity="center_vertical"
             app:layout_constraintTop_toBottomOf="@+id/guideline"

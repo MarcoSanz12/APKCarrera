@@ -5,17 +5,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_profile"
     app:startDestination="@id/fragmentProfile">
+
+    <argument
+        android:name="uid"
+        app:argType="string"
+        app:nullable="true"
+        android:defaultValue="@null"/>
+
+
     <fragment
         android:id="@+id/fragmentProfile"
         android:name="com.gf.apkcarrera.features.f5_profile.fragments.ProfileFragment"
         android:label="FragmentProfile"
         tools:layout="@layout/frg05_profile">
-
-        <argument
-            android:name="uid"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null"/>
+        <action
+            android:id="@+id/action_fragmentProfile_to_statFragment"
+            app:destination="@id/statFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/statFragment"
+        android:name="com.gf.apkcarrera.features.f5_profile.fragments.statistics.StatFragment"
+        android:label="StatFragment"
+        tools:layout="@layout/frg05_profile_stats"/>
+    <fragment
+        android:id="@+id/statDataFragment"
+        android:name="com.gf.apkcarrera.features.f5_profile.fragments.statistics.StatDataFragment"
+        android:label="StatDataFragment"
+        tools:layout="@layout/frg05_profile_stats_data"/>
 
 </navigation>

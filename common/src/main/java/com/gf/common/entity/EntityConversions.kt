@@ -1,5 +1,6 @@
 package com.gf.common.entity
 
+import com.gf.common.entity.activity.ActivityType
 import com.gf.common.entity.friend.FriendModel
 import com.gf.common.entity.friend.FriendStatus
 import com.gf.common.entity.user.UserModel
@@ -7,17 +8,16 @@ import com.gf.common.entity.user.UserModel
 fun UserModel.toFriendModel() = FriendModel(
     uid = this.uid,
     uname = this.name,
-    image = this.picture
+    image = this.picture,
+    lastActivity = this.lastActivity
 )
 
 fun UserModel.toFriendModel(user : UserModel) = FriendModel(
     uid = this.uid,
     uname = this.name,
     image = this.picture,
+    lastActivity = this.lastActivity,
     friendStatus = assignFriendStatus(friend = this, user = user)
-
-
-
 )
 
 private fun assignFriendStatus(friend : UserModel, user:UserModel): FriendStatus {

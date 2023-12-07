@@ -18,7 +18,7 @@ interface UserDao {
 
     @Transaction
     suspend fun getAllFriendsFromId(uid : String) : List<FriendModel>{
-        val user = getUserByUid(uid)
+        val user = getUserByUid(uid) ?: return emptyList()
         val friends = getUserByUid(user.friendList)
 
         return friends.map { it.toFriendModel(user) }.filter { it.friendStatus == FriendStatus.FRIEND }
@@ -28,11 +28,11 @@ interface UserDao {
     suspend fun getUserByUid(uids: List<String>): List<UserModel>
 
     @Query("SELECT * FROM users WHERE uid = :uid")
-    suspend fun getUserByUid(uid: String): UserModel
+    suspend fun getUserByUid(uid: String): UserModel?
 
     @Transaction
     suspend fun removeFriend(userId : String, friendId : String){
-        val user = getUserByUid(userId)
+        val user = getUserByUid(userId) ?: return
 
         // Filtrar la lista de amigos para quitar el amigo específico
         user.friendList = user.friendList.filter { it != friendId }
@@ -43,7 +43,7 @@ interface UserDao {
 
     @Transaction
     suspend fun addFriend(userId : String, friendId : String){
-        val user = getUserByUid(userId)
+        val user = getUserByUid(userId) ?: return
 
         // Filtrar la lista de amigos para quitar el amigo específico
         user.friendList = user.friendList.toMutableList().apply { add(friendId) }

@@ -10,7 +10,7 @@ import com.gf.common.entity.activity.ActivityModel
 interface ActivityDao {
 
     @Query("SELECT * FROM activities")
-    suspend fun getAllActivity(): List<ActivityModel>?
+    suspend fun getAllActivity(): List<ActivityModel>
 
     @Query("SELECT * FROM activities WHERE uid IN (:uids)")
     suspend fun getActivityById(uids: List<String>): List<ActivityModel>

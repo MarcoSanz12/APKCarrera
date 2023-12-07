@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.gf.common.entity.Model
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "users")
 class UserModel() : Model() {
@@ -28,25 +29,25 @@ class UserModel() : Model() {
         searchname = doc.get("searchname") as String
     }
     @PrimaryKey
-    @ColumnInfo("uid")
+    @SerializedName("uid")
     override var uid: String = ""
 
-    @ColumnInfo("username")
+    @SerializedName("username")
     var username: String = ""
 
-    @ColumnInfo("searchname")
+    @SerializedName("searchname")
     var searchname : String = ""
 
-    @ColumnInfo("name")
+    @SerializedName("name")
     var name: String = ""
 
-    @ColumnInfo("picture")
+    @SerializedName("picture")
     var picture: String = ""
 
-    @ColumnInfo("lastActivity")
+    @SerializedName("lastActivity")
     var lastActivity : Long = 0L
 
-    @ColumnInfo("friendList")
+    @SerializedName("friendList")
     var friendList : List<String> = listOf()
 
     override fun getModelFromDoc(doc: DocumentSnapshot) {

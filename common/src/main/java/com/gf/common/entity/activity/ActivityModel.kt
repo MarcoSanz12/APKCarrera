@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.gf.common.entity.Model
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "activities")
 class ActivityModel() : Model() {
@@ -23,34 +24,34 @@ class ActivityModel() : Model() {
     }
 
     @PrimaryKey
-    @ColumnInfo("uid")
+    @SerializedName("uid")
     override var uid: String = ""
 
-    @ColumnInfo("timestamp")
+    @SerializedName("timestamp")
     var timestamp : Long = 0L
 
-    @ColumnInfo("userid")
+    @SerializedName("userid")
     var userid : String = ""
 
-    @ColumnInfo("title")
+    @SerializedName("title")
     var title : String = ""
 
-    @ColumnInfo("type")
+    @SerializedName("type")
     var type : ActivityType = ActivityType.RUN
 
-    @ColumnInfo("points")
+    @SerializedName("points")
     var points : List<RegistryField> = emptyList()
 
-    @ColumnInfo("images")
+    @SerializedName("images")
     var images : List<String> = emptyList()
 
-    @ColumnInfo("time")
+    @SerializedName("time")
     var time : List<Int> = emptyList()
 
-    @ColumnInfo("distance")
+    @SerializedName("distance")
     var distance : Int = 0
 
-    @ColumnInfo("visibility")
+    @SerializedName("visibility")
     var visibility : Boolean = true
 
     override fun getModelFromDoc(doc: DocumentSnapshot) {

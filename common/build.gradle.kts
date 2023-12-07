@@ -2,15 +2,13 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
-    id("com.google.devtools.ksp")
+
 }
 
 android {
-    namespace("com.gf.common")
+    namespace = "com.gf.common"
     compileSdk = 34
-
     defaultConfig {
-        namespace("com.gf.common")
         minSdk = 26
         javaCompileOptions {
             annotationProcessorOptions {
@@ -52,7 +50,7 @@ kapt {
 }
 
 dependencies {
-    val room_version = "2.5.2"
+    val room_version = "2.6.1"
 
     api(platform("com.google.firebase:firebase-bom:32.2.0"))
     api("com.google.firebase:firebase-analytics-ktx")
@@ -63,6 +61,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    kapt ("androidx.lifecycle:lifecycle-compiler:2.6.2")
 
     // Navigation
     api("androidx.navigation:navigation-fragment-ktx:2.7.5")
@@ -91,11 +90,12 @@ dependencies {
 
     // Room
 
-    api("androidx.room:room-runtime:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
     api("androidx.room:room-ktx:$room_version")
     api("com.google.code.gson:gson:2.9.0")
+    api("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+
 
     // Hilt
     implementation("com.google.dagger:hilt-android:2.48.1")
@@ -119,10 +119,11 @@ dependencies {
     implementation("com.google.maps.android:android-maps-utils:2.3.0")
 
     // Firebase
-    api(platform("com.google.firebase:firebase-bom:21.0.0"))
-    api("com.google.firebase:firebase-firestore-ktx")
+    api(platform("com.google.firebase:firebase-bom:32.2.0"))
+    api("com.google.firebase:firebase-firestore-ktx:24.7.0")
     api("com.google.firebase:firebase-auth-ktx")
     api("com.google.firebase:firebase-analytics-ktx")
+    api("com.google.firebase:firebase-crashlytics-ktx")
 
 
 }

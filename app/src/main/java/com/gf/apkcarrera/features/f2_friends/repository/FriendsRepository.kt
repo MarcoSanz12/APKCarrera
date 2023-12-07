@@ -56,7 +56,7 @@ interface FriendsRepository {
 
             val userId =  preferences.getString(Constants.Login.LOG_UID,null) ?: return FriendListResponse.Error
 
-            val user =  database.userDao().getUserByUid(userId)
+            val user =  database.userDao().getUserByUid(userId) ?: return FriendListResponse.Error
             return try {
                 val users = firestore.collection("users")
                     .whereIn(FieldPath.documentId(),user.friendList)
@@ -116,7 +116,7 @@ interface FriendsRepository {
 
             val userId =  preferences.getString(Constants.Login.LOG_UID,null) ?: return FriendListResponse.Error
 
-            val user =  database.userDao().getUserByUid(userId)
+            val user =  database.userDao().getUserByUid(userId) ?: return FriendListResponse.Error
 
             runCatching {
                 firestore.collection("users")
@@ -193,9 +193,9 @@ interface FriendsRepository {
             if (!networkHandler.isConnected)
                 return FriendListResponse.Error
 
-            val userId =  preferences.getString(Constants.Login.LOG_UID,null)
+            val userId =  preferences.getString(Constants.Login.LOG_UID,null) ?: return FriendListResponse.Error
 
-            val user =  database.userDao().getUserByUid(userId ?: "")
+            val user =  database.userDao().getUserByUid(userId) ?: return FriendListResponse.Error
 
             runCatching {
                 firestore.collection("users")

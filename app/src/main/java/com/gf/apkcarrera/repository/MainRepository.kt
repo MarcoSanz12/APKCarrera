@@ -6,6 +6,7 @@ import com.gf.common.entity.user.UserModel
 import com.gf.common.exception.Failure
 import com.gf.common.functional.Either
 import com.gf.common.platform.NetworkHandler
+import com.gf.common.response.ProfileResponse
 import com.gf.common.utils.Constants.Login.LOG_UID
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
@@ -40,7 +41,7 @@ interface MainRepository {
 
             return try{
                 val uid = preferences.getString(LOG_UID,"")
-                val user = database.userDao().getUserByUid(uid!!)
+                val user = database.userDao().getUserByUid(uid!!) ?: return Either.Left(Failure.ServerError)
                 Either.Right(user)
 
             }catch (ex:Throwable){

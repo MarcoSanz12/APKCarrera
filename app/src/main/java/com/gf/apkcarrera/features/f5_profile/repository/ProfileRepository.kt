@@ -6,6 +6,7 @@ import com.gf.common.db.APKCarreraDatabase
 import com.gf.common.entity.activity.ActivityModel
 import com.gf.common.entity.user.UserModel
 import com.gf.common.platform.NetworkHandler
+import com.gf.common.response.FriendListResponse
 import com.gf.common.response.ProfileResponse
 import com.gf.common.utils.Constants
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -66,7 +67,7 @@ interface ProfileRepository {
 
 
         private suspend fun getUserDataNoConnection (userId: String) : ProfileResponse{
-            val user = database.userDao().getUserByUid(userId)
+            val user = database.userDao().getUserByUid(userId) ?: return ProfileResponse.Error
             val activities = database.activityDao().getActivitiesByUserId(userId)
 
             return ProfileResponse.Succesful(user,activities)

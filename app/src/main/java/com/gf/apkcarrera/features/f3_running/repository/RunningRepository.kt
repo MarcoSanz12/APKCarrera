@@ -45,7 +45,7 @@ interface RunningRepository {
             var response : GenericResponse = GenericResponse.Succesful
 
             firestore.runTransaction {
-                firestore.collection("activities").document().set(activityModel.setModelToMap())
+                firestore.collection("activities").document().set(activityModel)
                 firestore.collection("users").document(userId).update("lastActivity",activityModel.timestamp)
             }.addOnSuccessListener {
                 response = GenericResponse.Succesful

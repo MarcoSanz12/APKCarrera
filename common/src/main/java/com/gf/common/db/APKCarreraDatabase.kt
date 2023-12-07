@@ -13,7 +13,7 @@ import com.gf.common.entity.user.UserModel
     entities = [
         UserModel::class,
         ActivityModel::class
-    ], version = 1)
+    ], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class APKCarreraDatabase : RoomDatabase() {
 

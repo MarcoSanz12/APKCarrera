@@ -4,19 +4,18 @@ plugins {
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
     id("com.google.gms.google-services")
-    id("com.google.devtools.ksp")
     id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
     id ("androidx.navigation.safeargs.kotlin")
+    id("com.google.firebase.crashlytics")
 
 }
 android {
+    namespace = "com.gf.apkcarrera"
     compileSdk = 34
-    namespace("com.gf.apkcarrera")
 
 
 
     defaultConfig {
-        namespace("com.gf.apkcarrera")
         applicationId = "com.gf.apkcarrera"
         minSdk = 26
         //noinspection EditedTargetSdkVersion
@@ -51,9 +50,9 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-   /* kapt {
-        correctErrorTypes = true
-    }*/
+    /* kapt {
+         correctErrorTypes = true
+     }*/
 
 }
 
@@ -61,7 +60,7 @@ android {
 
 dependencies {
 
-    val room_version = "2.5.2"
+    val room_version = "2.6.1"
 
     implementation("com.google.gms:google-services:4.3.15")
     implementation (project(":common"))
@@ -73,7 +72,8 @@ dependencies {
     implementation ("com.google.dagger:hilt-android:2.48.1")
 
     // Expandable Layout
+    kapt ("androidx.lifecycle:lifecycle-compiler:2.6.2")
     implementation("net.cachapa.expandablelayout:expandablelayout:2.9.2")
 
-    ksp("androidx.room:room-compiler:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 }

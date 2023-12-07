@@ -6,15 +6,17 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.devtools.ksp")
     id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id ("androidx.navigation.safeargs.kotlin")
 
 }
 android {
-    namespace = "com.gf.apkcarrera"
     compileSdk = 34
+    namespace("com.gf.apkcarrera")
 
 
 
     defaultConfig {
+        namespace("com.gf.apkcarrera")
         applicationId = "com.gf.apkcarrera"
         minSdk = 26
         //noinspection EditedTargetSdkVersion

@@ -30,6 +30,7 @@ class FeedFragment : BaseFragment<Frg01FeedBinding>() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        throw RuntimeException("Test crash")
         viewModel.getUser()
         return super.onCreateView(inflater, container, savedInstanceState)
     }

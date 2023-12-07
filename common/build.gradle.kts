@@ -6,9 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.gf.common"
+    namespace("com.gf.common")
     compileSdk = 34
+
     defaultConfig {
+        namespace("com.gf.common")
         minSdk = 26
         javaCompileOptions {
             annotationProcessorOptions {
@@ -117,8 +119,8 @@ dependencies {
     implementation("com.google.maps.android:android-maps-utils:2.3.0")
 
     // Firebase
-    api(platform("com.google.firebase:firebase-bom:32.2.0"))
-    api("com.google.firebase:firebase-firestore-ktx:24.7.0")
+    api(platform("com.google.firebase:firebase-bom:21.0.0"))
+    api("com.google.firebase:firebase-firestore-ktx")
     api("com.google.firebase:firebase-auth-ktx")
     api("com.google.firebase:firebase-analytics-ktx")
 

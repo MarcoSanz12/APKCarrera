@@ -14,7 +14,7 @@ import com.gf.common.entity.user.UserModel
 interface UserDao {
 
     @Query("SELECT * FROM users")
-    suspend fun getAllUser(): UserModel?
+    suspend fun getAllUser(): List<UserModel>
 
     @Transaction
     suspend fun getAllFriendsFromId(uid : String) : List<FriendModel>{

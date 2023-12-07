@@ -29,7 +29,7 @@ class FriendsListFragment : BaseFragment<Frg02FriendsListBinding>() {
     }
 
     override fun initializeView() {
-        adapter = FriendsAdapter(listOf(),::removeFriendClick)
+        adapter = FriendsAdapter(listOf(),::onFriendClick,::removeFriendClick)
 
         // Asignamos el adaptador
         binding.rvList.assignAnimatedAdapter(
@@ -38,6 +38,9 @@ class FriendsListFragment : BaseFragment<Frg02FriendsListBinding>() {
         )
 
         viewModel.getFriends()
+    }
+
+    private fun onFriendClick(friendModel: FriendModel) {
     }
 
     override fun initObservers() {

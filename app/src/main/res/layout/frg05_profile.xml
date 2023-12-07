@@ -106,6 +106,7 @@
             android:textColor="@color/black"
             android:gravity="center"
             android:background="@color/background"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/ly_buttons"
             />
 

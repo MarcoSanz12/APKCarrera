@@ -1,6 +1,8 @@
 package com.gf.common.db.converters
 
 import androidx.room.TypeConverter
+import com.gf.common.entity.activity.ActivityType
+import com.gf.common.entity.activity.RegistryField
 import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import java.lang.reflect.Type
@@ -38,4 +40,27 @@ class Converters {
     fun fromIntstoString(list: List<Int?>?): String {
         return Gson().toJson(list)
     }
+
+    @TypeConverter
+    fun fromStringToListRegistryField(value: String?): List<RegistryField> {
+        val listType: Type = object : TypeToken<List<RegistryField?>?>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromListRegistryFrieldToString(list: List<RegistryField>?): String {
+        return Gson().toJson(list)
+    }
+
+    @TypeConverter
+    fun fromStringToActivityType(value: String?): ActivityType? {
+        val listType: Type = object : TypeToken<ActivityType?>() {}.type
+        return Gson().fromJson(value, listType)
+    }
+
+    @TypeConverter
+    fun fromActivityTypeToString(list: ActivityType?): String? {
+        return Gson().toJson(list)
+    }
+
 }

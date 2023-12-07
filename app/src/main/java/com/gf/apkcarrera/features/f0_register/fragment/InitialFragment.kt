@@ -10,7 +10,6 @@ import com.gf.common.platform.BaseFragment
 
 class InitialFragment : BaseFragment<Frg00InitialBinding>() {
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

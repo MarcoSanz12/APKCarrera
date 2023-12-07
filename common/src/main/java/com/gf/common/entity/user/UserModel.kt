@@ -18,6 +18,15 @@ class UserModel() : Model() {
         friendList = request.friendList
     }
 
+    constructor(doc: DocumentSnapshot) : this(){
+        uid = doc.id
+        username = doc.get("username") as String
+        picture = doc.get("picture") as String
+        name = doc.get("name") as String
+        friendList = doc.get("friendList") as List<String>
+        lastActivity = doc.get("lastActivity") as Long
+        searchname = doc.get("searchname") as String
+    }
     @PrimaryKey
     @ColumnInfo("uid")
     override var uid: String = ""

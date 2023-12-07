@@ -9,6 +9,19 @@ import com.google.firebase.firestore.DocumentSnapshot
 @Entity(tableName = "activities")
 class ActivityModel() : Model() {
 
+    constructor(doc : DocumentSnapshot) : this(){
+        uid = doc.id
+        userid = doc.get("userid") as String
+        timestamp = doc.get("timestamp") as Long
+        title = doc.get("title") as String
+        type = doc.get("type") as ActivityType
+        points = doc.get("points") as List<RegistryField>
+        images = doc.get("images") as List<String>
+        time = doc.get("time") as List<Int>
+        distance = doc.get("distance") as Int
+        visibility = doc.get("visibility") as Boolean
+    }
+
     @PrimaryKey
     @ColumnInfo("uid")
     override var uid: String = ""
@@ -41,6 +54,7 @@ class ActivityModel() : Model() {
     var visibility : Boolean = true
 
     override fun getModelFromDoc(doc: DocumentSnapshot) {
+        uid = doc.id
         userid = doc.get("userid") as String
         timestamp = doc.get("timestamp") as Long
         title = doc.get("title") as String

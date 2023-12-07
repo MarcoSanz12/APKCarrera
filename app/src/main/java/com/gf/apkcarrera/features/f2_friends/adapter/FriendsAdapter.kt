@@ -9,6 +9,7 @@ import com.gf.apkcarrera.R
 import com.gf.common.entity.friend.FriendModel
 
 class FriendsAdapter(friendList : List<FriendModel>,
+                     val onFriendClick : (friend: FriendModel) -> Unit,
                      val onRemoveClick : (friend: FriendModel) -> Unit
 ) : BaseAdapter<FriendModel>(friendList,R.layout.item_friend) {
     override fun renderOnViewHolder(resource: FriendModel, view: View) {
@@ -26,6 +27,9 @@ class FriendsAdapter(friendList : List<FriendModel>,
 
         // 3. Botones
         removeButton.setOnClickListener{onRemoveClick(resource)}
+
+        // Clickar en el elemento
+        view.setOnClickListener { onFriendClick(resource) }
     }
 
     fun friendRemoved(friendId : String) : Boolean {

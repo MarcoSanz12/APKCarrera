@@ -13,6 +13,10 @@
         app:destination="@id/fragmentFeed"
         app:popUpTo="@id/my_nav"
         app:popUpToInclusive="true"/>
+
+    <action android:id="@+id/action_global_navProfile"
+        app:destination="@+id/nav_profile"/>
+
     <!-- 00_Inicial -->
     <fragment
         android:id="@+id/fragmentInitial"
@@ -72,12 +76,7 @@
         android:label="FragmentSettings"
         tools:layout="@layout/frg04_settings" />
     <!-- 05_Perfil -->
-    <fragment
-        android:id="@+id/fragmentProfile"
-        android:name="com.gf.apkcarrera.features.f5_profile.fragments.ProfileFragment"
-        android:label="FragmentProfile"
-        tools:layout="@layout/frg05_profile" />
-
+    <include app:graph="@navigation/nav_profile"/>
     <!-- Navigation Registro -->
     <navigation
         android:id="@+id/navigation_register"
@@ -123,6 +122,6 @@
             android:id="@+id/placeholder"
             tools:layout="@layout/frg01_feed" />
     </navigation>
-  <include app:graph="@navigation/nav_friends"/>
+    <include app:graph="@navigation/nav_friends"/>
 
 </navigation>

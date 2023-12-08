@@ -89,6 +89,8 @@ class RunningService : LifecycleService() {
         private val _uiState = MutableStateFlow<RunningUIState?>(null)
         val uiState get() = _uiState.asStateFlow()
 
+        var status : ActivityStatus = ActivityStatus.DONE
+
         private const val PAUSE_MIN_DISTANCE = 1
         private const val RESUME_MIN_DISTANCE = 30
         private const val PAUSE_MIN_TIME = 30
@@ -100,6 +102,7 @@ class RunningService : LifecycleService() {
             when(it.action){
                 ACTION_START_OR_RESUME_RUNNING->{
                     STATUS = ActivityStatus.RUNNING
+                    status = ActivityStatus.RUNNING
                     if (isUnresumed){
                         Log.d(TAG, "onStartCommand: START_RUNNING")
                         startForegroundService()
@@ -120,6 +123,7 @@ class RunningService : LifecycleService() {
                 }
                 ACTION_END_RUNNING->{
                     STATUS = ActivityStatus.DONE
+                    status = ActivityStatus.DONE
                     stopTimer()
                     stopService()
                     Log.d(TAG, "onStartCommand: STOP_RUNNING")
@@ -143,6 +147,8 @@ class RunningService : LifecycleService() {
             .setContentTitle("Running App")
             .setContentText("00:00:00")
             .setContentIntent(getMainActivityPendingIntent())
+
+        status = ActivityStatus.RUNNING
 
         startForeground(NOTIFICATION_ID, notificationBuilder.build())
         fusedLocationProviderClient.requestLocationUpdates(locationRequest,locationCallback, null)

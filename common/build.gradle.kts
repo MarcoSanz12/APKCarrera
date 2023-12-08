@@ -89,12 +89,14 @@ dependencies {
     api ("com.google.android.flexbox:flexbox:3.0.0")
 
     // Room
-
     api("androidx.room:room-ktx:$room_version")
     api("com.google.code.gson:gson:2.9.0")
     api("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
+
+    // Paging3
+    api ("androidx.paging:paging-runtime-ktx:3.2.1")
 
 
     // Hilt
@@ -103,7 +105,7 @@ dependencies {
 
     // Viewmodel
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
-    api("androidx.lifecycle:lifecycle-livedata:2.6.2")
+    api("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     api("androidx.lifecycle:lifecycle-service:2.6.2")
     api("androidx.fragment:fragment-ktx:1.6.1")
     api("androidx.activity:activity-ktx:1.8.0")

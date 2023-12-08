@@ -7,5 +7,5 @@ sealed class FriendListResponse {
         val friendList : List<FriendModel>
     ) : FriendListResponse()
 
-    object Error : FriendListResponse()
+    data object Error : FriendListResponse()
 }

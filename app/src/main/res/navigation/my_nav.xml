@@ -10,7 +10,7 @@
         app:popUpTo="@id/my_nav"
         app:popUpToInclusive="true"/>
     <action android:id="@+id/action_global_navigationMain"
-        app:destination="@id/fragmentFeed"
+        app:destination="@+id/nav_feed"
         app:popUpTo="@id/my_nav"
         app:popUpToInclusive="true"/>
 
@@ -32,14 +32,11 @@
     <fragment
         android:id="@+id/fragmentSplash"
         android:name="com.gf.apkcarrera.features.f0_register.fragment.SplashFragment"
-        android:label=""
+
         tools:layout="@layout/frg00_splash"/>
-    <!-- 01_Feed -->
-    <fragment
-        android:id="@+id/fragmentFeed"
-        android:name="com.gf.apkcarrera.features.f1_feed.fragment.FeedFragment"
-        android:label="@string/title_feed"
-        tools:layout="@layout/frg01_feed" />
+
+    <!-- 02_Feed-->
+    <include app:graph="@navigation/nav_feed"/>
 
     <!-- 03_Running -->
 

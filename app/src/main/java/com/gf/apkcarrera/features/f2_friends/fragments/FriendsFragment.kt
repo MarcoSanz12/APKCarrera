@@ -50,4 +50,6 @@ class FriendsFragment : BaseFragment<Frg02FriendsBinding>(){
 
 
 
+
+
 }

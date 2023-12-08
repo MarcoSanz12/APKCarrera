@@ -3,7 +3,7 @@ package com.gf.apkcarrera.di
 import com.gf.apkcarrera.features.f2_friends.repository.FriendsRepository
 import com.gf.apkcarrera.features.f3_running.repository.RunningRepository
 import com.gf.apkcarrera.features.f5_profile.repository.ProfileRepository
-import com.gf.apkcarrera.repository.MainRepository
+import com.gf.apkcarrera.features.f1_feed.repository.FeedRepository
 import com.gf.apkcarrera.repository.RegisterRepository
 import dagger.Binds
 import dagger.Module
@@ -33,7 +33,7 @@ abstract class ApplicationModule {
 
     @Binds
     @Singleton
-    abstract fun bindMainRepository(repository: MainRepository.MainRepositoryImpl) : MainRepository
+    abstract fun bindMainRepository(repository: FeedRepository.MainRepositoryImpl) : FeedRepository
 
 
 }

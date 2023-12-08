@@ -67,6 +67,13 @@ class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
         onBackPressed()
     }
 
+    override fun onBackPressed() {
+        if (args.uid == null)
+            baseActivity.navController.popBackStack(R.id.fragmentFeed,false)
+        else
+            super.onBackPressed()
+    }
+
 
 
 }

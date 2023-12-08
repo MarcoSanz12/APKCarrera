@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.gf.common.R
 import com.gf.common.exception.Failure
@@ -51,6 +52,10 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     // VAR Filter
     private var mLyFilter : BaseFilter? = null
 
+    companion object{
+        private const val TAG = "BaseFragment"
+    }
+
 
 
     override fun onAttach(context: Context) {
@@ -63,9 +68,11 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
             Context.MODE_PRIVATE
         )
 
-        requireActivity().onBackPressedDispatcher.addCallback {
+        Log.d(TAG, "BACK ADDED: ${this.javaClass.simpleName}")
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
             onBackPressed()
         }
+
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -121,8 +128,18 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
         baseActivity.navController.navigate(directions)
     }
 
-    protected fun onBackPressed(){
-        baseActivity.navController.navigateUp()
+    open fun onBackPressed() {
+
+        if (_bi != null)
+            binding.root.hideKeyboard()
+        if (!baseActivity.navController.popBackStack()){
+            baseActivity.finish()
+            Log.d(TAG, "onBackPressed: CERRAMOS :D")
+        }
+        else
+            Log.d(TAG, "onBackPressed: VOLVEMOS :(")
+
+
     }
 
     protected fun startScheduleTimerOnMain(delay : Long = 0, period : Long = 1000, run: () -> Unit) : Timer {

@@ -17,6 +17,7 @@ import androidx.navigation.ui.NavigationUiSaveStateControl
 import com.gf.apkcarrera.databinding.ActivityMainBinding
 import com.gf.apkcarrera.features.f3_running.service.RunningService
 import com.gf.common.dialog.MultimediaDialog
+import com.gf.common.entity.activity.ActivityStatus
 import com.gf.common.extensions.invisible
 import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseActivity
@@ -78,8 +79,6 @@ class MainActivity : BaseActivity() {
             }
             */
 
-
-
         // Back Button
         backButton.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -89,7 +88,6 @@ class MainActivity : BaseActivity() {
 
             // No retroceso
             if (navDestination.id in topLevelIds){
-                navController.graph.setStartDestination(navDestination.id)
                 backButton.invisible()
             }
             else
@@ -117,6 +115,9 @@ class MainActivity : BaseActivity() {
             }
         }
     }
+
+    override fun onSupportNavigateUp(): Boolean = navController.navigateUp()
+
 
     /**
      * Abre [MultimediaDialog] cargando un [Multimedia]
@@ -170,7 +171,8 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onDestroy() {
-        sendCommandToService(ACTION_END_RUNNING)
+        if (RunningService.status == ActivityStatus.RUNNING)
+            sendCommandToService(ACTION_END_RUNNING)
         super.onDestroy()
         Log.d("STATUS_LIFE","${this.javaClass.simpleName} - DESTROY")
     }

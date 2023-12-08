@@ -491,4 +491,8 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
 
     private fun sendCommandToService(action: String) =
         (requireActivity() as MainActivity).sendCommandToService(action)
+
+    override fun onBackPressed() {
+        baseActivity.navController.popBackStack(R.id.fragmentFeed,false)
+    }
 }

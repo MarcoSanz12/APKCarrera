@@ -34,4 +34,7 @@ class InitialFragment : BaseFragment<Frg00InitialBinding>() {
             "N/A"
         }
     }
+/*    override fun onBackPressed() {
+        requireActivity().finish()
+    }*/
 }

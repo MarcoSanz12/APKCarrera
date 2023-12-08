@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_feed"
+    app:startDestination="@id/fragmentFeed">
+
+    <!-- 01_Feed -->
+    <fragment
+        android:id="@+id/fragmentFeed"
+        android:name="com.gf.apkcarrera.features.f1_feed.fragment.FeedFragment"
+        android:label="@string/title_feed"
+        tools:layout="@layout/frg01_feed" />
+
+</navigation>

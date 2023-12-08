@@ -1,5 +1,7 @@
 package com.gf.apkcarrera.features.f5_profile.viewmodel
 
+import androidx.lifecycle.viewModelScope
+import com.gf.apkcarrera.features.f1_feed.usecase.GetFeedActivitiesUseCase
 import com.gf.apkcarrera.features.f5_profile.usecase.GetProfileUseCase
 import com.gf.common.platform.BaseViewModel
 import com.gf.common.response.ProfileResponse
@@ -10,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    val getProfileUseCase: GetProfileUseCase
+    val getProfileUseCase: GetProfileUseCase,
 ): BaseViewModel() {
 
     // 1. Profile
@@ -20,4 +22,6 @@ class ProfileViewModel @Inject constructor(
     fun getProfile(userId : String?) = launch {
         _profileState.emit(getProfileUseCase(userId))
     }
+
+
 }

@@ -111,6 +111,10 @@ class FriendsRequestsFragment : BaseFragment<Frg02FriendsRequestBinding>() {
         }
     }
 
+    override fun onBackPressed() {
+        baseActivity.navController.popBackStack(R.id.fragmentFeed,false)
+    }
+
 
 
 }

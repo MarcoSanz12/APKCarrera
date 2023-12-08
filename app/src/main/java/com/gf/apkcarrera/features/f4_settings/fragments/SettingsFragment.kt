@@ -20,4 +20,8 @@ class SettingsFragment : BaseFragment<Frg04SettingsBinding>() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        baseActivity.navController.popBackStack(R.id.fragmentFeed,false)
+    }
 }

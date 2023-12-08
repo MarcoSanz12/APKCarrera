@@ -57,6 +57,40 @@ class ActivityModel() : Model() {
     @SerializedName("visibility")
     var visibility : Boolean = true
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ActivityModel
+
+        if (uid != other.uid) return false
+        if (timestamp != other.timestamp) return false
+        if (userid != other.userid) return false
+        if (title != other.title) return false
+        if (type != other.type) return false
+        if (points != other.points) return false
+        if (images != other.images) return false
+        if (time != other.time) return false
+        if (distance != other.distance) return false
+        if (visibility != other.visibility) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = uid.hashCode()
+        result = 31 * result + timestamp.hashCode()
+        result = 31 * result + userid.hashCode()
+        result = 31 * result + title.hashCode()
+        result = 31 * result + type.hashCode()
+        result = 31 * result + points.hashCode()
+        result = 31 * result + images.hashCode()
+        result = 31 * result + time.hashCode()
+        result = 31 * result + distance
+        result = 31 * result + visibility.hashCode()
+        return result
+    }
+
     override fun getModelFromDoc(doc: DocumentSnapshot) {
         uid = doc.id
         userid = doc.get("userid") as String

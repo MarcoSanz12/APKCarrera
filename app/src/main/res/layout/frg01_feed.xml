@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:backgroundTint="@color/background"
     android:orientation="vertical"
     android:gravity="center">
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_list"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:text="Nombre"/>
-    <TextView
-        android:id="@+id/tv_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:text="Username"/>
-    <TextView
-        android:id="@+id/tv_uid"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:text="UID"/>
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_profile_pic"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
-        tools:src="@drawable/face_default"/>
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/item_activity"/>
 
-</LinearLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/ly_results_not_found"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/friend_no_friends"
+        android:textColor="@color/blue_primary"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMaxTextSize="30sp"
+        android:autoSizeMinTextSize="12sp"
+        android:paddingHorizontal="10dp"
+        android:visibility="gone"
+        android:gravity="center"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

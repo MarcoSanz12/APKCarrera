@@ -27,7 +27,7 @@ class FeedViewModel @Inject constructor(
 
     var user : MutableLiveData<UserModel> = MutableLiveData()
 
-    var _feedFlow : Flow<PagingData<ActivityModel>>? = null
+    var _feedFlow : Flow<PagingData<Pair<ActivityModel,UserModel>>>? = null
 
     fun getFeedActivities() = launch {
         val response = getFeedActivitiesUseCase.invoke(viewModelScope)

@@ -89,7 +89,7 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
             points = activityModelSimple.points.toRegistryFields()
 
             // Imágenes
-            images = adapter.resourceList.map { it.image.toBase64() }
+            images = adapter.resourceListFiltered.map { it.image.toBase64() }
 
             // Distancia
             distance = activityModelSimple.distance

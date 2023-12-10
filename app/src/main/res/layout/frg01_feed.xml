@@ -6,11 +6,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:backgroundTint="@color/background"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:clipToPadding="false"
+    android:clipChildren="false"
+    >
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:clipChildren="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:orientation="vertical"
+        android:fadingEdge="vertical"
+        tools:itemCount="3"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/item_activity"/>
 

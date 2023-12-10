@@ -207,6 +207,7 @@
             <!-- Mensaje motivacional -->
             <com.google.android.material.card.MaterialCardView
                 app:cardCornerRadius="5dp"
+                android:visibility="gone"
                 android:stateListAnimator="@animator/animator_button"
                 android:layout_marginHorizontal="6dp"
                 android:layout_width="match_parent"

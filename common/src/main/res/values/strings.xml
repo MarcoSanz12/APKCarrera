@@ -67,9 +67,9 @@
     <string name="last_activity_weeks">Última actividad: Hace %d semanas.</string>
     <string name="last_activity_months">Última actividad: Hace %d meses.</string>
     <string name="last_activity_years">Última actividad: Hace %d años.</string>
-    <string name="stat_distance_activity"><font color="#6A6A6A" size="10" style="regular">Distancia</font>\n%s km</string>
-    <string name="stat_rythm_activity"><font color="#6A6A6A" size="10" style="regular">Ritmo</font>\n%s /km</string>
-    <string name="stat_time_activity"><font color="#6A6A6A" size="10" style="regular">Tiempo</font>\n%s</string>
+    <string name="stat_distance_activity">Distancia</string>
+    <string name="stat_rythm_activity">Ritmo</string>
+    <string name="stat_time_activity">Tiempo</string>
     <string name="add_friend">AGREGAR</string>
     <string name="cancel_friend">CANCELAR SOLICITUD</string>
     <string name="tab_friends">Amigos</string>

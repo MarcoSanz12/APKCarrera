@@ -1,5 +1,6 @@
 package com.gf.apkcarrera.features.f3_running.fragments
 
+import android.app.AlertDialog
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
@@ -14,7 +15,7 @@ import com.gf.apkcarrera.features.f3_running.fragments.RunningFragment.Companion
 import com.gf.apkcarrera.features.f3_running.viewmodel.RunningViewModel
 import com.gf.common.entity.activity.ActivityModel
 import com.gf.common.entity.activity.ActivityModelSimple
-import com.gf.common.entity.activity.ActivityType
+import com.gf.common.entity.activity.ActivityType.*
 import com.gf.common.entity.activity.RegistryField
 import com.gf.common.entity.activity.RegistryPoint
 import com.gf.common.extensions.adjustCamera
@@ -23,7 +24,6 @@ import com.gf.common.extensions.collectFlow
 import com.gf.common.extensions.collectFlowOnce
 import com.gf.common.extensions.format
 import com.gf.common.extensions.paintPolyline
-import com.gf.common.extensions.toast
 import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseCameraFragment
 import com.gf.common.response.GenericResponse
@@ -82,7 +82,7 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
             timestamp = System.currentTimeMillis()/1000
 
             // Tipo
-            type = ActivityType.RUN
+            type = activityModelSimple.activityType
 
             // Puntos
             points = activityModelSimple.points.toRegistryFields()
@@ -108,10 +108,10 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
             is GenericResponse.Succesful -> {
                 sendCommandToService(Constants.ACTION_END_RUNNING)
                 baseActivity.navController.popBackStack(R.id.fragmentFeed,false)
-                toast("Carrera guardada")
+                snackbar(com.gf.common.R.string.race_saved)
             }
             is GenericResponse.Error -> {
-                toast("Error al guardar")
+                snackbar(com.gf.common.R.string.race_saved_error)
             }
         }
     }
@@ -166,6 +166,14 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
                 activityModelSimple.time
             ))
 
+            // Tipo actividad
+            val typeResource = when(activityModelSimple.activityType){
+                WALK -> com.gf.common.R.drawable.icon_walk
+                RUN -> com.gf.common.R.drawable.icon_run
+                BIKE -> com.gf.common.R.drawable.icon_bike
+            }
+
+            ivActivityType.setImageResource(typeResource)
             // Desnivel positivo
             statistic3.tvContentLeft.text = "${getDesnivelPositivo(activityModelSimple.points)} metros"
 
@@ -175,7 +183,10 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
             // Guardar carrera
             binding.btEnd.setOnClickListener {
                 saveActivity(activityModelSimple)
+            }
 
+            binding.btDiscard.setOnClickListener {
+                discardRace()
             }
             loadMap(activityModelSimple.points)
         }
@@ -190,7 +201,7 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
 
 
     private fun onImageClick(bitmaps: List<Bitmap>, i: Int) {
-        (requireActivity() as MainActivity).showZoomableImage(bitmaps,i)
+        (requireActivity() as MainActivity).showZoomableImage(images = bitmaps, position = i)
     }
 
     private fun getDesnivelPositivo(points : List<List<RegistryPoint>>) : Int{
@@ -219,6 +230,25 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
         }
 
         return maxSpeed
+    }
+
+    private fun discardRace(){
+        showDeleteConfirmationDialog {
+            sendCommandToService(Constants.ACTION_END_RUNNING)
+            baseActivity.navController.popBackStack(R.id.fragmentFeed,false)
+            snackbar(com.gf.common.R.string.race_discarded)
+        }
+    }
+
+    private fun showDeleteConfirmationDialog(onConfirmed: () -> Unit) {
+        AlertDialog.Builder(context)
+            .setMessage(getString(com.gf.common.R.string.discard_race_message))
+            .setPositiveButton(getString(com.gf.common.R.string.discard_yes)) { _, _ ->
+                // Llamado cuando el usuario hace clic en "Sí"
+                onConfirmed.invoke()
+            }
+            .setNegativeButton(getString(com.gf.common.R.string.discard_no), null) // No es necesario especificar una acción para "No"
+            .show()
     }
 
 

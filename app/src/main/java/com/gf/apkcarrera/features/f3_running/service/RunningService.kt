@@ -182,11 +182,19 @@ class RunningService : LifecycleService() {
                 ActivityStatus.STOP -> getString(com.gf.common.R.string.service_status_end)
                 else -> ""
             }
-            setContentTitle(title)
-            setContentText(StatCounter.formatTime(clockTime))
+            setContentTitle("$title - ${formatDistance(statCounter.totalDistance)}")
+            setContentText("${StatCounter.formatTime(clockTime)}")
 
             startForeground(NOTIFICATION_ID,notificationBuilder.build())
         }
+    }
+
+    private fun formatDistance(distance: Int) : String{
+        return if (distance < 1000)
+            "$distance m"
+        else
+            "${distance/1000} km"
+
     }
 
     @SuppressLint("MissingPermission")
@@ -273,7 +281,8 @@ class RunningService : LifecycleService() {
     }
 
     private fun stopTimer(){
-        timer.cancel()
+        if (this::timer.isInitialized)
+            timer.cancel()
     }
 
     private fun stopService(){

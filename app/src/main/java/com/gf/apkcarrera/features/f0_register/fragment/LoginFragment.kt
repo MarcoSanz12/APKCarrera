@@ -14,6 +14,7 @@ import com.gf.common.extensions.textToString
 import com.gf.common.extensions.toast
 import com.gf.common.platform.BaseFragment
 import com.gf.common.utils.Constants
+import dagger.hilt.android.AndroidEntryPoint
 
 class LoginFragment : BaseFragment<Frg00LoginBinding>() {
 

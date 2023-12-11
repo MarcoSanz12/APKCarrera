@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
+import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg01FeedBinding
 import com.gf.apkcarrera.features.f1_feed.adapter.FeedAdapter
@@ -47,7 +48,6 @@ class FeedFragment : BaseFragment<Frg01FeedBinding>() {
                         Log.d(TAG, "Recogiendo FLOW")
                         adapter.submitData(pagingData)
                     }
-
                 }
             }
         }
@@ -66,7 +66,7 @@ class FeedFragment : BaseFragment<Frg01FeedBinding>() {
     }
 
     private fun onImageClick(bitmaps: List<FeedImage>, i: Int) {
-        //(requireActivity() as MainActivity).showZoomableImage(bitmaps,i)
+        (requireActivity() as MainActivity).showZoomableImage(urls = bitmaps.map { it.url }, position = i)
     }
 
     private fun onFeedFailure(failure: Failure) {

@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -59,8 +60,9 @@ interface FeedRepository {
         }
 
         override suspend fun getFeedActivities(targetId: String?, scope : CoroutineScope): FeedResponse{
+
             val userId = preferences.getString(LOG_UID,"")  ?: return FeedResponse.Error
-            val user = database.userDao().getUserByUid(userId)
+            val user =  runBlocking { database.userDao().getUserByUid(userId) }
             user ?: return FeedResponse.Error
 
 
@@ -69,7 +71,7 @@ interface FeedRepository {
                 // PagingConfig, such as prefetchDistance.
                 PagingConfig(pageSize = 50)
             ) {
-                FeedPagingSource(targetId, userId, user.friendList, firestore, database)
+                FeedPagingSource(targetId, user, firestore, database)
             }.flow
                 .cachedIn(scope)
 

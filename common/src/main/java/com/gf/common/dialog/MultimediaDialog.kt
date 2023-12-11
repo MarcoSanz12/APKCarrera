@@ -16,7 +16,7 @@ import com.cotesa.common.extensions.notNull
 import com.gf.common.R
 import com.gf.common.adapter.MultimediaGalleryDialogAdapter
 
-class MultimediaDialog(context: Context, var images: List<Bitmap>, var position: Int) : Dialog(context) {
+class MultimediaDialog(context: Context, var images: List<Bitmap>? = null, var url : List<String>? = null, var position: Int) : Dialog(context) {
 
     private val viewpager : ViewPager2 by lazy { findViewById(R.id.viewpager) }
     private val tvCount : TextView by lazy { findViewById(R.id.tv_page_count) }
@@ -42,8 +42,10 @@ class MultimediaDialog(context: Context, var images: List<Bitmap>, var position:
             )
         }
 
+
         val adapter = MultimediaGalleryDialogAdapter(
             images,
+            url,
             ::onEndScrolling
         )
 
@@ -61,7 +63,7 @@ class MultimediaDialog(context: Context, var images: List<Bitmap>, var position:
     }
 
     private fun onImageChanged(p: Int) {
-        tvCount.text = "${p + 1} / ${images.size}"
+        tvCount.text = "${p + 1} / ${images?.size ?: url?.size ?: 0}"
     }
 
     private fun onEndScrolling(b: Boolean) {

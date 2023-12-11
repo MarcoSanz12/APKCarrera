@@ -57,6 +57,8 @@ interface FriendsRepository {
             val userId =  preferences.getString(Constants.Login.LOG_UID,null) ?: return FriendListResponse.Error
 
             val user =  database.userDao().getUserByUid(userId) ?: return FriendListResponse.Error
+
+            if (user.friendList.isEmpty()) return FriendListResponse.Succesful(emptyList())
             return try {
                 val users = firestore.collection("users")
                     .whereIn(FieldPath.documentId(),user.friendList)

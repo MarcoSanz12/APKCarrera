@@ -3,6 +3,7 @@ package com.gf.apkcarrera.features.f0_register.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg00SplashBinding
 import com.gf.apkcarrera.features.f0_register.viewmodel.RegisterViewModel
@@ -15,11 +16,13 @@ import com.gf.common.utils.Constants.Login.ALWAYS_LOGGED
 import com.gf.common.utils.Constants.Login.LOG_EMAIL
 import com.gf.common.utils.Constants.Login.LOG_PASSWORD
 import com.gf.common.utils.Constants.Login.LOG_UID
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SplashFragment : BaseFragment<Frg00SplashBinding>() {
 
-    private val registerVM: RegisterViewModel by activityViewModels()
-    private val mainVM : MainViewModel by activityViewModels()
+    private val registerVM: RegisterViewModel by viewModels()
+    private val mainVM : MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

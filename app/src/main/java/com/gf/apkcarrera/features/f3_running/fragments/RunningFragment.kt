@@ -2,6 +2,7 @@ package com.gf.apkcarrera.features.f3_running.fragments
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.res.ColorStateList
 import android.location.Location
 import android.os.Build
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.R
@@ -20,6 +22,8 @@ import com.gf.apkcarrera.features.f3_running.viewmodel.RunningViewModel
 import com.gf.common.entity.RunningUIState
 import com.gf.common.entity.activity.ActivityModelSimple
 import com.gf.common.entity.activity.ActivityStatus
+import com.gf.common.entity.activity.ActivityType
+import com.gf.common.entity.activity.ActivityType.*
 import com.gf.common.entity.activity.RegistryPoint
 import com.gf.common.extensions.collectFlowOnce
 import com.gf.common.extensions.format
@@ -42,6 +46,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Timer
 
@@ -70,6 +75,8 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     private var distance = 0
     private var points = listOf<List<RegistryPoint>>()
 
+    private var activityType : ActivityType = RUN
+
     private val runningViewModel : RunningViewModel by hiltNavGraphViewModels(R.id.nav_running)
 
     private val fusedLocationProviderClient: FusedLocationProviderClient
@@ -90,6 +97,10 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     companion object {
         private const val MIN_CAM_ZOOM = 16f
         private const val CAM_ZOOM = 18f
+
+        private const val MIN_TIME = 30
+        private const val MIN_DISTANCE = 100
+        private const val MIN_POINTS = 3
 
         fun TextView.setSpeed(speed: Float){
             text = if (speed > 0) {
@@ -135,6 +146,7 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
         with(binding) {
             btMapButton.setOnClickListener {
                 if (STATUS == ActivityStatus.READY || STATUS == ActivityStatus.PAUSE) {
+                    disableActivityType()
                     sendCommandToService(Constants.ACTION_START_OR_RESUME_RUNNING)
                     updateUIRunning()
                 } else if (STATUS == ActivityStatus.RUNNING) {
@@ -144,12 +156,42 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
             }
 
             btFinish.setOnClickListener {
-                if (STATUS == ActivityStatus.PAUSE){
-                    updateUIEnd()
+                // Si lleva muy poco tiempo mensaje de borrar
+                Log.d(TAG, "END\nPoints: ${points.flatten().size}\nTime: ${timeList.sum()}\nDistance: $distance")
+                if (points.flatten().size < MIN_POINTS || timeList.sum() < MIN_TIME || distance < MIN_DISTANCE){
+                    discardRace()
                 }
+
+                else if (STATUS == ActivityStatus.PAUSE)
+                    updateUIEnd()
             }
         }
     }
+
+    private fun discardRace(){
+        showDeleteConfirmationDialog {
+            sendCommandToService(Constants.ACTION_END_RUNNING)
+            baseActivity.navController.popBackStack(R.id.fragmentFeed,false)
+            snackbar(com.gf.common.R.string.race_discarded)
+        }
+    }
+
+    private fun showDeleteConfirmationDialog(onConfirmed: () -> Unit) {
+        AlertDialog.Builder(context)
+            .setMessage(getString(com.gf.common.R.string.discard_short_race_message))
+            .setPositiveButton(getString(com.gf.common.R.string.discard_yes)) { _, _ ->
+                // Llamado cuando el usuario hace clic en "Sí"
+                onConfirmed.invoke()
+            }
+            .setNegativeButton(
+                getString(com.gf.common.R.string.discard_no),
+                null
+            ) // No es necesario especificar una acción para "No"
+            .show()
+
+    }
+
+
 
     // 2.* Localizando usuario
     val locationCallback = object : LocationCallback() {
@@ -214,6 +256,7 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
         timer = startTimerOnMain(2000) { binding.lyLocating.collapse() }
 
         STATUS = ActivityStatus.READY
+        setActivityType()
 
         // Default GOOGLE Location Button -> Invisible
         // val locationButton = hideGoogleLocationButton()
@@ -288,6 +331,7 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
 
         // Se recupera una carrera
         if (recoveredState){
+            disableActivityType()
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
             Log.d(TAG, "updateUI: Recupero ${runningUIState.status}")
             when (runningUIState.status) {
@@ -407,10 +451,57 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
         STATUS = ActivityStatus.STOP
 
         runningViewModel.postActivityModelSimple(
-            ActivityModelSimple(points,timeList,distance)
+            ActivityModelSimple(points,timeList,distance,activityType)
         )
         navigate(R.id.action_fragmentRunning_to_fragmentRunningEnd)
 
+    }
+
+    private fun setActivityType(){
+        val walkIcon = AppCompatResources.getDrawable(requireContext(), com.gf.common.R.drawable.icon_walk)
+        val runIcon = AppCompatResources.getDrawable(requireContext(), com.gf.common.R.drawable.icon_run)
+        val bikeIcon = AppCompatResources.getDrawable(requireContext(), com.gf.common.R.drawable.icon_bike)
+
+        val currentActivityType = (baseActivity as MainActivity).activityType
+
+        activityType = currentActivityType
+
+
+        when (activityType){
+            WALK -> {
+                (baseActivity as MainActivity).binding.actionbarBtActivityType.icon = walkIcon
+            }
+            RUN ->{
+                (baseActivity as MainActivity).binding.actionbarBtActivityType.icon = runIcon
+            }
+            BIKE -> {
+                (baseActivity as MainActivity).binding.actionbarBtActivityType.icon = bikeIcon
+            }
+        }
+
+        baseActivity.setOnActivityTypeByClickListener{
+            when (activityType){
+                WALK -> {
+                    (baseActivity as MainActivity).binding.actionbarBtActivityType.icon = runIcon
+                    activityType = RUN
+
+                }
+                RUN ->{
+                    (baseActivity as MainActivity).binding.actionbarBtActivityType.icon = bikeIcon
+                    activityType = BIKE
+                }
+                BIKE -> {
+                    (baseActivity as MainActivity).binding.actionbarBtActivityType.icon = walkIcon
+                    activityType = WALK
+                }
+            }
+            (baseActivity as MainActivity).activityType = activityType
+        }
+    }
+
+    private fun disableActivityType(){
+        (baseActivity as MainActivity).activityType = activityType
+        (baseActivity as MainActivity).binding.actionbarBtActivityType.invisible()
     }
 
     private val requestMultiplePermissions =

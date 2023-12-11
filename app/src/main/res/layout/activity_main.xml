@@ -57,7 +57,7 @@
                 android:id="@+id/actionbar_bt_activity_type"
                 style="@style/ActionbarButton"
                 tools:visibility="gone"
-                android:checkable="true"
+                android:checkable="false"
                 app:iconSize="35dp"
                 app:icon="@drawable/icon_run" />
 

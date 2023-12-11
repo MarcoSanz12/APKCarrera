@@ -6,12 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.cotesa.common.extensions.notNull
 import com.gf.common.R
+import com.gf.common.extensions.loadFromUrl
 import com.gf.common.utils.ImageZoomView
 
 
 class MultimediaGalleryDialogAdapter(
-    var items: List<Bitmap>,
+    var items: List<Bitmap>? = null,
+    var urls : List<String>? = null,
     var onEndScrolling : (Boolean) -> Unit
 ) :
     RecyclerView.Adapter<MultimediaGalleryDialogAdapter.ViewHolder>() {
@@ -33,7 +36,7 @@ class MultimediaGalleryDialogAdapter(
         holder.ivItem.fitToScreen()
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = items?.size ?: urls?.size ?: 0
 
     fun loadItems(items: List<Bitmap>) {
         this.items = items
@@ -49,9 +52,13 @@ class MultimediaGalleryDialogAdapter(
 
         fun bind(position: Int) {
             mPosition = position
-            Log.d(TAG, "bind: URL: ${items[position]}")
+
             with(ivItem){
-               setImageBitmap(items[position])
+                if (!items.isNullOrEmpty())
+                    setImageBitmap(items!![position])
+                else if (!urls.isNullOrEmpty())
+                    loadFromUrl(urls!![position])
+
                 canScroll = this@MultimediaGalleryDialogAdapter.onEndScrolling
             }
         }

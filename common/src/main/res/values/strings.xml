@@ -114,6 +114,16 @@
     <string name="service_status_movin">En movimiento</string>
     <string name="service_status_paused">Pausado</string>
     <string name="service_status_end">Detenido</string>
+    <string name="race_saved">Carrera guardada exitosamente</string>
+    <string name="race_saved_error">Error al guardar</string>
+    <string name="discard_race_title">Eliminar Actividad</string>
+    <string name="discard_race_message">¿Estás seguro de que quieres eliminar tu carrera actual?</string>
+    <string name="discard_short_race_title">Actividad demasiado corta</string>
+    <string name="discard_short_race_message">¿Llevas muy poco no? Necesitas una actividad más larga para acabar. Continúa o comienza de nuevo</string>
+    <string name="discard_yes">Descartar</string>
+    <string name="discard_no">Reanudar</string>
+    <string name="race_discarded">Carrera eliminada</string>
+
 
     <!-- Fragment04 - Ajustes -->
     <string name="settings_help">Ayuda</string>

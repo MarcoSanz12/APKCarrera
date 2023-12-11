@@ -18,7 +18,9 @@ import com.gf.apkcarrera.databinding.ActivityMainBinding
 import com.gf.apkcarrera.features.f3_running.service.RunningService
 import com.gf.common.dialog.MultimediaDialog
 import com.gf.common.entity.activity.ActivityStatus
+import com.gf.common.entity.activity.ActivityType
 import com.gf.common.extensions.invisible
+import com.gf.common.extensions.navigateToMenuItem
 import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseActivity
 import com.gf.common.utils.Constants.ACTION_END_RUNNING
@@ -39,6 +41,8 @@ class MainActivity : BaseActivity() {
     private val topLevelIds = setOf(R.id.fragmentSplash,R.id.fragmentInitial, R.id.fragmentFeed)
 
     lateinit var binding: ActivityMainBinding
+
+    var activityType = ActivityType.RUN
 
     // VAR UI Elements
     val actionbar : ConstraintLayout by lazy { findViewById(R.id.ly_actionbar) }
@@ -70,14 +74,14 @@ class MainActivity : BaseActivity() {
         // Navegación OG
         NavigationUI.setupWithNavController(binding.bottomNavigationView,navController,false)
 
-        /*
-        Navegación experimental custom
-        with(bottomNavigationView){
+
+       /* Navegación experimental custom*/
+        /*with(bottomNavigationView){
                 setOnItemSelectedListener {
                     navController.navigateToMenuItem(it)
                 }
-            }
-            */
+            }*/
+
 
         // Back Button
         backButton.setOnClickListener {
@@ -141,11 +145,11 @@ class MainActivity : BaseActivity() {
      *
      * @return **True** si la lista no esta vacía o **False** si la lista está vacía
      */
-    fun showZoomableImage(images : List<Bitmap>, position : Int = 0) : Boolean {
-        return if (images.isEmpty() || multimediaDialog?.isShowing == true)
+    fun showZoomableImage(images : List<Bitmap>? = null, urls: List<String>? = null, position : Int = 0) : Boolean {
+        return if ((images.isNullOrEmpty() && urls.isNullOrEmpty()) || multimediaDialog?.isShowing == true)
             false
         else{
-            multimediaDialog = MultimediaDialog(this,images,position)
+            multimediaDialog = MultimediaDialog(this,images,urls,position)
             multimediaDialog!!.show()
             true
         }

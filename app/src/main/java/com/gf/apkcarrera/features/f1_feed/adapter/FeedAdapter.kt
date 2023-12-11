@@ -59,11 +59,6 @@ class FeedAdapter (
         holder.bind(item)
     }
 
-    override fun onViewDetachedFromWindow(holder: ActivityViewHolder) {
-        /*holder.mapView?.onPause()
-        holder.mapView?.onDestroy()*/
-        super.onViewDetachedFromWindow(holder)
-    }
 
 }
 
@@ -102,7 +97,7 @@ class ActivityViewHolder(view: View,
 
 
         // 0. Desplegable
-        if (absoluteAdapterPosition == 0 ||absoluteAdapterPosition == 1)
+        if (absoluteAdapterPosition == 0)
             expandable.expand(false)
         else
             expandable.collapse(false)

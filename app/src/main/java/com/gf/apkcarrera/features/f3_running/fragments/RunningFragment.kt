@@ -11,7 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.activityViewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg03RunningBinding
@@ -70,7 +70,7 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     private var distance = 0
     private var points = listOf<List<RegistryPoint>>()
 
-    private val runningViewModel : RunningViewModel by activityViewModels()
+    private val runningViewModel : RunningViewModel by hiltNavGraphViewModels(R.id.nav_running)
 
     private val fusedLocationProviderClient: FusedLocationProviderClient
         get() = LocationServices.getFusedLocationProviderClient(requireContext())
@@ -405,14 +405,12 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
         Log.d(TAG, "updateUIEnd: UI End")
         timer?.cancel()
         STATUS = ActivityStatus.STOP
-        map.snapshot {bitmap->
-            bitmap ?: return@snapshot
 
-            runningViewModel.postActivityModelSimple(
-                ActivityModelSimple(points,timeList,distance)
-            )
-            navigate(R.id.action_fragmentRunning_to_fragmentRunningEnd)
-        }
+        runningViewModel.postActivityModelSimple(
+            ActivityModelSimple(points,timeList,distance)
+        )
+        navigate(R.id.action_fragmentRunning_to_fragmentRunningEnd)
+
     }
 
     private val requestMultiplePermissions =

@@ -126,6 +126,7 @@ dependencies {
     api("com.google.firebase:firebase-auth-ktx")
     api("com.google.firebase:firebase-analytics-ktx")
     api("com.google.firebase:firebase-crashlytics-ktx")
+    api("com.google.firebase:firebase-storage-ktx")
 
 
 }

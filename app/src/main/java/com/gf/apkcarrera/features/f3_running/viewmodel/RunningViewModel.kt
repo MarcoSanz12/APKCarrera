@@ -1,5 +1,6 @@
 package com.gf.apkcarrera.features.f3_running.viewmodel
 
+import android.graphics.Bitmap
 import com.gf.apkcarrera.features.f3_running.usecase.SaveActivityUseCase
 import com.gf.common.entity.activity.ActivityModel
 import com.gf.common.entity.activity.ActivityModelSimple
@@ -27,8 +28,8 @@ class RunningViewModel @Inject constructor(
             _activityModelSimple.emit(activityModelSimple)
         }
 
-    fun uploadActivityModel(activityModel: ActivityModel) =
+    fun uploadActivityModel(activityModel: ActivityModel,imagesBitmap : List<Bitmap>) =
         launch {
-            _uploadedActivityResponse.emit(saveActivityUseCase(activityModel))
+            _uploadedActivityResponse.emit(saveActivityUseCase(activityModel,imagesBitmap))
         }
 }

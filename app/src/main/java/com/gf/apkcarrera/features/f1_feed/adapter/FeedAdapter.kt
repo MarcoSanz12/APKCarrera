@@ -1,7 +1,6 @@
 package com.gf.apkcarrera.features.f1_feed.adapter
 
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,17 +10,16 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.cotesa.common.extensions.toBitmap
 import com.gf.apkcarrera.R
-import com.gf.apkcarrera.features.f3_running.adapter.RunningImagesAdapter
-import com.gf.common.entity.activity.ActivityImage
 import com.gf.common.entity.activity.ActivityModel
 import com.gf.common.entity.activity.ActivityType
-import com.gf.common.entity.activity.ActivityType.*
-import com.gf.common.entity.activity.RegistryField
+import com.gf.common.entity.activity.ActivityType.BIKE
+import com.gf.common.entity.activity.ActivityType.RUN
+import com.gf.common.entity.activity.ActivityType.WALK
 import com.gf.common.entity.activity.RegistryPoint
+import com.gf.common.entity.feed.FeedImage
 import com.gf.common.entity.user.UserModel
 import com.gf.common.extensions.adjustCamera
 import com.gf.common.extensions.assignAnimatedAdapter
@@ -31,21 +29,17 @@ import com.gf.common.extensions.visible
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.firebase.firestore.auth.User
 import net.cachapa.expandablelayout.ExpandableLayout
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import javax.inject.Inject
-import kotlin.math.atan
 
 class FeedAdapter (
     val userId : String,
-    val onImageClick : (images:List<Bitmap>, position : Int) -> Unit,
+    val onImageClick : (images:List<FeedImage>, position : Int) -> Unit,
     val onProfileClick : (user : UserModel) -> Unit
 ) :
     PagingDataAdapter<Pair<ActivityModel,UserModel>, ActivityViewHolder>(ActivityModelComparator) {
@@ -54,6 +48,7 @@ class FeedAdapter (
         viewType: Int
     ): ActivityViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_activity,parent,false)
+
         return ActivityViewHolder(view,userId,onImageClick,onProfileClick)
     }
 
@@ -64,17 +59,17 @@ class FeedAdapter (
         holder.bind(item)
     }
 
-    override fun onViewRecycled(holder: ActivityViewHolder) {
-        holder.mapView?.onPause()
-        holder.mapView?.onDestroy()
-        super.onViewRecycled(holder)
+    override fun onViewDetachedFromWindow(holder: ActivityViewHolder) {
+        /*holder.mapView?.onPause()
+        holder.mapView?.onDestroy()*/
+        super.onViewDetachedFromWindow(holder)
     }
 
 }
 
 class ActivityViewHolder(view: View,
                          val userId : String,
-                         val onImageClick : (images:List<Bitmap>, position : Int) -> Unit,
+                         val onImageClick : (images:List<FeedImage>, position : Int) -> Unit,
                          val onProfileClick : (user : UserModel) -> Unit) : RecyclerView.ViewHolder(view) {
 
     private lateinit var googleMap : GoogleMap
@@ -95,18 +90,32 @@ class ActivityViewHolder(view: View,
         val tvFav1 = this.itemView.findViewById<TextView>(R.id.tv_fav1)
         val btFav1 = this.itemView.findViewById<Button>(R.id.bt_fav1)
         val blueBar = this.itemView.findViewById<View>(R.id.blue_bar)
+        val whiteBar = this.itemView.findViewById<View>(R.id.white_bar)
         val tvFav2 = this.itemView.findViewById<TextView>(R.id.tv_fav2)
         val btFav2 = this.itemView.findViewById<Button>(R.id.bt_fav2)
         val btDeploy = this.itemView.findViewById<AppCompatImageButton>(R.id.bt_deploy)
         val ivType = this.itemView.findViewById<ImageView>(R.id.iv_type)
         val rvList = this.itemView.findViewById<RecyclerView>(R.id.rv_list)
         val expandable = this.itemView.findViewById<ExpandableLayout>(R.id.expandable)
-        mapView = this.itemView.findViewById<MapView>(R.id.map)
+        mapView = this.itemView.findViewById(R.id.map)
         val cvMap = this.itemView.findViewById<MaterialCardView>(R.id.cv_map)
 
 
         // 0. Desplegable
-        btDeploy.setOnClickListener {
+        if (absoluteAdapterPosition == 0 ||absoluteAdapterPosition == 1)
+            expandable.expand(false)
+        else
+            expandable.collapse(false)
+
+        val arrow = if (expandable.isExpanded)
+            com.gf.common.R.drawable.small_arrow_up
+        else
+            com.gf.common.R.drawable.small_arrow_down
+
+        btDeploy.setImageResource(arrow)
+
+
+        whiteBar.setOnClickListener {
             expandable.toggle()
 
             val resource = if (expandable.isExpanded)
@@ -150,9 +159,9 @@ class ActivityViewHolder(view: View,
 
         // 9. Imágenes
         if (activity.images.isNotEmpty()){
-            rvList.assignAnimatedAdapter(FeedImagesAdapter(activity.images.map { ActivityImage(
+            rvList.assignAnimatedAdapter(FeedImagesAdapter(activity.images.map { FeedImage(
                 id = activity.images.indexOf(it),
-                image = it.toBitmap()!!)
+                url = it)
             },
                 onImageClick = onImageClick),
                 com.gf.common.R.anim.animation_layout_fade_in,
@@ -191,7 +200,7 @@ class ActivityViewHolder(view: View,
         // 11. Click perfil
 
         val color = if (userId == user.uid)
-            itemView.context.getColor(com.gf.common.R.color.purple_secondary)
+            itemView.context.getColor(com.gf.common.R.color.statistic4)
         else
             itemView.context.getColor(com.gf.common.R.color.blue_primary)
 
@@ -233,7 +242,7 @@ class ActivityViewHolder(view: View,
                 val segundos = ((minkm * 60) % 60).toInt()
 
                 // Formatea la cadena en "mm:ss"
-                String.format("%02d %02d min/km", minutos, segundos)
+                String.format("%02d:%02d min/km", minutos, segundos)
             }
         }
     }

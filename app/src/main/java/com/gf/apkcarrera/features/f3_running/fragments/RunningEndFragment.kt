@@ -3,10 +3,9 @@ package com.gf.apkcarrera.features.f3_running.fragments
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.activityViewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cotesa.common.extensions.toBase64
 import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg03RunningEndBinding
@@ -36,7 +35,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
 
-    private val runningViewModel : RunningViewModel by activityViewModels()
+    private val runningViewModel : RunningViewModel by hiltNavGraphViewModels(R.id.nav_running)
     private lateinit var adapter : RunningImagesAdapter
 
 
@@ -47,7 +46,7 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
 
     override fun initObservers() {
         with(runningViewModel){
-            collectFlow(activityModelSimple,Lifecycle.State.STARTED,::activityLoaded)
+            collectFlow(activityModelSimple, Lifecycle.State.STARTED,::activityLoaded)
             collectFlowOnce(uploadedActivityResponse,::activitySaved)
         }
     }
@@ -88,9 +87,6 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
             // Puntos
             points = activityModelSimple.points.toRegistryFields()
 
-            // Imágenes
-            images = adapter.resourceListFiltered.map { it.image.toBase64() }
-
             // Distancia
             distance = activityModelSimple.distance
 
@@ -101,7 +97,10 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
             visibility = binding.btVisibility.isChecked
         }
 
-        runningViewModel.uploadActivityModel(activityModel)
+        // Imágenes
+        val imagesBitmap = adapter.resourceListFiltered.map { it.image }
+
+        runningViewModel.uploadActivityModel(activityModel,imagesBitmap)
     }
 
     private fun activitySaved(genericResponse: GenericResponse) {

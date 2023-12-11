@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:clipChildren="false"
     android:clipToPadding="false"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="20dp"
     app:cardElevation="10dp"
     app:cardBackgroundColor="@color/white"
     app:layout_constraintEnd_toEndOf="parent"
@@ -44,10 +44,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
+            android:id="@+id/white_bar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="@id/ly_stats"
+            app:layout_constraintBottom_toBottomOf="@id/bt_deploy"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/gl_header" />
 
@@ -116,8 +117,10 @@
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/ly_stats"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="60dp"
             android:paddingBottom="15dp"
+            android:clickable="false"
+            android:focusable="false"
             android:layout_marginHorizontal="30dp"
             app:justifyContent="space_around"
             android:orientation="horizontal"
@@ -260,8 +263,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="15dp"
-            app:el_expanded="false"
-            tools:visibility="gone"
+            app:el_expanded="true"
+            tools:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ly_stats" >
@@ -287,6 +290,7 @@
                         android:clipChildren="false"
                         android:clipToPadding="false"
                         android:overScrollMode="never"
+                        android:gravity="center_vertical"
                         android:layout_marginTop="10dp"
                         android:showDividers="middle"
                         android:orientation="horizontal">
@@ -378,11 +382,7 @@
 
                     </androidx.appcompat.widget.LinearLayoutCompat>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
             </LinearLayout>
-
         </net.cachapa.expandablelayout.ExpandableLayout>
 
         <androidx.appcompat.widget.AppCompatImageButton
@@ -390,10 +390,11 @@
             android:layout_width="match_parent"
             android:layout_height="15dp"
             android:background="@color/purple_secondary"
+            android:clickable="false"
+            android:focusable="false"
             android:src="@drawable/small_arrow_down"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

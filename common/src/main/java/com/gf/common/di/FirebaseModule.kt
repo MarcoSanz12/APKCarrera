@@ -4,6 +4,7 @@ import android.content.Context
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,4 +28,8 @@ class FirebaseModule {
     @Singleton
     @Provides
     fun provideFirebaseFirestore():FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    @Singleton
+    @Provides
+    fun provideFirebaseImages() : FirebaseStorage = FirebaseStorage.getInstance()
 }

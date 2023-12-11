@@ -1,6 +1,5 @@
 package com.gf.common.entity.activity
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.gf.common.entity.Model
@@ -16,9 +15,9 @@ class ActivityModel() : Model() {
         timestamp = doc.get("timestamp") as Long
         title = doc.get("title") as String
         type = if ((doc.get("type") as? String) != null)
-                ActivityType.valueOf(doc.get("type") as String)
-            else
-                ActivityType.RUN
+            ActivityType.valueOf(doc.get("type") as String)
+        else
+            ActivityType.RUN
         points = doc.get("points") as List<RegistryField>
         images = doc.get("images") as List<String>
         time = doc.get("time") as List<Int>

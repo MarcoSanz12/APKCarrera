@@ -19,6 +19,12 @@
         android:id="@+id/fragmentFeed"
         android:name="com.gf.apkcarrera.features.f1_feed.fragment.FeedFragment"
         android:label="@string/title_feed"
-        tools:layout="@layout/frg01_feed" />
+        tools:layout="@layout/frg01_feed" >
+        <argument
+            android:name="uid"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
 
 </navigation>

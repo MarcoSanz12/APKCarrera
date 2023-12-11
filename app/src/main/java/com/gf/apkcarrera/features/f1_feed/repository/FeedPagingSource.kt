@@ -6,14 +6,13 @@ import androidx.paging.PagingState
 import com.gf.common.db.APKCarreraDatabase
 import com.gf.common.entity.activity.ActivityModel
 import com.gf.common.entity.user.UserModel
-import com.gf.common.response.FeedResponse
 import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
 
 class FeedPagingSource(
+    val targetId : String?,
     val userId : String,
     val friendsIds : List<String>,
     val firestore : FirebaseFirestore,
@@ -30,9 +29,14 @@ class FeedPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Pair<ActivityModel,UserModel>> {
         val nextPageNumber = params.key ?: 1
 
-        val allIds = friendsIds.toMutableList().apply{
-            add(userId)
-        }
+        val allIds : List<String> = if (targetId == null)
+            friendsIds.toMutableList().apply{
+                add(userId)
+            }
+        else
+            listOf(targetId)
+
+        Log.d(TAG, "Actividades de amigos[${allIds.size}]: ${allIds}")
 
         return try {
             val friendActivities = firestore.collection("activities")
@@ -72,7 +76,7 @@ class FeedPagingSource(
             }
 
 
-            Log.d(TAG, "Emitiendo pagingData")
+            Log.d(TAG, "Emitiendo pagingData\nResultados [${result.size}]")
             LoadResult.Page(
                 data = result,
                 prevKey = null,

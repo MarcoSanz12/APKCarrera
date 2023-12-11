@@ -60,6 +60,9 @@ class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
 
             // Estadisticas
             btStats.setOnClickListener { navigate(R.id.action_fragmentProfile_to_statFragment) }
+
+            // Actividades
+            btActivities.setOnClickListener{navigate(ProfileFragmentDirections.actionGlobalNavFeed(profile.uid))}
         }
     }
     private fun error(){

@@ -8,7 +8,7 @@ import com.gf.common.dialog.LoadingDialog
 abstract class BaseActivity : AppCompatActivity() {
 
     abstract val navController : NavController
-    abstract val actionBarTitle : String
+    abstract var actionBarTitle : String
     private var loadingDialog : LoadingDialog? = null
 
     fun showLoadingDialog(msg:String){

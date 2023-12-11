@@ -15,6 +15,12 @@ object Constants {
         const val LOG_UID = "LOG_UID"
     }
 
+    const val LANGUAGE: String = "LANGUAGE"
+    const val LANGUAGE_ES: String = "es" //español
+    const val LANGUAGE_FR: String = "fr" //francés
+    const val LANGUAGE_EN: String = "en" //inglés
+    const val LANGUAGE_CA: String = "ca" //catalan
+
     const val ACTION_START_OR_RESUME_RUNNING = "ACTION_START_OR_RESUME_RUNNING"
     const val ACTION_PAUSE_RUNNING = "ACTION_PAUSE_RUNNING"
     const val ACTION_STOP_RUNNING = "ACTION_STOP_RUNNING"

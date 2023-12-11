@@ -414,6 +414,7 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     private fun updateUIRunning(){
         Log.d(TAG, "updateUIRunning: UI Corriendo")
         with(binding){
+            actionBarTitle = getString(com.gf.common.R.string.service_status_movin)
             btFinish.invisible()
             lyInfoPanel.expand()
 
@@ -433,6 +434,7 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
     private fun updateUIPause(){
         Log.d(TAG, "updateUIPause: UI Pausada")
         with(binding){
+            actionBarTitle = getString(com.gf.common.R.string.service_status_paused)
             btFinish.visible()
             lyInfoPanel.visible()
             btMapButton.apply {
@@ -447,6 +449,7 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
 
     private fun updateUIEnd() {
         Log.d(TAG, "updateUIEnd: UI End")
+        actionBarTitle = getString(com.gf.common.R.string.service_status_paused)
         timer?.cancel()
         STATUS = ActivityStatus.STOP
 

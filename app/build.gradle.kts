@@ -16,6 +16,7 @@ android {
 
 
     defaultConfig {
+        resourceConfigurations += listOf("es", "en", "fr", "ca")
         applicationId = "com.gf.apkcarrera"
         minSdk = 26
         //noinspection EditedTargetSdkVersion

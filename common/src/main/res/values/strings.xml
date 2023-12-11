@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- TITULOS -->
     <string name="title_login">Iniciar sesión</string>
     <string name="title_register">Crear cuenta</string>
@@ -37,7 +37,7 @@
     <string name="forgot_password">¿Has olvidado la contraseña?\n¡Pulse aquí!</string>
     <string name="please_introduce_data">Por favor introduzca los datos de su cuenta APKCarrera.</string>
     <string name="we_are_almost_done">¡Ya casi estamos!</string>
-    <string name="we_are_almost_done2">¿Por qué no le das a tu cuenta un nombre y le pones una foto?\n¡No te preocupes si te equivocas, podrás cambiarlo más adelante!</string>
+    <string name="we_are_almost_done_two">¿Por qué no le das a tu cuenta un nombre y le pones una foto?\n¡No te preocupes si te equivocas, podrás cambiarlo más adelante!</string>
     <string name="recover_password_msg">Introduzca su correo electrónico, si tiene una cuenta asociada recibirá un correo con la información para recuperarla en los próximos minutos.</string>
     <string name="my_name">Mi nombre</string>
     <string name="version">Versión %s</string>
@@ -127,6 +127,7 @@
 
     <!-- Fragment04 - Ajustes -->
     <string name="settings_help">Ayuda</string>
+    <string name="settings_language">Idioma</string>
     <string name="settings_logout">Cerrar sesión</string>
     <string name="logout_succesful">Sesión cerrada</string>
     <string name="loggin_out">Cerrando sesión\nEspere porfavor</string>
@@ -150,6 +151,11 @@
     <string name="visibilty_default_on">Esta actividad será visible para tus amigos</string>
     <string name="wanted_message">¡Vaya! No hemos podido encontrar a tu amig@</string>
 
+    <!-- Idiomas -->
+    <string name="castellano" translatable="false">Castellano</string>
+    <string name="catalan" translatable="false">Catalán</string>
+    <string name="ingles" translatable="false">Inglés</string>
+    <string name="frances" translatable="false">Francés</string>
 
     <string-array name="visibility_message_on">
         <item>¡Todo el mundo contemplará tus hazañas!</item>
@@ -164,6 +170,11 @@
         <item>Escondámosla, no queremos darles envidia</item>
     </string-array>
 
-
+    <!-- Fragments -->
+    <string name="fragment_actividades">Actividades</string>
+    <string name="fragment_registrar_actividad">Registrar actividad</string>
+    <string name="fragment_estadisticas">Estadísticas</string>
+    <string name="fragment_perfil">Mi Perfil</string>
+    <string name="fragment_add_friend">Añadir amigos</string>
 
 </resources>

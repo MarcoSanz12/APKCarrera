@@ -45,12 +45,14 @@ class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
             profile = profileResponse.user
             activities = profileResponse.activityList
             loadProfile()
+
         }
         else
             error()
     }
 
     private fun loadProfile(){
+        actionBarTitle = profile.name
         with (binding){
             // Nombre
             tvName.text = profile.name

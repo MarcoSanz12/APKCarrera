@@ -39,6 +39,8 @@ class FeedFragment : BaseFragment<Frg01FeedBinding>() {
     }
 
 
+
+
     override fun initObservers() {
         with(viewModel){
             collectFlowOnce(failureState,::onFeedFailure)

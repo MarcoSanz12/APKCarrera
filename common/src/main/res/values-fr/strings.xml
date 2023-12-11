@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TITRES -->
+    <string name="title_login">Se connecter</string>
+    <string name="title_register">Créer un compte</string>
+    <string name="title_recover_account">Récupérer le compte</string>
+    <string name="title_feed">Activités</string>
+    <string name="title_activity">Activité</string>
+    <string name="title_friends">Amis</string>
+    <string name="title_friends_requests">Demandes</string>
+    <string name="title_friends_add">Ajouter un ami</string>
+    <string name="todos">Tout</string>
+
+    <!-- BottomNavigationView -->
+    <string name="bnv_feed">Accueil</string>
+    <string name="bnv_friends">Amis</string>
+    <string name="bnv_register">S\'inscrire</string>
+    <string name="bnv_settings">Paramètres</string>
+    <string name="bnv_profile">Mon profil</string>
+
+    <!-- Fragment00 - Inscription / Connexion -->
+    <string name="app_name">APKCarrera</string>
+    <string name="welcome_message_1">Bienvenue sur APKCarrera !</string>
+    <string name="welcome_message_2">Pour utiliser l\'application, vous devez avoir un compte enregistré</string>
+    <string name="username">Nom d\'utilisateur</string>
+    <string name="email">E-mail</string>
+    <string name="password">Mot de passe</string>
+    <string name="repeat_password">Répétez votre mot de passe</string>
+    <string name="i_read_terms">J\'ai lu les termes et conditions d\'APKCarrera et j'accepte.</string>
+    <string name="register">S\'inscrire</string>
+    <string name="login">Connexion</string>
+    <string name="accept">Accepter</string>
+    <string name="already_have_account">Déjà un compte ?</string>
+    <string name="dont_have_account">Pas de compte ?</string>
+    <string name="forgot_password">Mot de passe oublié ?\nCliquez ici !</string>
+    <string name="please_introduce_data">Veuillez entrer les informations de votre compte APKCarrera.</string>
+    <string name="we_are_almost_done">Nous y sommes presque !</string>
+    <string name="we_are_almost_done_two">Pourquoi ne pas donner un nom à votre compte et y mettre une photo?\nPas de souci si vous faites une erreur, vous pourrez le changer plus tard !</string>
+    <string name="recover_password_msg">Entrez votre e-mail, si vous avez un compte associé, vous recevrez un e-mail avec les informations pour le récupérer dans les prochaines minutes.</string>
+    <string name="my_name">Mon nom</string>
+    <string name="version">Version %s</string>
+    <string name="user_exists">Un utilisateur est déjà enregistré avec cet e-mail/nom d\'utilisateur</string>
+    <string name="verify_email_not_valid">L\'e-mail n\'est pas valide</string>
+    <string name="verify_username_not_long">Le nom d\'utilisateur doit avoir au moins 6 caractères</string>
+    <string name="verify_password_not_long">Le mot de passe doit avoir au moins 6 caractères</string>
+    <string name="verify_name_not_long">Le nom ne peut pas avoir moins de 6 caractères</string>
+    <string name="verify_password_not_match">Les mots de passe ne correspondent pas</string>
+    <string name="verify_field_required">Champ requis</string>
+    <string name="verify_field_already_used">Déjà utilisé</string>
+    <string name="verify_terms_condicions">Vous devez accepter les termes et conditions</string>
+    <string name="keep_logged_in">Me garder connecté</string>
+    <string name="generic_error">Une erreur s\'est produite</string>
+    <string name="select_camera_method">Sélectionner la méthode</string>
+    <string name="no_camera">Impossible de détecter la caméra du périphérique</string>
+    <string name="loading_signing_in">Connexion en cours</string>
+    <string name="loading_signing_up">Création du compte</string>
+    <string name="expandable_tag_search" translatable="false">EXPANDABLE_TAG_SEARCH</string>
+    <string name="expandable_tag_filter" translatable="false">EXPANDABLE_TAG_FILTER</string>
+
+    <!-- Fragment02 - Amis -->
+    <string name="last_activity_minutes">Dernière activité : il y a %d minutes.</string>
+    <string name="last_activity_hours">Dernière activité : il y a %d heures.</string>
+    <string name="last_activity_days">Dernière activité : il y a %d jours.</string>
+    <string name="last_activity_weeks">Dernière activité : il y a %d semaines.</string>
+    <string name="last_activity_months">Dernière activité : il y a %d mois.</string>
+    <string name="last_activity_years">Dernière activité : il y a %d ans.</string>
+    <string name="stat_distance_activity">Distance</string>
+    <string name="stat_rythm_activity">Rythme</string>
+    <string name="stat_time_activity">Temps</string>
+    <string name="add_friend">AJOUTER</string>
+    <string name="cancel_friend">ANNULER LA DEMANDE</string>
+    <string name="tab_friends">Amis</string>
+    <string name="tab_requests">Demandes</string>
+    <string name="search_placeholder">Rechercher...</string>
+    <string name="search_in_progress">Recherche d\'amis en cours</string>
+    <string name="search_min_chars">Entrez un minimum de 3 caractères</string>
+    <string name="friend_sending_request">Envoi de la demande</string>
+    <string name="friend_cancel_request">Annulation de la demande</string>
+    <string name="friend_accepting_request">Acceptation de la demande</string>
+    <string name="friend_removing">Suppression de l\'ami</string>
+    <string name="friend_removing_snackbar">Supprimé(e) avec succès : %s.</string>
+    <string name="friend_ignoring_request">Ignorer la demande</string>
+    <string name="friend_canceling_request">Envoi de la demande</string>
+    <string name="friend_no_requests">Vous n\'avez aucune demande en attente</string>
+    <string name="friend_no_friends">La liste est vide</string>
+
+    <!-- Fragment03 - Enregistrer l'activité -->
+    <string name="error_no_location">Impossible d\'accéder à la localisation GPS du périphérique</string>
+    <string name="google_maps_key">AIzaSyAfzS0tFJwWGDVg2GZ0IP7eLLasTI-inPg</string>
+    <string name="panel_time">TEMPS</string>
+    <string name="panel_distance">Distance <font size="10">(km)</font></string>
+    <string name="panel_speed">Rythme <font size="10">(min/km)</font></string>
+    <string name="panel_stat_format">%s:%s</string>
+    <string name="btmap_iniciar">Démarrer</string>
+    <string name="btmap_detener">Arrêter</string>
+    <string name="btmap_reanudar">Reprendre</string>
+    <string name="btmap_finalizar">Terminer</string>
+    <string name="obtaining_gps">OBTENTION DE LA LOCALISATION GPS</string>
+    <string name="obtaining_gps_done">LOCALISATION GPS OBTENUE !</string>
+    <string name="end_give_title">Donnez un titre à votre activité !</string>
+    <string name="end_stat_distance">Distance</string>
+    <string name="end_stat_time">Temps de déplacement</string>
+    <string name="end_stat_rythm">Rythme</string>
+    <string name="end_stat_max_speed">Vitesse maximale</string>
+    <string name="end_stat_desnivel">Dénivelé positif</string>
+    <string name="end_stat_max_altitude">Altitude maximale</string>
+    <string name="end_message">Félicitations !</string>
+    <string name="end_button_discard">IGNORER</string>
+    <string name="end_button_end">TERMINER</string>
+    <string name="service_status_movin">En mouvement</string>
+    <string name="service_status_paused">En pause</string>
+    <string name="service_status_end">Arrêté</string>
+    <string name="race_saved">Course enregistrée avec succès</string>
+    <string name="race_saved_error">Erreur lors de l\'enregistrement de la course</string>
+    <string name="discard_race_title">Ignorer l\'activité</string>
+    <string name="discard_race_message">Êtes-vous sûr de vouloir ignorer votre course actuelle ?</string>
+    <string name="discard_short_race_title">Activité trop courte</string>
+    <string name="discard_short_race_message">Est-ce trop court ? Vous avez besoin d\'une activité plus longue pour terminer. Continuer ou recommencer</string>
+    <string name="discard_yes">Ignorer</string>
+    <string name="discard_no">Reprendre</string>
+    <string name="race_discarded">Course ignorée</string>
+
+    <!-- Fragment04 - Paramètres -->
+    <string name="settings_help">Aide</string>
+    <string name="settings_language">Langue</string>
+    <string name="settings_logout">Se déconnecter</string>
+    <string name="logout_succesful">Déconnecté</string>
+    <string name="loggin_out">Déconnexion\nVeuillez patienter</string>
+
+    <!-- Fragment05 - Profil -->
+    <string name="profile_activities">ACTIVITÉS</string>
+    <string name="profile_add_friend">AJOUTER UN AMI</string>
+    <string name="profile_remove_friend">SUPPRIMER UN AMI</string>
+    <string name="profile_statistics">Statistiques</string>
+
+    <!-- Statistiques -->
+    <string name="statistics_week">CETTE SEMAINE</string>
+    <string name="statistics_year">CETTE ANNÉE</string>
+    <string name="statistics_all">TOUT</string>
+    <string name="statistics_count">Activités :</string>
+    <string name="statistics_time_total">Temps :</string>
+    <string name="statistics_distance_total">Distance :</string>
+    <string name="statistics_speed_average">Vitesse moyenne :</string>
+
+    <!-- Messages de visibilité -->
+    <string name="visibilty_default_on">Cette activité sera visible par vos amis</string>
+    <string name="wanted_message">Oops ! Nous n\'avons pas pu trouver votre ami</string>
+
+    <!-- Langues -->
+    <string name="castellano" translatable="false">Espagnol</string>
+    <string name="catalan" translatable="false">Catalan</string>
+    <string name="ingles" translatable="false">Anglais</string>
+    <string name="frances" translatable="false">Français</string>
+
+    <string-array name="visibility_message_on">
+        <item>Tout le monde admirera vos exploits !</item>
+        <item>Cette activité sera visible par vos amis</item>
+        <item>Montrez votre progrès !</item>
+    </string-array>
+
+    <string-array name="visibility_message_off">
+        <item>Ne vous inquiétez pas, personne ne connaîtra vos secrets</item>
+        <item>Cette activité sera visible uniquement par vous</item>
+        <item>Cachons-le, nous ne voulons pas les rendre jaloux</item>
+    </string-array>
+
+    <!-- Fragments -->
+    <string name="fragment_actividades">Activités</string>
+    <string name="fragment_registrar_actividad">Enregistrer l\'activité</string>
+    <string name="fragment_estadisticas">Statistiques</string>
+    <string name="fragment_perfil">Mon Profil</string>
+    <string name="fragment_add_friend">Ajouter des Amis</string>
+</resources>

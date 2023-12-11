@@ -25,7 +25,7 @@
     <fragment
         android:id="@+id/fragmentProfile"
         android:name="com.gf.apkcarrera.features.f5_profile.fragments.ProfileFragment"
-        android:label="FragmentProfile"
+        android:label="@string/bnv_profile"
         tools:layout="@layout/frg05_profile">
         <action
             android:id="@+id/action_fragmentProfile_to_statFragment"
@@ -34,12 +34,12 @@
     <fragment
         android:id="@+id/statFragment"
         android:name="com.gf.apkcarrera.features.f5_profile.fragments.statistics.StatFragment"
-        android:label="StatFragment"
+        android:label="@string/fragment_estadisticas"
         tools:layout="@layout/frg05_profile_stats"/>
     <fragment
         android:id="@+id/statDataFragment"
         android:name="com.gf.apkcarrera.features.f5_profile.fragments.statistics.StatDataFragment"
-        android:label="StatDataFragment"
+        android:label="@string/fragment_estadisticas"
         tools:layout="@layout/frg05_profile_stats_data"/>
 
 </navigation>

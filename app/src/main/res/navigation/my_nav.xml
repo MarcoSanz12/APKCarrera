@@ -46,8 +46,18 @@
     <fragment
         android:id="@+id/fragmentSettings"
         android:name="com.gf.apkcarrera.features.f4_settings.fragments.SettingsFragment"
-        android:label="FragmentSettings"
-        tools:layout="@layout/frg04_settings" />
+        android:label="@string/bnv_settings"
+        tools:layout="@layout/frg04_settings" >
+        <action
+            android:id="@+id/action_fragmentSettings_to_settingsLanguageFragment"
+            app:destination="@id/settingsLanguageFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsLanguageFragment"
+        android:name="com.gf.apkcarrera.features.f4_settings.fragments.SettingsLanguageFragment"
+        android:label="@string/settings_language"
+        tools:layout="@layout/frg04_settings_language"/>
     <!-- 05_Perfil -->
     <include app:graph="@navigation/nav_profile"/>
     <!-- Navigation Registro -->
@@ -96,5 +106,7 @@
             tools:layout="@layout/frg01_feed" />
     </navigation>
     <include app:graph="@navigation/nav_friends"/>
+
+
 
 </navigation>

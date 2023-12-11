@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- TÍTOLS -->
+    <string name="title_login">Inicia la sessió</string>
+    <string name="title_register">Crea un compte</string>
+    <string name="title_recover_account">Recupera el compte</string>
+    <string name="title_feed">Activitats</string>
+    <string name="title_activity">Activitat</string>
+    <string name="title_friends">Amics</string>
+    <string name="title_friends_requests">Sol·licituds</string>
+    <string name="title_friends_add">Afegeix amic</string>
+    <string name="todos">Tots</string>
+
+    <!-- BottomNavigationView -->
+    <string name="bnv_feed">Inici</string>
+    <string name="bnv_friends">Amics</string>
+    <string name="bnv_register">Registra\'t</string>
+    <string name="bnv_settings">Configuració</string>
+    <string name="bnv_profile">El meu perfil</string>
+
+    <!-- Fragment00 - Registrar / Iniciar sessió -->
+    <string name="app_name">APKCarrera</string>
+    <string name="welcome_message_1">Benvingut a APKCarrera!</string>
+    <string name="welcome_message_2">Per utilitzar l\'aplicació, has de tenir un compte registrat</string>
+    <string name="username">Nom d\'usuari</string>
+    <string name="email">Correu electrònic</string>
+    <string name="password">Contrasenya</string>
+    <string name="repeat_password">Repeteix la contrasenya</string>
+    <string name="i_read_terms">He llegit els termes i condicions d\'APKCarrera i hi estic d'acord.</string>
+    <string name="register">Registra\'t</string>
+    <string name="login">Inicia la sessió</string>
+    <string name="accept">Accepta</string>
+    <string name="already_have_account">Ja tens compte?</string>
+    <string name="dont_have_account">No tens compte?</string>
+    <string name="forgot_password">Has oblidat la contrasenya?\nFes clic aquí!</string>
+    <string name="please_introduce_data">Si us plau, introdueix les dades del teu compte APKCarrera.</string>
+    <string name="we_are_almost_done">Ja hi som gairebé!</string>
+    <string name="we_are_almost_done_two">Per què no poses un nom al teu compte i hi poses una foto?\nNo t'amoïnis si et confons, podràs canviar-ho més endavant!</string>
+    <string name="recover_password_msg">Introdueix el teu correu electrònic, si tens un compte associat, rebràs un correu amb la informació per recuperar-lo en els pròxims minuts.</string>
+    <string name="my_name">El meu nom</string>
+    <string name="version">Versió %s</string>
+    <string name="user_exists">Ja existeix un usuari registrat amb aquest correu/nom</string>
+    <string name="verify_email_not_valid">El correu electrònic no és vàlid</string>
+    <string name="verify_username_not_long">El nom d\'usuari ha de tenir com a mínim 6 caràcters</string>
+    <string name="verify_password_not_long">La contrasenya ha de tenir com a mínim 6 caràcters</string>
+    <string name="verify_name_not_long">El nom no pot tenir menys de 6 caràcters</string>
+    <string name="verify_password_not_match">Les contrasenyes no coincideixen</string>
+    <string name="verify_field_required">Camp obligatori</string>
+    <string name="verify_field_already_used">Ja està sent utilitzat</string>
+    <string name="verify_terms_condicions">Has d\'acceptar els termes i condicions</string>
+    <string name="keep_logged_in">Mantén la sessió iniciada</string>
+    <string name="generic_error">S\'ha produït un error</string>
+    <string name="select_camera_method">Selecciona el mètode</string>
+    <string name="no_camera">No s\'ha pogut detectar la càmera del dispositiu</string>
+    <string name="loading_signing_in">Iniciant sessió</string>
+    <string name="loading_signing_up">Creant compte</string>
+    <string name="expandable_tag_search" translatable="false">EXPANDABLE_TAG_SEARCH</string>
+    <string name="expandable_tag_filter" translatable="false">EXPANDABLE_TAG_FILTER</string>
+
+    <!-- Fragment02 - Amics -->
+    <string name="last_activity_minutes">Última activitat: Fa %d minuts.</string>
+    <string name="last_activity_hours">Última activitat: Fa %d hores.</string>
+    <string name="last_activity_days">Última activitat: Fa %d dies.</string>
+    <string name="last_activity_weeks">Última activitat: Fa %d setmanes.</string>
+    <string name="last_activity_months">Última activitat: Fa %d mesos.</string>
+    <string name="last_activity_years">Última activitat: Fa %d anys.</string>
+    <string name="stat_distance_activity">Distància</string>
+    <string name="stat_rythm_activity">Ritme</string>
+    <string name="stat_time_activity">Temps</string>
+    <string name="add_friend">AFEGIR</string>
+    <string name="cancel_friend">CANCEL·LAR SOL·LICITUD</string>
+    <string name="tab_friends">Amics</string>
+    <string name="tab_requests">Sol·licituds</string>
+    <string name="search_placeholder">Cerca...</string>
+    <string name="search_in_progress">Buscant amics</string>
+    <string name="search_min_chars">Escriu un mínim de 3 caràcters</string>
+    <string name="friend_sending_request">Enviant sol·licitud</string>
+    <string name="friend_cancel_request">Cancel·lant sol·licitud</string>
+    <string name="friend_accepting_request">Acceptant sol·licitud</string>
+    <string name="friend_removing">Eliminant amic/a</string>
+    <string name="friend_removing_snackbar">S\'ha eliminat %s correctament.</string>
+    <string name="friend_ignoring_request">Rebutjant sol·licitud</string>
+    <string name="friend_canceling_request">Enviant sol·licitud</string>
+    <string name="friend_no_requests">No tens sol·licituds pendents</string>
+    <string name="friend_no_friends">La llista està buida</string>
+
+    <!-- Fragment03 - Registrar activitat -->
+    <string name="error_no_location">No s\'ha pogut accedir a la ubicació GPS del dispositiu</string>
+    <string name="google_maps_key">AIzaSyAfzS0tFJwWGDVg2GZ0IP7eLLasTI-inPg</string>
+    <string name="panel_time">TEMPS</string>
+    <string name="panel_distance">Distància <font size="10">(km)</font></string>
+    <string name="panel_speed">Ritme <font size="10">(min/km)</font></string>
+    <string name="panel_stat_format">%s:%s</string>
+    <string name="btmap_iniciar">Inicia</string>
+    <string name="btmap_detener">Atura</string>
+    <string name="btmap_reanudar">Reanuda</string>
+    <string name="btmap_finalizar">Finalitza</string>
+    <string name="obtaining_gps">OBTENINT LOCALITZACIÓ GPS</string>
+    <string name="obtaining_gps_done">LOCALITZACIÓ GPS OBTINGUDA!</string>
+    <string name="end_give_title">Dóna un títol a la teva activitat!</string>
+    <string name="end_stat_distance">Distància</string>
+    <string name="end_stat_time">Temps en moviment</string>
+    <string name="end_stat_rythm">Velocitat</string>
+    <string name="end_stat_max_speed">Velocitat màxima</string>
+    <string name="end_stat_desnivel">Desnivell positiu</string>
+    <string name="end_stat_max_altitude">Altitud màxima</string>
+    <string name="end_message">Felicitats!</string>
+    <string name="end_button_discard">DESCARTA</string>
+    <string name="end_button_end">ACABA</string>
+    <string name="service_status_movin">En moviment</string>
+    <string name="service_status_paused">En pausa</string>
+    <string name="service_status_end">Aturat</string>
+    <string name="race_saved">Carrera guardada amb èxit</string>
+    <string name="race_saved_error">Error en desar la carrera</string>
+    <string name="discard_race_title">Descarta l\'activitat</string>
+    <string name="discard_race_message">Segur que vols descartar la teva carrera actual?</string>
+    <string name="discard_short_race_title">Activitat massa curta</string>
+    <string name="discard_short_race_message">És massa curta? Necessites una activitat més llarga per acabar. Continua o comença de nou</string>
+    <string name="discard_yes">Descarta</string>
+    <string name="discard_no">Reanuda</string>
+    <string name="race_discarded">Carrera descartada</string>
+
+    <!-- Fragment04 - Configuració -->
+    <string name="settings_help">Ajuda</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_logout">Tanca la sessió</string>
+    <string name="logout_succesful">Sessió tancada</string>
+    <string name="loggin_out">Tancant sessió\nEspereu, si us plau</string>
+
+    <!-- Fragment05 - Perfil -->
+    <string name="profile_activities">ACTIVITATS</string>
+    <string name="profile_add_friend">AFEGIR AMIC</string>
+    <string name="profile_remove_friend">ELIMINAR AMIC</string>
+    <string name="profile_statistics">Estadístiques</string>
+
+    <!-- Estadísticas -->
+    <string name="statistics_week">AQUESTA SETMANA</string>
+    <string name="statistics_year">AQUEST ANY</string>
+    <string name="statistics_all">TOT</string>
+    <string name="statistics_count">Activitats:</string>
+    <string name="statistics_time_total">Temps:</string>
+    <string name="statistics_distance_total">Distància:</string>
+    <string name="statistics_speed_average">Velocitat mitjana:</string>
+
+    <!-- Missatges de visibilitat -->
+    <string name="visibilty_default_on">Aquesta activitat serà visible pels teus amics</string>
+    <string name="wanted_message">Oops! No hem pogut trobar el teu amic</string>
+
+    <!-- Idiomes -->
+    <string name="castellano" translatable="false">Espanyol</string>
+    <string name="catalan" translatable="false">Català</string>
+    <string name="ingles" translatable="false">Anglès</string>
+    <string name="frances" translatable="false">Francès</string>
+
+    <string-array name="visibility_message_on">
+        <item>Tothom admirarà els teus èxits!</item>
+        <item>Aquesta activitat serà visible pels teus amics</item>
+        <item>Mostra el teu progrés!</item>
+    </string-array>
+
+    <string-array name="visibility_message_off">
+        <item>No et preocupis, ningú coneixerà els teus secrets</item>
+        <item>Aquesta activitat serà visible només per a tu</item>
+        <item>Amaguem-ho, no volem fer-los enveja</item>
+    </string-array>
+
+    <!-- Fragments -->
+    <string name="fragment_actividades">Activitats</string>
+    <string name="fragment_registrar_actividad">Registrar activitat</string>
+    <string name="fragment_estadisticas">Estadístiques</string>
+    <string name="fragment_perfil">El meu perfil</string>
+    <string name="fragment_add_friend">Afegir amics</string>
+
+</resources>

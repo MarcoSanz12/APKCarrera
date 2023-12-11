@@ -60,10 +60,12 @@ class MainActivity : BaseActivity() {
     val backButton : MaterialButton by lazy { binding.actionbarBack }
     val buttonsLayout : LinearLayoutCompat by lazy { binding.actionbarButtons }
 
+
     @OptIn(NavigationUiSaveStateControl::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         val screenSplash = installSplashScreen()
         screenSplash.setKeepOnScreenCondition{false}
+
 
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)

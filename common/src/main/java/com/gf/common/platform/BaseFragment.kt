@@ -47,6 +47,12 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     private var mLySearch : ExpandableLayout? = null
     private var mEtSearch : TextInputEditText? = null
 
+    var actionBarTitle: String
+        get() = baseActivity.actionBarTitle
+        set(value){
+            baseActivity.actionBarTitle = value
+        }
+
     private lateinit var mSearchTextWatcher : TextWatcher
 
     // VAR Filter

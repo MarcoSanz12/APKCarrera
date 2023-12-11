@@ -61,6 +61,56 @@
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!-- Idioma -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ly_language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_language"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="5dp"
+                android:paddingVertical="8dp"
+                android:maxLines="1"
+                android:text="@string/settings_language"
+                app:drawableStartCompat="@drawable/settings_language"
+                android:drawablePadding="20dp"
+                app:drawableTint="@color/blue_primary"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_ultralarge_20"
+                app:layout_constraintBottom_toTopOf="@id/line_language"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/iv_arrow_language"
+                android:drawableTint="@color/black"
+                />
+            <View
+                android:id="@+id/line_language"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/blue_primary"
+                app:layout_constraintTop_toBottomOf="@id/tv_language"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_arrow_language"
+                android:layout_width="20dp"
+                android:layout_height="39dp"
+                android:paddingVertical="10dp"
+                android:scaleY="1.65"
+                android:scaleX="1.65"
+                app:tint="@color/blue_primary"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/line_language"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/settings_arrow"
+                android:scaleType="centerInside"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <!-- Cerrar sesión -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/ly_logout"

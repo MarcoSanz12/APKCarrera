@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/fragmentFriends"
         android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsFragment"
-        android:label="FragmentFriends"
+        android:label="@string/bnv_friends"
         tools:layout="@layout/frg02_friends">
         <action
             android:id="@+id/action_fragmentFriends_to_fragmentAddFriends"
@@ -27,16 +27,16 @@
     <fragment
         android:id="@+id/fragmentAddFriends"
         android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsAddFragment"
-        android:label="FragmentAddFriends"
+        android:label="@string/fragment_add_friend"
         tools:layout="@layout/frg02_friends_add" />
     <fragment
         android:id="@+id/friendsListFragment"
         android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsListFragment"
-        android:label="FriendsListFragment"
+        android:label="@string/tab_friends"
         tools:layout="@layout/frg02_friends_list"/>
     <fragment
         android:id="@+id/friendsRequestsFragment"
         android:name="com.gf.apkcarrera.features.f2_friends.fragments.FriendsRequestsFragment"
-        android:label="FriendsRequestsFragment"
+        android:label="@string/tab_requests"
         tools:layout="@layout/frg02_friends_request"/>
 </navigation>

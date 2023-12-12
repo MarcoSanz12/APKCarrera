@@ -35,7 +35,7 @@
     <string name="forgot_password">Forgot your password?\nClick here!</string>
     <string name="please_introduce_data">Please enter your APKCarrera account information.</string>
     <string name="we_are_almost_done">We\'re almost there!</string>
-    <string name="we_are_almost_done_two">Why not give your account a name and put a photo on it?\nDon't worry if you make a mistake, you can change it later!</string>
+    <string name="we_are_almost_done_two">Why not give your account a name and put a photo on it?\nDon\'t worry if you make a mistake, you can change it later!</string>
     <string name="recover_password_msg">Enter your email, if you have an associated account, you will receive an email with the information to recover it in the next few minutes.</string>
     <string name="my_name">My name</string>
     <string name="version">Version %s</string>

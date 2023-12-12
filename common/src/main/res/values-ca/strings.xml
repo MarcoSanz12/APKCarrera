@@ -26,7 +26,7 @@
     <string name="email">Correu electrònic</string>
     <string name="password">Contrasenya</string>
     <string name="repeat_password">Repeteix la contrasenya</string>
-    <string name="i_read_terms">He llegit els termes i condicions d\'APKCarrera i hi estic d'acord.</string>
+    <string name="i_read_terms">He llegit els termes i condicions d\'APKCarrera i hi estic d\'acord.</string>
     <string name="register">Registra\'t</string>
     <string name="login">Inicia la sessió</string>
     <string name="accept">Accepta</string>
@@ -35,7 +35,7 @@
     <string name="forgot_password">Has oblidat la contrasenya?\nFes clic aquí!</string>
     <string name="please_introduce_data">Si us plau, introdueix les dades del teu compte APKCarrera.</string>
     <string name="we_are_almost_done">Ja hi som gairebé!</string>
-    <string name="we_are_almost_done_two">Per què no poses un nom al teu compte i hi poses una foto?\nNo t'amoïnis si et confons, podràs canviar-ho més endavant!</string>
+    <string name="we_are_almost_done_two">Per què no poses un nom al teu compte i hi poses una foto?\nNo t\'amoïnis si et confons, podràs canviar-ho més endavant!</string>
     <string name="recover_password_msg">Introdueix el teu correu electrònic, si tens un compte associat, rebràs un correu amb la informació per recuperar-lo en els pròxims minuts.</string>
     <string name="my_name">El meu nom</string>
     <string name="version">Versió %s</string>

@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.navArgs
 import com.cotesa.common.extensions.toBitmap
+import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.NavProfileArgs
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg05ProfileBinding
@@ -34,8 +35,6 @@ class ProfileFragment : BaseCameraFragment<Frg05ProfileBinding>() {
 
     private lateinit var updateProfileDialog : UpdateProfileDialog
 
-
-
     override fun initObservers() {
         with(viewModel){
             collectFlowOnce(profileState,::profileLoaded)
@@ -54,6 +53,7 @@ class ProfileFragment : BaseCameraFragment<Frg05ProfileBinding>() {
     }
 
     private fun profileLoaded(profileResponse: ProfileResponse) {
+        hideLoadingDialog()
         if (profileResponse is ProfileResponse.Succesful){
             profile = profileResponse.user
             activities = profileResponse.activityList
@@ -69,18 +69,18 @@ class ProfileFragment : BaseCameraFragment<Frg05ProfileBinding>() {
         }
     }
 
-
-
     private fun profileUpdated(profileUpdateResponse: ProfileUpdateResponse) {
         when (profileUpdateResponse){
             ProfileUpdateResponse.Error -> {
                 hideLoadingDialog()
+                updateProfileDialog.dismiss()
                 snackbar(com.gf.common.R.string.generic_error)
             }
             is ProfileUpdateResponse.Succesful -> {
                 profile.name = profileUpdateResponse.updatename
                 profile.picture = profileUpdateResponse.updatepicture
-
+                viewModel.profileUpdated(profile)
+                updateProfileDialog.dismiss()
             }
         }
     }
@@ -94,13 +94,22 @@ class ProfileFragment : BaseCameraFragment<Frg05ProfileBinding>() {
         try{
             with (binding){
 
-                updateProfileDialog = UpdateProfileDialog(requireContext(),profile.picture,profile.name,::onUpdateProfile,::onImageUpdateClick)
+                // Solo edición si es el propio usuario
+                if (userid == profile.uid)
+                    (requireActivity() as MainActivity).setOnPencilByClickListener{
+                        updateProfileDialog = UpdateProfileDialog(requireContext(),profile.picture,profile.name,::onUpdateProfile,::onImageUpdateClick)
+                        updateProfileDialog.show()
+                    }
+
 
                 // Nombre
                 tvName.text = profile.name
 
                 // Foto
                 ivProfilePic.setImageBitmap(profile.picture.toBitmap())
+                ivProfilePic.setOnClickListener {
+                    (requireActivity() as MainActivity).showZoomableImage(profile.picture.toBitmap())
+                }
 
                 // Estadisticas
                 btStats.setOnClickListener { navigate(R.id.action_fragmentProfile_to_statFragment) }
@@ -118,7 +127,7 @@ class ProfileFragment : BaseCameraFragment<Frg05ProfileBinding>() {
 
 
     private fun onUpdateProfile(name: String, picture: String) {
-        viewModel.updateProfile(profile.uid,profile.name,profile.picture)
+        viewModel.updateProfile(profile.uid,name,picture)
         showLoadingDialog(getString(com.gf.common.R.string.loading_signing_up))
     }
 

@@ -24,7 +24,7 @@ abstract class BaseViewModel : ViewModel() {
     val failureState = _failureState.asStateFlow()
 
     fun launch(func : suspend () -> Unit){
-        viewModelScope.launch(context = Dispatchers.IO) {
+        viewModelScope.launch {
             func()
         }
     }

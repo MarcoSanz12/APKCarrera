@@ -82,8 +82,6 @@ class FeedPagingSource(
             foundUser
         }
 
-
-
         return activities.map { Pair(it,targetUser) }
     }
 
@@ -93,14 +91,14 @@ class FeedPagingSource(
 
         Log.d(TAG, "user activities from [${allIds.size}]: $allIds starting after (${pageCount * nextPageNumber - 1})")
 
-        val activities : List<ActivityModel> = firestore.collection("activities")
+        var activities : List<ActivityModel> = firestore.collection("activities")
             .whereIn("userid",allIds)
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .startAfter(lastTimeStamp)
             .limit(pageCount)
             .get()
             .await()
-            .documents.map { ActivityModel(it) }
+            .documents.mapNotNull { ActivityModel(it) }
 
         lastTimeStamp = activities.lastOrNull()?.timestamp ?: 0
 
@@ -114,7 +112,7 @@ class FeedPagingSource(
                 .whereArrayContains("friendList",user.uid)
                 .get()
                 .await()
-                .documents.map { UserModel(it) }
+                .documents.mapNotNull { UserModel(it) }
 
             foundUsers.forEach {
                 if (it !in cachedFriends)
@@ -122,6 +120,8 @@ class FeedPagingSource(
             }
             foundUsers
         }
+
+        activities = activities.filter { it.userid in (targetUsers+user).map { it.uid } }
 
 
         return activities.map { activity ->

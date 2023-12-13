@@ -282,7 +282,7 @@
                     android:paddingHorizontal="20dp"
                     android:clipChildren="false"
                     android:clipToPadding="false"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:orientation="horizontal"
                     android:scrollbars="none"
                     android:fillViewport="true">
                     <RelativeLayout
@@ -315,7 +315,7 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_list"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:overScrollMode="never"
                             android:orientation="horizontal"
                             android:layout_toEndOf="@id/cv_map"

@@ -13,7 +13,7 @@ import java.util.Timer
 import kotlin.concurrent.timerTask
 
 
-class LoadingDialog(context:Context, private val message : String?,private val animated : Boolean = true): Dialog(context) {
+class LoadingDialog(context:Context, private var message : String?,private val animated : Boolean = true): Dialog(context) {
 
     private val tvLoadingMessage by lazy { findViewById<TextView>(R.id.tv_loadingMessage) }
 
@@ -54,6 +54,7 @@ class LoadingDialog(context:Context, private val message : String?,private val a
         super.onStop()
     }
     fun setText(msg:String) {
+        message = msg
         tvLoadingMessage.text = msg
     }
 }

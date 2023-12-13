@@ -102,7 +102,7 @@
     <string name="btmap_finalizar">Finalizar</string>
     <string name="obtaining_gps">OBTENIENDO LOCALIZACIÓN GPS</string>
     <string name="obtaining_gps_done">¡LOCALIZACIÓN GPS OBTENIDA!</string>
-    <string name="end_give_title">¡Dale un título a tu actividad!</string>
+    <string name="end_give_title">Dale un título a tu actividad...</string>
     <string name="end_stat_distance">Distancia</string>
     <string name="end_stat_time">Tiempo en movimiento</string>
     <string name="end_stat_rythm">Velocidad</string>

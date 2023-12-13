@@ -49,6 +49,7 @@
                         android:id="@+id/ly_title"
                         android:layout_width="0dp"
                         android:layout_marginStart="15dp"
+                        app:placeholderTextColor="@color/hint"
                         app:placeholderText="@string/end_give_title"
                         app:layout_constraintTop_toTopOf="@id/iv_activity_type"
                         app:layout_constraintStart_toStartOf="parent"

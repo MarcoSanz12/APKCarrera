@@ -191,7 +191,8 @@ class ActivityViewHolder(view: View,
             itemView.context.getColor(com.gf.common.R.color.blue_primary)
 
         blueBar.backgroundTintList = ColorStateList.valueOf(color)
-        blueBar.setOnClickListener { onProfileClick(user) }
+        ivImage.setOnClickListener { onProfileClick(user) }
+        tvName.setOnClickListener { onProfileClick(user) }
 
         // TODO Implementar sistema de favoritos
     }

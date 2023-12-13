@@ -9,6 +9,7 @@ import com.gf.common.platform.BaseViewModel
 import com.gf.common.response.GenericResponse
 import com.gf.common.response.ProfileResponse
 import com.gf.common.response.ProfileUpdateResponse
+import com.gf.common.states.ProfileState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,7 +38,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun profileUpdated(newProfile : UserModel) = launch {
-        _profileState.emit(newProfile)
+        _profileState.emit(ProfileResponse.Succesful(newProfile,(_profileState.value as ProfileResponse.Succesful).activityList))
     }
 
 

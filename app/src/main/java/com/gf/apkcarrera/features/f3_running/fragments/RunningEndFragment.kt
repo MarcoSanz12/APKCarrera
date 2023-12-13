@@ -60,6 +60,8 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
             adapter = rvImages.assignAnimatedAdapter(RunningImagesAdapter(listOf(),::onImageClick,::imagesChanged), com.gf.common.R.anim.animation_layout_fade_in,false)
             (rvImages.layoutManager as LinearLayoutManager).orientation = LinearLayoutManager.HORIZONTAL
 
+            etTitle.requestFocus()
+
             // Añadir imagen
             cvAddImage.setOnClickListener {
                 try{

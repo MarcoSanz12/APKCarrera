@@ -381,7 +381,7 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
                 color(requireContext().getColor(com.gf.common.R.color.orange_quaternary)) // Color de la línea
                 visible(true)
                 zIndex(7f)
-                width(8f) // Grosor de la línea en píxeles
+                width(15f) // Grosor de la línea en píxeles
             }
             it.forEach {
                 polylineOptions.add(it.latLng)

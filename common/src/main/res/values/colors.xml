@@ -16,6 +16,7 @@
     <color name="red_ripple">#C88787</color>
     <color name="yellow">#F7EC07</color>
     <color name="white">#FFFFFF</color>
+    <color name="hint">#CDCDCD</color>
     <color name="background">#E9E9E9</color>
     <color name="black">#000000</color>
     <color name="lightGrey">#6A6A6A</color>

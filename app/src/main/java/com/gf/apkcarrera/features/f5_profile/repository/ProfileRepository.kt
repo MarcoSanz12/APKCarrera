@@ -7,12 +7,15 @@ import com.gf.common.entity.activity.ActivityModel
 import com.gf.common.entity.user.UserModel
 import com.gf.common.platform.NetworkHandler
 import com.gf.common.response.FriendListResponse
+import com.gf.common.response.GenericResponse
 import com.gf.common.response.ProfileResponse
+import com.gf.common.response.ProfileUpdateResponse
 import com.gf.common.utils.Constants
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -20,6 +23,8 @@ import javax.inject.Singleton
 interface ProfileRepository {
 
     suspend fun getProfile(userId : String?) : ProfileResponse
+
+    suspend fun updateData(userId: String, name : String, image : String) : ProfileUpdateResponse
 
     @Singleton
     class ProfileRepositoryImpl
@@ -66,6 +71,25 @@ interface ProfileRepository {
             }catch (ex:Exception){
                 ex.printStackTrace()
                 ProfileResponse.Error
+            }
+        }
+
+        override suspend fun updateData(userId: String, name : String, image : String) : ProfileUpdateResponse{
+            return try{
+               firestore.collection("users").document(userId)
+                    .update(mapOf(
+                        Pair("name",name),
+                        Pair("picture",image)
+                    )).await()
+
+                runBlocking {
+                    database.userDao().updateProfile(userId,name,image)
+                }
+
+                ProfileUpdateResponse.Succesful(name,image)
+            }catch (ex:Exception){
+                ex.printStackTrace()
+                ProfileUpdateResponse.Error
             }
         }
 

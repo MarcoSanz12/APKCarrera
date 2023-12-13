@@ -264,6 +264,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="15dp"
             app:el_expanded="false"
+            tools:el_expanded="true"
             tools:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -313,11 +314,10 @@
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_list"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:overScrollMode="never"
                             android:orientation="horizontal"
-                            android:layout_marginStart="10dp"
                             android:layout_toEndOf="@id/cv_map"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             tools:listitem="@layout/item_image"

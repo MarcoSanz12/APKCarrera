@@ -20,7 +20,6 @@ import com.gf.common.dialog.MultimediaDialog
 import com.gf.common.entity.activity.ActivityStatus
 import com.gf.common.entity.activity.ActivityType
 import com.gf.common.extensions.invisible
-import com.gf.common.extensions.navigateToMenuItem
 import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseActivity
 import com.gf.common.utils.Constants.ACTION_END_RUNNING
@@ -71,10 +70,11 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        navigateToRunningFragmentIfNeeded(intent)
-
         // Navegación OG
         NavigationUI.setupWithNavController(binding.bottomNavigationView,navController,false)
+
+        navigateToRunningFragmentIfNeeded(intent)
+
 
 
        /* Navegación experimental custom*/
@@ -90,6 +90,7 @@ class MainActivity : BaseActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
+        bottomNavigationView.setOnItemReselectedListener { }
         navController.addOnDestinationChangedListener{ navController: NavController, navDestination: NavDestination, arguments: Bundle? ->
 
             // No retroceso
@@ -226,8 +227,8 @@ class MainActivity : BaseActivity() {
     /**
      * Asigna un [View.OnClickListener] al botón Bandera y lo pone visible
      */
-    override fun setOnFlagByClickListener(listener: View.OnClickListener) {
-        binding.actionbarBtFlag.setOnActionBarClickListener(listener)
+    override fun setOnPencilByClickListener(listener: View.OnClickListener) {
+        binding.actionbarBtPencil.setOnActionBarClickListener(listener)
     }
 
     /**

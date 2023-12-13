@@ -52,7 +52,7 @@ abstract class BaseActivity : AppCompatActivity() {
     /**
      * Usar para asignar un [View.OnClickListener] al botón Bandera
      */
-    abstract fun setOnFlagByClickListener(listener: View.OnClickListener)
+    abstract fun setOnPencilByClickListener(listener: View.OnClickListener)
 
     /**
      * Usar para asignar un [View.OnClickListener] al botón Borrar

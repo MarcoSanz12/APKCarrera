@@ -56,6 +56,7 @@
     <string name="no_camera">No se ha podido detectar la cámara del dispositivo</string>
     <string name="loading_signing_in">Iniciando sesión</string>
     <string name="loading_signing_up">Creando cuenta</string>
+    <string name="loading_generic">Cargando</string>
     <string name="expandable_tag_search" translatable="false">EXPANDABLE_TAG_SEARCH</string>
     <string name="expandable_tag_filter" translatable="false">EXPANDABLE_TAG_FILTER</string>
 

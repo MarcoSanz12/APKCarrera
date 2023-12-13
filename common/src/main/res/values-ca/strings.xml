@@ -172,5 +172,6 @@
     <string name="fragment_perfil">El meu perfil</string>
     <string name="fragment_add_friend">Afegir amics</string>
     <string name="saving_race">Guardando carrera</string>
+    <string name="loading_generic">Loading</string>
 
 </resources>

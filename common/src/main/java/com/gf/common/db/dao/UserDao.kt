@@ -52,6 +52,9 @@ interface UserDao {
         addUser(user)
     }
 
+    @Query("UPDATE users SET picture = :picture, name = :name WHERE uid = :userId")
+    suspend fun updateProfile(userId: String , name:String,picture : String) : Int
+
     @Query("SELECT friendList FROM users WHERE uid = :uid")
     suspend fun getFriendListByUid(uid: String): List<String>
 

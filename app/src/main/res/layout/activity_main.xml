@@ -103,10 +103,10 @@
 
             <!-- Bt Bandera -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/actionbar_bt_flag"
+                android:id="@+id/actionbar_bt_pencil"
                 style="@style/ActionbarButton"
                 tools:visibility="gone"
-                app:icon="@drawable/icon_flag"
+                app:icon="@drawable/icon_quill"
                 app:iconSize="35dp"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>

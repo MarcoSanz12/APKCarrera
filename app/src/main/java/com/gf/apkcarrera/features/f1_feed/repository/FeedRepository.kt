@@ -62,7 +62,7 @@ interface FeedRepository {
         override suspend fun getFeedActivities(targetId: String?, scope : CoroutineScope): FeedResponse{
 
             val userId = preferences.getString(LOG_UID,"")  ?: return FeedResponse.Error
-            val user =  runBlocking { database.userDao().getUserByUid(userId) }
+            val user = database.userDao().getUserByUid(userId)
             user ?: return FeedResponse.Error
 
 

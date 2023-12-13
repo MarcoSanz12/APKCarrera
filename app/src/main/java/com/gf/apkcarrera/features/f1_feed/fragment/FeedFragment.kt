@@ -41,9 +41,6 @@ class FeedFragment : BaseFragment<Frg01FeedBinding>() {
         preferences.getString(Constants.Login.LOG_UID,"-777") ?: "-777"
     }
 
-
-
-
     override fun initObservers() {
         with(viewModel){
             collectFlowOnce(failureState,::onFeedFailure)
@@ -86,10 +83,10 @@ class FeedFragment : BaseFragment<Frg01FeedBinding>() {
         toast(com.gf.common.R.string.generic_error)
     }
 
-    /*    override fun onBackPressed() {
-            requireActivity().finish()
-        }
-        */
+    override fun onBackPressed() {
+        requireActivity().finish()
+    }
+
 
 
 

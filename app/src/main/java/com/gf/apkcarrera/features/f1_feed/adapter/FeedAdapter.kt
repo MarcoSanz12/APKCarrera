@@ -126,12 +126,10 @@ class ActivityViewHolder(view: View,
 
         expandable.setOnExpansionUpdateListener(::expandableExpanded)
 
-        if (absoluteAdapterPosition == 0 || absoluteAdapterPosition == 1)
+        if (absoluteAdapterPosition == 0)
             expandable.expand(false)
         else
             expandable.collapse(false)
-
-
 
         val arrow = if (expandable.isExpanded)
             com.gf.common.R.drawable.small_arrow_up
@@ -139,7 +137,6 @@ class ActivityViewHolder(view: View,
             com.gf.common.R.drawable.small_arrow_down
 
         btDeploy.setImageResource(arrow)
-
 
         whiteBar.setOnClickListener {
             expandable.toggle()
@@ -186,22 +183,6 @@ class ActivityViewHolder(view: View,
         // 8. Tiempo
         tvStatTime.text = formatTime(time)
 
-        // 9. Imágenes
-        if (activity.images.isNotEmpty()){
-            rvList.assignAnimatedAdapter(FeedImagesAdapter(activity.images.map { FeedImage(
-                id = activity.images.indexOf(it),
-                url = it)
-            },
-                onImageClick = onImageClick),
-                com.gf.common.R.anim.animation_layout_fade_in,
-                false)
-        }
-        else
-            rvList.invisible()
-
-
-
-
         // 11. Click perfil
 
         val color = if (userId == user.uid)
@@ -220,6 +201,19 @@ class ActivityViewHolder(view: View,
         if (state == 2 || state == 3){
             if (hasOpened)
                 return
+
+            // 9. Imágenes
+            if (activity.images.isNotEmpty()){
+                rvList.assignAnimatedAdapter(FeedImagesAdapter(activity.images.map { FeedImage(
+                    id = activity.images.indexOf(it),
+                    url = it)
+                },
+                    onImageClick = onImageClick),
+                    com.gf.common.R.anim.animation_layout_fade_in,
+                    false)
+            }
+            else
+                rvList.invisible()
 
             hasOpened = true
             // 10. Mapa con la ruta

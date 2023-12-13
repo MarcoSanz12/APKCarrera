@@ -172,4 +172,5 @@
     <string name="fragment_perfil">Mon Profil</string>
     <string name="fragment_add_friend">Ajouter des Amis</string>
     <string name="saving_race">Saving race</string>
+    <string name="loading_generic">Loading</string>
 </resources>

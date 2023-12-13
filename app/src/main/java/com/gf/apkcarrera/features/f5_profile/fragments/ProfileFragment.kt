@@ -1,6 +1,7 @@
 package com.gf.apkcarrera.features.f5_profile.fragments
 
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.navArgs
 import com.cotesa.common.extensions.toBitmap
@@ -8,17 +9,20 @@ import com.gf.apkcarrera.NavProfileArgs
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg05ProfileBinding
 import com.gf.apkcarrera.features.f5_profile.viewmodel.ProfileViewModel
+import com.gf.common.dialog.UpdateProfileDialog
 import com.gf.common.entity.activity.ActivityModel
 import com.gf.common.entity.user.UserModel
 import com.gf.common.extensions.collectFlowOnce
+import com.gf.common.platform.BaseCameraFragment
 import com.gf.common.platform.BaseFragment
 import com.gf.common.response.ProfileResponse
+import com.gf.common.response.ProfileUpdateResponse
 import com.gf.common.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
+class ProfileFragment : BaseCameraFragment<Frg05ProfileBinding>() {
 
     private val viewModel : ProfileViewModel by hiltNavGraphViewModels(R.id.nav_profile)
     private val args : NavProfileArgs by navArgs()
@@ -28,9 +32,14 @@ class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
 
     private val userid by lazy{preferences.getString(Constants.Login.LOG_UID,null)}
 
+    private lateinit var updateProfileDialog : UpdateProfileDialog
+
+
+
     override fun initObservers() {
         with(viewModel){
             collectFlowOnce(profileState,::profileLoaded)
+            collectFlowOnce(profileUpdatedState,::profileUpdated)
             getProfile(args.uid)
         }
     }
@@ -42,7 +51,6 @@ class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
         // Si no, hacer la llamada
         else
             viewModel.getProfile(args.uid)
-
     }
 
     private fun profileLoaded(profileResponse: ProfileResponse) {
@@ -50,10 +58,31 @@ class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
             profile = profileResponse.user
             activities = profileResponse.activityList
             loadProfile()
-
         }
         else
             error()
+    }
+
+    override fun onImageLoadedListener(img: Bitmap?) {
+        img?.let {
+            updateProfileDialog.changeImage(img)
+        }
+    }
+
+
+
+    private fun profileUpdated(profileUpdateResponse: ProfileUpdateResponse) {
+        when (profileUpdateResponse){
+            ProfileUpdateResponse.Error -> {
+                hideLoadingDialog()
+                snackbar(com.gf.common.R.string.generic_error)
+            }
+            is ProfileUpdateResponse.Succesful -> {
+                profile.name = profileUpdateResponse.updatename
+                profile.picture = profileUpdateResponse.updatepicture
+
+            }
+        }
     }
 
     private fun loadProfile(){
@@ -62,22 +91,40 @@ class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
         else
             profile.name
 
-        with (binding){
-            // Nombre
-            tvName.text = profile.name
+        try{
+            with (binding){
 
-            // Foto
-            ivProfilePic.setImageBitmap(profile.picture.toBitmap())
+                updateProfileDialog = UpdateProfileDialog(requireContext(),profile.picture,profile.name,::onUpdateProfile,::onImageUpdateClick)
 
-            // Estadisticas
-            btStats.setOnClickListener { navigate(R.id.action_fragmentProfile_to_statFragment) }
+                // Nombre
+                tvName.text = profile.name
 
-            // Actividades
-            btActivities.setOnClickListener{navigate(ProfileFragmentDirections.actionGlobalNavFeed(profile.uid))}
+                // Foto
+                ivProfilePic.setImageBitmap(profile.picture.toBitmap())
+
+                // Estadisticas
+                btStats.setOnClickListener { navigate(R.id.action_fragmentProfile_to_statFragment) }
+
+                // Actividades
+                btActivities.setOnClickListener{navigate(ProfileFragmentDirections.actionGlobalNavFeed(profile.uid))}
+            }
+        }catch (ex: Exception){
+            ex.printStackTrace()
         }
     }
+
+    private fun onImageUpdateClick() =
+        uploadImage()
+
+
+    private fun onUpdateProfile(name: String, picture: String) {
+        viewModel.updateProfile(profile.uid,profile.name,profile.picture)
+        showLoadingDialog(getString(com.gf.common.R.string.loading_signing_up))
+    }
+
     private fun error(){
         snackbar(com.gf.common.R.string.generic_error)
+        hideLoadingDialog()
         onBackPressed()
     }
 

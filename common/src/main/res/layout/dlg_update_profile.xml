@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:layout_gravity="center"
+    android:layout_marginHorizontal="30dp"
+    android:background="@drawable/bg_dlg_update_profile">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_title"
+        app:autoSizeMaxTextSize="22sp"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeTextType="uniform"
+        android:text="Editar usuario"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:paddingBottom="2dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_profile_pic"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        tools:src="@drawable/face_default"
+        android:layout_marginTop="20dp"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@color/background"
+        android:alpha="0.25"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+        app:layout_constraintStart_toStartOf="@id/iv_profile_pic"
+        app:layout_constraintEnd_toEndOf="@id/iv_profile_pic"
+        app:layout_constraintTop_toTopOf="@+id/iv_profile_pic"
+        app:layout_constraintBottom_toBottomOf="@id/iv_profile_pic"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_upload"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        tools:src="@drawable/icon_add_photo"
+        app:tint="@color/grey"
+        android:alpha="0.45"
+        android:padding="20dp"
+        app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+        app:layout_constraintStart_toStartOf="@id/iv_profile_pic"
+        app:layout_constraintEnd_toEndOf="@id/iv_profile_pic"
+        app:layout_constraintTop_toTopOf="@+id/iv_profile_pic"
+        app:layout_constraintBottom_toBottomOf="@id/iv_profile_pic"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ly_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        app:boxBackgroundMode="outline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/bt_ok"
+        app:layout_constraintTop_toBottomOf="@id/iv_profile_pic"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:inputType="textEmailAddress"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:maxLength="50"
+            android:text="Guillermo Díaz Ibañes de la rosa de Guadalupe" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_close"
+        android:layout_width="38dp"
+        android:layout_height="35dp"
+        app:backgroundTint="@color/red"
+        app:icon="@drawable/icon_close"
+        app:iconTint="@color/white"
+        app:layout_constraintTop_toTopOf="@id/tv_title"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="5dp"
+        style="@style/RoundButton"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/bt_ok"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        app:backgroundTint="@color/green"
+        app:rippleColor="@color/basic_ripple"
+        app:icon="@drawable/icon_done"
+        app:iconSize="30dp"
+        app:iconTint="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/iv_profile_pic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="15dp"
+        style="@style/RoundButton"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

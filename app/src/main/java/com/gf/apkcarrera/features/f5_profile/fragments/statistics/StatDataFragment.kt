@@ -92,14 +92,18 @@ class StatDataFragment(val activityType: ActivityType) : BaseFragment<Frg05Profi
                 "$kmh km/h"
             }
             else ->{
-                val minkm = ((speed * 3.6)/60)
+                if (speed > 0) {
+                    val speedMinsPerKilometer = ((1 / speed) / 60) * 1000
 
-                // Calcula los minutos y segundos
-                val minutos = (minkm).toInt()
-                val segundos = ((minkm * 60) % 60).toInt()
+                    // Calcula los minutos y segundos
+                    val minutos = (speedMinsPerKilometer).toInt()
+                    val segundos = ((speedMinsPerKilometer * 60) % 60).toInt()
 
-                // Formatea la cadena en "mm:ss"
-                String.format("%02d %02d min/km", minutos, segundos)
+                    // Formatea la cadena en "mm:ss"
+                    String.format("%02d:%02d m/km", minutos, segundos)
+                }
+                else
+                    "0:00"
             }
         }
     }

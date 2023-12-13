@@ -211,8 +211,8 @@ class RunningFragment : OnMapReadyCallback,BaseFragment<Frg03RunningBinding>() {
         override fun onLocationResult(p0: LocationResult) {
             Log.d(TAG, "onLocationResult: TRACKING...")
             super.onLocationResult(p0)
+            lastLocation = p0.lastLocation?.toLatLng()
             if (canUpdateCamera){
-                lastLocation = p0.lastLocation?.toLatLng()
                 Log.d(TAG, "AUTO move_camera")
                 map.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocation!!,map.cameraPosition.zoom),300,null)
             }

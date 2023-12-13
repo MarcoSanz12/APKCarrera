@@ -121,6 +121,7 @@
     <string name="race_discarded">Race discarded</string>
 
     <!-- Fragment04 - Settings -->
+    <string name="yo">Me</string>
     <string name="settings_help">Help</string>
     <string name="settings_language">Language</string>
     <string name="settings_logout">Log out</string>
@@ -170,4 +171,5 @@
     <string name="fragment_estadisticas">Statistics</string>
     <string name="fragment_perfil">My Profile</string>
     <string name="fragment_add_friend">Add Friends</string>
+    <string name="saving_race">Saving race</string>
 </resources>

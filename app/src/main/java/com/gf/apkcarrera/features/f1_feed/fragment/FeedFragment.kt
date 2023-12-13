@@ -6,6 +6,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
+import androidx.paging.LoadState
 import com.gf.apkcarrera.MainActivity
 import com.gf.apkcarrera.R
 import com.gf.apkcarrera.databinding.Frg01FeedBinding
@@ -15,7 +16,9 @@ import com.gf.common.entity.feed.FeedImage
 import com.gf.common.entity.user.UserModel
 import com.gf.common.exception.Failure
 import com.gf.common.extensions.collectFlowOnce
+import com.gf.common.extensions.invisible
 import com.gf.common.extensions.toast
+import com.gf.common.extensions.visible
 import com.gf.common.platform.BaseFragment
 import com.gf.common.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,6 +61,14 @@ class FeedFragment : BaseFragment<Frg01FeedBinding>() {
         hideLoadingDialog()
 
         adapter = FeedAdapter(userId,::onImageClick,::onProfileClick)
+        adapter.addLoadStateListener {
+            when (it.source.refresh){
+                is LoadState.Error -> {}
+                LoadState.Loading -> binding.progressbar.visible()
+                is LoadState.NotLoading -> binding.progressbar.invisible()
+            }
+        }
+
         binding.rvList.adapter = adapter
 
         viewModel.getFeedActivities(args.uid)

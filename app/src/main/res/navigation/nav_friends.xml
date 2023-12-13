@@ -7,7 +7,11 @@
     app:startDestination="@id/fragmentFriends">
 
     <action android:id="@+id/action_global_navProfile"
-        app:destination="@+id/nav_profile">
+        app:destination="@+id/nav_profile"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim">
         <argument
             android:name="uid"
             app:argType="string"
@@ -22,7 +26,11 @@
         tools:layout="@layout/frg02_friends">
         <action
             android:id="@+id/action_fragmentFriends_to_fragmentAddFriends"
-            app:destination="@id/fragmentAddFriends" />
+            app:destination="@id/fragmentAddFriends"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/fragmentAddFriends"

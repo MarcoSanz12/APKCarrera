@@ -12,22 +12,30 @@
     <fragment
         android:id="@+id/fragmentRunning"
         android:name="com.gf.apkcarrera.features.f3_running.fragments.RunningFragment"
-        android:label="FragmentRunning"
+        android:label="@string/title_activity"
         tools:layout="@layout/frg03_running" >
         <action
             android:id="@+id/action_fragmentRunning_to_fragmentRunningEnd"
-            app:destination="@id/fragmentRunningEnd"/>
+            app:destination="@id/fragmentRunningEnd"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
     <action
         android:id="@+id/action_global_fragmentRunning"
         app:destination="@id/fragmentRunning"
-        app:launchSingleTop="true"/>
+        app:launchSingleTop="true"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
 
     <!-- Running End-->
     <fragment
         android:id="@+id/fragmentRunningEnd"
         android:name="com.gf.apkcarrera.features.f3_running.fragments.RunningEndFragment"
-        android:label="FragmentRunningEnd"
+        android:label="@string/profile_statistics"
         tools:layout="@layout/frg03_running_end"/>
 
 </navigation>

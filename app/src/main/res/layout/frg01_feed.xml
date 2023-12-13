@@ -10,10 +10,11 @@
     android:clipToPadding="false"
     android:clipChildren="false"
     >
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:paddingTop="20dp"
         android:paddingBottom="10dp"
         android:clipToPadding="false"
@@ -24,6 +25,7 @@
         android:fadingEdge="vertical"
         tools:itemCount="3"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/progressbar"
         tools:listitem="@layout/item_activity"/>
 
     <com.google.android.material.textview.MaterialTextView
@@ -38,5 +40,13 @@
         android:paddingHorizontal="10dp"
         android:visibility="gone"
         android:gravity="center"/>
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:progressTint="@color/blue_primary"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

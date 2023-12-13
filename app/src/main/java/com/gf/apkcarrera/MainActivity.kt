@@ -100,10 +100,10 @@ class MainActivity : BaseActivity() {
                 backButton.visible()
 
             // Titulo
-            actionBarTitle = if (arguments?.getString("title") != null)
-                arguments.getString("title")!!
-            else
-                navDestination.label.toString()
+            if (arguments?.getString("title") != null)
+                actionBarTitle = arguments.getString("title")!!
+            else if (navDestination.label != "")
+                actionBarTitle = navDestination.label.toString()
 
             // Ocultar Actionbar
             actionbar.visible(navDestination.id !in noActionBarIds)

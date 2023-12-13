@@ -121,6 +121,7 @@
     <string name="race_discarded">Course ignorée</string>
 
     <!-- Fragment04 - Paramètres -->
+    <string name="yo">Je</string>
     <string name="settings_help">Aide</string>
     <string name="settings_language">Langue</string>
     <string name="settings_logout">Se déconnecter</string>
@@ -170,4 +171,5 @@
     <string name="fragment_estadisticas">Statistiques</string>
     <string name="fragment_perfil">Mon Profil</string>
     <string name="fragment_add_friend">Ajouter des Amis</string>
+    <string name="saving_race">Saving race</string>
 </resources>

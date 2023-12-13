@@ -29,6 +29,7 @@ import com.gf.common.extensions.visible
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.MapsInitializer
+import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
@@ -59,48 +60,78 @@ class FeedAdapter (
         holder.bind(item)
     }
 
-
 }
 
 class ActivityViewHolder(view: View,
                          val userId : String,
                          val onImageClick : (images:List<FeedImage>, position : Int) -> Unit,
-                         val onProfileClick : (user : UserModel) -> Unit) : RecyclerView.ViewHolder(view) {
+                         val onProfileClick : (user : UserModel) -> Unit) : RecyclerView.ViewHolder(view) , OnMapReadyCallback {
 
     private lateinit var googleMap : GoogleMap
     var mapView : MapView? = null
+    var points : MutableList<List<RegistryPoint>> = mutableListOf()
+    private lateinit var expandable : ExpandableLayout
+    private lateinit var btDeploy : AppCompatImageButton
+    private lateinit var whiteBar : View
+
+    private lateinit var tvDescription : TextView
+    private lateinit var ivImage : ShapeableImageView
+    private lateinit var tvName : TextView
+    private lateinit var tvDate : TextView
+    private lateinit var tvStatDistance : TextView
+    private lateinit var tvStatRythm : TextView
+    private lateinit var tvStatTime : TextView
+    private lateinit var tvFav1 : TextView
+    private lateinit var btFav1 : Button
+    private lateinit var blueBar : View
+    private lateinit var tvFav2 : TextView
+    private lateinit var btFav2 : Button
+    private lateinit var ivType : ImageView
+    private lateinit var rvList : RecyclerView
+    private lateinit var cvMap : MaterialCardView
+
+    private lateinit var activity : ActivityModel
+    private lateinit var user : UserModel
+
+    var hasOpened = false
+
     fun bind(item:Pair<ActivityModel,UserModel>?){
-        val activity = item!!.first
-        val user = item.second
+        activity = item!!.first
+        user = item.second
 
         val context = itemView.context
 
-        val tvDescription = this.itemView.findViewById<TextView>(R.id.tv_message)
-        val ivImage = this.itemView.findViewById<ShapeableImageView>(R.id.iv_profile_pic)
-        val tvName = this.itemView.findViewById<TextView>(R.id.tv_name)
-        val tvDate = this.itemView.findViewById<TextView>(R.id.tv_date)
-        val tvStatDistance = this.itemView.findViewById<TextView>(R.id.tv_stat_distance)
-        val tvStatRythm = this.itemView.findViewById<TextView>(R.id.tv_stat_rythm)
-        val tvStatTime = this.itemView.findViewById<TextView>(R.id.tv_stat_time)
-        val tvFav1 = this.itemView.findViewById<TextView>(R.id.tv_fav1)
-        val btFav1 = this.itemView.findViewById<Button>(R.id.bt_fav1)
-        val blueBar = this.itemView.findViewById<View>(R.id.blue_bar)
-        val whiteBar = this.itemView.findViewById<View>(R.id.white_bar)
-        val tvFav2 = this.itemView.findViewById<TextView>(R.id.tv_fav2)
-        val btFav2 = this.itemView.findViewById<Button>(R.id.bt_fav2)
-        val btDeploy = this.itemView.findViewById<AppCompatImageButton>(R.id.bt_deploy)
-        val ivType = this.itemView.findViewById<ImageView>(R.id.iv_type)
-        val rvList = this.itemView.findViewById<RecyclerView>(R.id.rv_list)
-        val expandable = this.itemView.findViewById<ExpandableLayout>(R.id.expandable)
+        tvDescription  = this.itemView.findViewById<TextView>(R.id.tv_message)
+        ivImage  = this.itemView.findViewById<ShapeableImageView>(R.id.iv_profile_pic)
+        tvName  = this.itemView.findViewById<TextView>(R.id.tv_name)
+        tvDate  = this.itemView.findViewById<TextView>(R.id.tv_date)
+        tvStatDistance  = this.itemView.findViewById<TextView>(R.id.tv_stat_distance)
+        tvStatRythm  = this.itemView.findViewById<TextView>(R.id.tv_stat_rythm)
+        tvStatTime  = this.itemView.findViewById<TextView>(R.id.tv_stat_time)
+        tvFav1  = this.itemView.findViewById<TextView>(R.id.tv_fav1)
+        btFav1  = this.itemView.findViewById<Button>(R.id.bt_fav1)
+        blueBar  = this.itemView.findViewById<View>(R.id.blue_bar)
+        whiteBar = this.itemView.findViewById<View>(R.id.white_bar)
+        tvFav2  = this.itemView.findViewById<TextView>(R.id.tv_fav2)
+        btFav2  = this.itemView.findViewById<Button>(R.id.bt_fav2)
+        btDeploy = this.itemView.findViewById<AppCompatImageButton>(R.id.bt_deploy)
+        ivType  = this.itemView.findViewById<ImageView>(R.id.iv_type)
+        rvList = this.itemView.findViewById<RecyclerView>(R.id.rv_list)
+        expandable = this.itemView.findViewById<ExpandableLayout>(R.id.expandable)
         mapView = this.itemView.findViewById(R.id.map)
-        val cvMap = this.itemView.findViewById<MaterialCardView>(R.id.cv_map)
+        cvMap = this.itemView.findViewById<MaterialCardView>(R.id.cv_map)
 
 
         // 0. Desplegable
-        if (absoluteAdapterPosition == 0)
+
+        expandable.setOnExpansionUpdateListener(::expandableExpanded)
+
+        if (absoluteAdapterPosition == 0 || absoluteAdapterPosition == 1)
             expandable.expand(false)
         else
             expandable.collapse(false)
+
+
 
         val arrow = if (expandable.isExpanded)
             com.gf.common.R.drawable.small_arrow_up
@@ -122,7 +153,10 @@ class ActivityViewHolder(view: View,
         }
 
         // 1. Nombre
-        tvName.text = user.name
+        tvName.text = if (userId == user.uid)
+            itemView.context.getString(com.gf.common.R.string.yo)
+        else
+            user.name
 
         // 2. Fecha
         tvDate.text = getTimeStamp(activity.timestamp * 1000)
@@ -166,54 +200,55 @@ class ActivityViewHolder(view: View,
             rvList.invisible()
 
 
-        // 10. Mapa con la ruta
-        var points : MutableList<List<RegistryPoint>> = mutableListOf()
-        val actPoints = activity.points as List<HashMap<String, ArrayList<HashMap<String, Any>>>>
-        actPoints.forEach { partial ->
-            val partialPoints = mutableListOf<RegistryPoint>()
-            partial["registryPoints"]?.forEach{ point ->
-                val actLatLng = point["latLng"] as HashMap<String,Double>
-                val regPoint = RegistryPoint(
-                    altitude = (point["altitude"] as Long).toInt(),
-                    distance = (point["distance"] as Long).toInt(),
-                    latLng = LatLng(actLatLng["latitude"]!!,actLatLng["longitude"]!!),
-                    time = (point["time"] as Long).toInt()
-                )
-                partialPoints.add(regPoint)
 
-            }
-            points.add(partialPoints)
-        }
-
-        if (points.flatten().count() > 2){
-            cvMap?.visible()
-            loadMap(mapView!!,points)
-        }
-        else
-            cvMap?.invisible()
 
         // 11. Click perfil
 
         val color = if (userId == user.uid)
-            itemView.context.getColor(com.gf.common.R.color.statistic4)
+            itemView.context.getColor(com.gf.common.R.color.purple_secondary)
         else
             itemView.context.getColor(com.gf.common.R.color.blue_primary)
 
         blueBar.backgroundTintList = ColorStateList.valueOf(color)
         blueBar.setOnClickListener { onProfileClick(user) }
 
-
         // TODO Implementar sistema de favoritos
     }
 
-    private fun loadMap(map:MapView,points: List<List<RegistryPoint>>) {
-        map.onCreate(null)
-        map.onResume()
-        map.getMapAsync{
-            MapsInitializer.initialize(itemView.context);
-            googleMap = it;
-            googleMap.paintPolyline(map.context,points)
-            googleMap.adjustCamera(points)
+    private fun expandableExpanded(fl: Float, state: Int) {
+        // Expandiendose
+        if (state == 2 || state == 3){
+            if (hasOpened)
+                return
+
+            hasOpened = true
+            // 10. Mapa con la ruta
+            points.clear()
+            val actPoints = activity.points as List<HashMap<String, ArrayList<HashMap<String, Any>>>>
+            actPoints.forEach { partial ->
+                val partialPoints = mutableListOf<RegistryPoint>()
+                partial["registryPoints"]?.forEach{ point ->
+                    val actLatLng = point["latLng"] as HashMap<String,Double>
+                    val regPoint = RegistryPoint(
+                        altitude = (point["altitude"] as Long).toInt(),
+                        distance = (point["distance"] as Long).toInt(),
+                        latLng = LatLng(actLatLng["latitude"]!!,actLatLng["longitude"]!!),
+                        time = (point["time"] as Long).toInt()
+                    )
+                    partialPoints.add(regPoint)
+
+                }
+                points.add(partialPoints)
+            }
+
+            if (points.flatten().count() > 2){
+                cvMap.visible()
+                mapView?.onCreate(null);
+                mapView?.onResume();
+                mapView?.getMapAsync(this)
+            }
+            else
+                cvMap.invisible()
         }
     }
 
@@ -230,14 +265,18 @@ class ActivityViewHolder(view: View,
                 "$kmh km/h"
             }
             else ->{
-                val minkm = ((speed * 3.6)/60)
+                if (speed > 0) {
+                    val speedMinsPerKilometer = ((1 / speed) / 60) * 1000
 
-                // Calcula los minutos y segundos
-                val minutos = (minkm).toInt()
-                val segundos = ((minkm * 60) % 60).toInt()
+                    // Calcula los minutos y segundos
+                    val minutos = (speedMinsPerKilometer).toInt()
+                    val segundos = ((speedMinsPerKilometer * 60) % 60).toInt()
 
-                // Formatea la cadena en "mm:ss"
-                String.format("%02d:%02d min/km", minutos, segundos)
+                    // Formatea la cadena en "mm:ss"
+                    String.format("%02d:%02d m/km", minutos, segundos)
+                }
+                else
+                    "0:00"
             }
         }
     }
@@ -254,6 +293,14 @@ class ActivityViewHolder(view: View,
             "$distance m"
         else
             "${distance/1000} km"
+
+    }
+
+    override fun onMapReady(p0: GoogleMap) {
+        googleMap = p0
+        googleMap.paintPolyline(itemView.context,points)
+        googleMap.adjustCamera(points)
+
 
     }
 

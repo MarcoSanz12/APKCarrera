@@ -5,14 +5,31 @@
     android:id="@+id/my_nav"
     app:startDestination="@id/fragmentSplash">
 
+    <action
+        android:id="@+id/action_global_fragmentRunning"
+        app:destination="@id/nav_running"
+        app:launchSingleTop="true"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+
     <action android:id="@+id/action_global_fragmentInitial"
         app:destination="@id/fragmentInitial"
         app:popUpTo="@id/my_nav"
-        app:popUpToInclusive="true"/>
+        app:popUpToInclusive="true"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     <action android:id="@+id/action_global_navigationMain"
         app:destination="@+id/nav_feed"
         app:popUpTo="@id/my_nav"
-        app:popUpToInclusive="true"/>
+        app:popUpToInclusive="true"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
 
     <!-- 00_Inicial -->
     <fragment
@@ -22,10 +39,18 @@
         tools:layout="@layout/frg00_initial" >
         <action
             android:id="@+id/action_fragmentInitial_to_navigation00Login"
-            app:destination="@id/navigation_login" />
+            app:destination="@id/navigation_login"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
         <action
             android:id="@+id/action_fragmentInitial_to_navigation00Register"
-            app:destination="@id/navigation_register" />
+            app:destination="@id/navigation_register"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
 
     <!-- 00_Splash -->
@@ -50,7 +75,11 @@
         tools:layout="@layout/frg04_settings" >
         <action
             android:id="@+id/action_fragmentSettings_to_settingsLanguageFragment"
-            app:destination="@id/settingsLanguageFragment" />
+            app:destination="@id/settingsLanguageFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
 
     <fragment
@@ -72,7 +101,11 @@
             tools:layout="@layout/frg00_register1" >
             <action
                 android:id="@+id/action_fragmentRegister1_to_fragmentRegister2"
-                app:destination="@id/fragmentRegister2" />
+                app:destination="@id/fragmentRegister2"
+                app:enterAnim="@anim/nav_default_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+                app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
         </fragment>
         <fragment
             android:id="@+id/fragmentRegister2"
@@ -92,7 +125,11 @@
             tools:layout="@layout/frg00_login">
             <action
                 android:id="@+id/action_fragmentLogin_to_fragmentRecoverPass"
-                app:destination="@id/fragmentRecoverPass" />
+                app:destination="@id/fragmentRecoverPass"
+                app:enterAnim="@anim/nav_default_enter_anim"
+                app:exitAnim="@anim/nav_default_exit_anim"
+                app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+                app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
         </fragment>
 
         <!-- Recuperar cuenta-->

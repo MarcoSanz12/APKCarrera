@@ -13,7 +13,11 @@
         android:defaultValue="@null"/>
 
     <action android:id="@+id/action_global_navFeed"
-        app:destination="@+id/nav_feed">
+        app:destination="@+id/nav_feed"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim">
         <argument
             android:name="uid"
             app:argType="string"
@@ -25,11 +29,15 @@
     <fragment
         android:id="@+id/fragmentProfile"
         android:name="com.gf.apkcarrera.features.f5_profile.fragments.ProfileFragment"
-        android:label="@string/bnv_profile"
+        android:label=""
         tools:layout="@layout/frg05_profile">
         <action
             android:id="@+id/action_fragmentProfile_to_statFragment"
-            app:destination="@id/statFragment" />
+            app:destination="@id/statFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
     </fragment>
     <fragment
         android:id="@+id/statFragment"

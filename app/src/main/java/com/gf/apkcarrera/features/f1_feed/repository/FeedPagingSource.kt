@@ -93,7 +93,7 @@ class FeedPagingSource(
 
         Log.d(TAG, "user activities from [${allIds.size}]: $allIds starting after (${pageCount * nextPageNumber - 1})")
 
-        val activities = firestore.collection("activities")
+        val activities : List<ActivityModel> = firestore.collection("activities")
             .whereIn("userid",allIds)
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .startAfter(lastTimeStamp)
@@ -102,7 +102,7 @@ class FeedPagingSource(
             .await()
             .documents.map { ActivityModel(it) }
 
-        lastTimeStamp = activities.last().timestamp
+        lastTimeStamp = activities.lastOrNull()?.timestamp ?: 0
 
         Log.d(TAG, "user activities -> ${activities.size}")
 

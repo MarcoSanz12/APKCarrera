@@ -5,7 +5,7 @@
     <string name="title_register">Crear cuenta</string>
     <string name="title_recover_account">Recuperar cuenta</string>
     <string name="title_feed">Actividades</string>
-    <string name="title_activity">Actividad</string>
+    <string name="title_activity">Iniciar actividad</string>
     <string name="title_friends">Amigos</string>
     <string name="title_friends_requests">Solicitudes</string>
     <string name="title_friends_add">Añadir amigo</string>
@@ -115,6 +115,7 @@
     <string name="service_status_paused">Pausado</string>
     <string name="service_status_end">Detenido</string>
     <string name="race_saved">Carrera guardada exitosamente</string>
+    <string name="saving_race">Guardando carrera</string>
     <string name="race_saved_error">Error al guardar</string>
     <string name="discard_race_title">Eliminar Actividad</string>
     <string name="discard_race_message">¿Estás seguro de que quieres eliminar tu carrera actual?</string>
@@ -123,6 +124,7 @@
     <string name="discard_yes">Descartar</string>
     <string name="discard_no">Reanudar</string>
     <string name="race_discarded">Carrera eliminada</string>
+    <string name="yo">Yo</string>
 
 
     <!-- Fragment04 - Ajustes -->

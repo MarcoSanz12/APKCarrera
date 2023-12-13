@@ -1,5 +1,6 @@
 package com.gf.apkcarrera.features.f5_profile.fragments
 
+import android.content.SharedPreferences
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.navigation.fragment.navArgs
 import com.cotesa.common.extensions.toBitmap
@@ -12,7 +13,9 @@ import com.gf.common.entity.user.UserModel
 import com.gf.common.extensions.collectFlowOnce
 import com.gf.common.platform.BaseFragment
 import com.gf.common.response.ProfileResponse
+import com.gf.common.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
@@ -22,6 +25,8 @@ class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
 
     private lateinit var profile : UserModel
     private lateinit var activities : List<ActivityModel>
+
+    private val userid by lazy{preferences.getString(Constants.Login.LOG_UID,null)}
 
     override fun initObservers() {
         with(viewModel){
@@ -52,7 +57,11 @@ class ProfileFragment : BaseFragment<Frg05ProfileBinding>() {
     }
 
     private fun loadProfile(){
-        actionBarTitle = profile.name
+        actionBarTitle = if (userid == profile.uid)
+            getString(com.gf.common.R.string.yo)
+        else
+            profile.name
+
         with (binding){
             // Nombre
             tvName.text = profile.name

@@ -100,6 +100,7 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
         // Imágenes
         val imagesBitmap = adapter.resourceListFiltered.map { it.image }
 
+        showLoadingDialog(getString(com.gf.common.R.string.saving_race))
         runningViewModel.uploadActivityModel(activityModel,imagesBitmap)
     }
 
@@ -114,6 +115,7 @@ class RunningEndFragment : BaseCameraFragment<Frg03RunningEndBinding>() {
                 snackbar(com.gf.common.R.string.race_saved_error)
             }
         }
+        hideLoadingDialog()
     }
 
     private fun List<List<RegistryPoint>>.toRegistryFields() : List<RegistryField> {
